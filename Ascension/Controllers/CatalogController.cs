@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Ascension.Data;
@@ -37,9 +39,10 @@ namespace Ascension.Controllers
                 .ToListAsync();
             return View(models.First());
         }
-        
-        public async Task<PartialViewResult> GetProducts(string category, string ids)
+
+        public async Task<PartialViewResult> GetProducts(string sortOption, string category, string ids)
         {
+            ViewData["sortOption"] = sortOption;
             if (ids == null)
                 return PartialView("ProductsPartial", await _context
                     .Product

@@ -1,6 +1,7 @@
-﻿@model List<Product>
+﻿@using Ascension.Services
+@model List<Product>
 
-@foreach (var product in Model)
+@foreach (var product in Model.Sort((string)ViewData["sortOption"]))
 {
     @product.Name<br>
 }
