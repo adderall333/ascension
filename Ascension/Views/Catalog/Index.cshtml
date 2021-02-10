@@ -1,0 +1,24 @@
+﻿@model List<SuperCategory>
+
+@{
+    ViewBag.Title = "Catalog";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-3">
+        @foreach (var superCategory in Model)
+        {
+            <details>
+                <summary>@superCategory.Name</summary>
+                @foreach (var category in superCategory.Categories)
+                {
+                    <a asp-action="Category" asp-route-name="@category.Name">@category.Name</a><br>
+                }
+            </details>
+        }
+    </div>
+    <div class="col-9">
+        
+    </div>
+</div>

@@ -1,0 +1,73 @@
+﻿@model Category
+
+@{
+    ViewBag.Title = "Catalog";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    
+</div>
+
+<div class="row">
+    <div class="col-3">
+        @foreach (var specification in Model.Specifications)
+        {
+            @specification.Name<br>
+            @foreach (var specificationOption in specification.SpecificationOptions)
+            {
+                <input class="filter" id="@specificationOption.Id" type="checkbox">@specificationOption.Name<br>
+            }
+        }
+    </div>
+    <div id="products" class="col-9">
+        @await Html.PartialAsync("ProductsPartial", Model.Products)
+    </div>
+</div>
+
+<script>
+let optionIds = new Set();
+let params = window
+    .location
+    .search
+    .replace('?','')
+    .split('&')
+    .reduce(
+        function(p, e){
+            let a = e.split('=');
+            p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+            return p;
+        },
+        {}
+    );
+
+function toString(set) {
+    let result = '';
+    for (let e of set)
+        result += e;
+    return result;
+}
+
+function sendRequest(ids) {
+    $.ajax({
+        type: "GET",
+        url: "@Url.Action("GetProducts")?category=" + params['name'] + "&ids=" + ids,
+        success: function(result){
+            $('#products').load(result);
+        }
+    });    
+}
+
+window.onload = function () {
+    let checkboxes = document.getElementsByClassName('filter');
+    for (let i = 0; i < checkboxes.length; i++)  
+        checkboxes[i].addEventListener('click', function (){
+            if (checkboxes[i].checked)
+                optionIds.add(checkboxes[i].getAttribute('id'));
+            else
+                optionIds.delete(checkboxes[i].getAttribute('id'));
+            let ids = toString(optionIds);
+            $('#products').load("@Url.Action("GetProducts")?category=" + params['name'] + "&ids=" + ids);
+        });
+}
+</script>
