@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ascension.Data;
 using Ascension.Models;
+using Ascension.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,8 +38,8 @@ namespace Ascension.Controllers
                 .Include(c => c.Specifications)
                 .ThenInclude(s => s.SpecificationOptions)
                 .AsSplitQuery()
-                .ToListAsync();
-            return View(models.First());
+                .FirstAsync();
+            return View(models);
         }
 
         public async Task<PartialViewResult> GetProducts(string sortOption, string category, string ids)
@@ -50,47 +51,22 @@ namespace Ascension.Controllers
                     .Include(p => p.Images)
                     .Include(p => p.Category)
                     .Where(p => p.Category.Name == category)
+                    .AsSplitQuery()
                     .ToListAsync());
-            var products = FilterProducts(category, ids);
+            var products = Sorter.FilterProducts(category, ids);
             return PartialView("ProductsPartial", products.ToList());
         }
-        
-        private IEnumerable<Product> FilterProducts(string categoryName, string optionIds)
+
+        public async Task<ViewResult> Product(int id)
         {
-            var ids = optionIds
-                .Select(e => (int)char.GetNumericValue(e))
-                .ToList();
-            
-            var specifications = _context
-                .Specification
-                .Where(s => s.Category.Name == categoryName)
-                .Include(s => s.SpecificationOptions)
-                .ToList();
-
-            var checkedOptions = _context
-                .SpecificationOption
-                .Where(sOp => ids.Contains(sOp.Id))
-                .ToList();
-
-            var options = specifications
-                .Where(s => !s
-                    .SpecificationOptions
-                    .Any(sOp => ids.Contains(sOp.Id)))
-                .SelectMany(s => s.SpecificationOptions)
-                .Concat(checkedOptions);
-            
-            foreach (var product in _context
+            return View(await _context
                 .Product
+                .Where(p => p.Id == id)
                 .Include(p => p.Images)
                 .Include(p => p.SpecificationOptions)
-                .Include(p => p.Category)
-                .Where(p => p.Category.Name == categoryName)
-                .Where(product => product
-                    .SpecificationOptions
-                    .All(sOp => options.Contains(sOp))))
-            {
-                yield return product;
-            }
+                .ThenInclude(sOp => sOp.Specification)
+                .AsSplitQuery()
+                .FirstAsync());
         }
     }
 }
