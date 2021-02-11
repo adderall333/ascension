@@ -1,0 +1,89 @@
+﻿@model Category
+
+@{
+    ViewBag.Title = "Catalog";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col">
+        <div class="dropdown my-2">
+            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Сортировать
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a href="#" class="dropdown-item" sortOption="cheapFirst">Сначала дешевые</a>
+                <a href="#" class="dropdown-item" sortOption="expensiveFirst">Сначала дорогие</a>
+                <a href="#" class="dropdown-item" sortOption="alphabet">По алфавиту</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-3">
+        @foreach (var specification in Model.Specifications)
+        {
+            @specification.Name<br>
+            @foreach (var specificationOption in specification.SpecificationOptions)
+            {
+                <input class="filter" id="@specificationOption.Id" type="checkbox">@specificationOption.Name<br>
+            }
+        }
+    </div>
+    <div id="products" class="col-9">
+        @await Html.PartialAsync("ProductsPartial", Model.Products)
+    </div>
+</div>
+
+<script>
+let optionIds = new Set();
+let sortOption = "";
+
+let params = window
+    .location
+    .search
+    .replace('?','')
+    .split('&')
+    .reduce(
+        function(p, e){
+            let a = e.split('=');
+            p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+            return p;
+        },
+        {}
+    );
+
+function toString(set) {
+    let result = '';
+    for (let e of set)
+        result += e;
+    return result;
+}
+
+function sendRequest() {
+    $('#products').load("@Url.Action("GetProducts")?" + 
+                "sortOption="+ sortOption + 
+                "&category=" + params['name'] + 
+                "&ids=" + toString(optionIds));     
+}
+
+window.onload = function () {
+    let sortOptions = document.getElementsByClassName('dropdown-item');
+    for (let i = 0; i < sortOptions.length; i++ )
+        sortOptions[i].addEventListener('click', function (){
+            sortOption = sortOptions[i].getAttribute('sortOption');
+            sendRequest();
+        });
+    
+    let checkboxes = document.getElementsByClassName('filter');
+    for (let i = 0; i < checkboxes.length; i++)  
+        checkboxes[i].addEventListener('click', function (){
+            if (checkboxes[i].checked)
+                optionIds.add(checkboxes[i].getAttribute('id'));
+            else
+                optionIds.delete(checkboxes[i].getAttribute('id'));
+            sendRequest();
+        });
+}
+</script>
