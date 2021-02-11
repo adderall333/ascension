@@ -12,5 +12,6 @@ namespace Ascension.Models
         
         public Category Category { get; set; }
         public List<SpecificationOption> SpecificationOptions { get; set; }
+        public List<Image> Images { get; set; }
     }
 }

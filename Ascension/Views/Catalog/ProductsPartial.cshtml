@@ -4,4 +4,8 @@
 @foreach (var product in Model.Sort((string)ViewData["sortOption"]))
 {
     @product.Name<br>
+    if (product.Images.Count > 0)
+    {
+        <img style='width:150px; height:150px;' src="data:image;base64,@Convert.ToBase64String(product.Images.First().Bytes)"/><br>
+    }
 }

@@ -33,6 +33,7 @@ namespace Ascension.Controllers
                 .Category
                 .Where(c => c.Name == name)
                 .Include(c => c.Products)
+                .ThenInclude(p => p.Images)
                 .Include(c => c.Specifications)
                 .ThenInclude(s => s.SpecificationOptions)
                 .AsSplitQuery()
@@ -46,6 +47,7 @@ namespace Ascension.Controllers
             if (ids == null)
                 return PartialView("ProductsPartial", await _context
                     .Product
+                    .Include(p => p.Images)
                     .Include(p => p.Category)
                     .Where(p => p.Category.Name == category)
                     .ToListAsync());
@@ -79,6 +81,7 @@ namespace Ascension.Controllers
             
             foreach (var product in _context
                 .Product
+                .Include(p => p.Images)
                 .Include(p => p.SpecificationOptions)
                 .Include(p => p.Category)
                 .Where(p => p.Category.Name == categoryName)

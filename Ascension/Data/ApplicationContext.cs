@@ -11,6 +11,7 @@ namespace Ascension.Data
         public DbSet<Specification> Specification { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<SuperCategory> SuperCategory { get; set; }
+        public DbSet<Image> Image { get; set; }
         
         
         public ApplicationContext()
