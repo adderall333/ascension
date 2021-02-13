@@ -1,6 +1,8 @@
 ﻿namespace Ascension
 
+open System
 open System.Collections.Generic
+open System.Diagnostics
 open System.Linq
 open Microsoft.AspNetCore.Mvc
 open Microsoft.EntityFrameworkCore
@@ -9,17 +11,13 @@ open Models
 type CatalogController() =
     inherit Controller()
     
-    let getProductsQuery (context : ApplicationContext) (category : string) =
-        context
-            .Product
-            .Where(fun p -> p.Category.Name = category)
-            .Include(fun p -> p.Images)
-            .Include(fun p -> p.SpecificationOptions)
-            .Include(fun p -> p.Category)
-    
-    
     let getProducts (context : ApplicationContext) (category : string) (options : List<SpecificationOption>) =
-        let productsQuery = getProductsQuery context category
+        let productsQuery = context
+                                .Product
+                                .Where(fun p -> p.Category.Name = category)
+                                .Include(fun p -> p.Images)
+                                .Include(fun p -> p.SpecificationOptions)
+                                .Include(fun p -> p.Category)
         if options = null
         then
             productsQuery
@@ -105,5 +103,25 @@ type CatalogController() =
         this.PartialView("ProductsPartial", products)
             
         
-    member this.Product() =
-        this.View()
+    member this.Product(id : int) =
+        use context = new ApplicationContext()
+        let products = context
+                           .Product
+                           .Where(fun p -> p.Id = id)
+                           .Include(fun p -> p.Images)
+                           .Include(fun p -> p.SpecificationOptions)
+                           .ThenInclude(fun (sOp:SpecificationOption) -> sOp.Specification)
+                           .Include(fun p -> p.Category)
+                           .ToList()
+                           
+        if products.Count = 0
+        then
+            this.Response.StatusCode <- 400
+            let reqId = 
+                if isNull Activity.Current then
+                    this.HttpContext.TraceIdentifier
+                else
+                    Activity.Current.Id
+            this.View("Error", ErrorViewModel(reqId))
+        else    
+            this.View(products.First())
