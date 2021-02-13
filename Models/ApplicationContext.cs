@@ -1,8 +1,6 @@
-﻿using System;
-using Ascension.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Ascension.Data
+namespace Models
 {
     public class ApplicationContext : DbContext
     {

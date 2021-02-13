@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Ascension.Models
+﻿namespace Models
 {
     public class Image
     {

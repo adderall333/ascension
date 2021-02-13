@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace Ascension.Models
+namespace Models
 {
     public class SuperCategory
     {
         public int Id { get; set; }
         public string Name { get; set; }
                 
-        public List<Category> Categories { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
     }
 }

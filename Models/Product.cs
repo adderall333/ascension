@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
 
-namespace Ascension.Models
+namespace Models
 {
     public class Product
     {
@@ -11,7 +11,7 @@ namespace Ascension.Models
         public JsonDocument Specifications { get; set; }
         
         public Category Category { get; set; }
-        public List<SpecificationOption> SpecificationOptions { get; set; }
-        public List<Image> Images { get; set; }
+        public IEnumerable<SpecificationOption> SpecificationOptions { get; set; }
+        public IEnumerable<Image> Images { get; set; }
     }
 }

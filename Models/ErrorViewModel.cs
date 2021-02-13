@@ -1,6 +1,4 @@
-using System;
-
-namespace Ascension.Models
+namespace Models
 {
     public class ErrorViewModel
     {

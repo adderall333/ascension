@@ -1,4 +1,4 @@
-﻿@model List<SuperCategory>
+﻿@model List<Models.SuperCategory>
 
 @{
     ViewBag.Title = "Catalog";
@@ -13,7 +13,7 @@
                 <summary>@superCategory.Name</summary>
                 @foreach (var category in superCategory.Categories)
                 {
-                    <a asp-action="Category" asp-route-name="@category.Name">@category.Name</a><br>
+                    <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name">@category.Name</a><br>
                 }
             </details>
         }

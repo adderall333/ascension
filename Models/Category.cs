@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ascension.Models
+namespace Models
 {
     public class Category
     {
@@ -8,7 +8,7 @@ namespace Ascension.Models
         public string Name { get; set; }
         
         public SuperCategory SuperCategory { get; set; }
-        public List<Product> Products { get; set; }
-        public List<Specification> Specifications { get; set; }
+        public IEnumerable<Product> Products { get; set; }
+        public IEnumerable<Specification> Specifications { get; set; }
     }
 }
