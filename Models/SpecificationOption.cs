@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ascension.Models
+namespace Models
 {
     public class SpecificationOption
     {
@@ -8,6 +8,6 @@ namespace Ascension.Models
         public string Name { get; set; }
         
         public Specification Specification { get; set; }
-        public List<Product> Products { get; set; }
+        public IEnumerable<Product> Products { get; set; }
     }
 }
