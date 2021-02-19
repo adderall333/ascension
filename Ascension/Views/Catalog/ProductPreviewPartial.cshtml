@@ -1,27 +1,29 @@
 @model Models.Product
 
-<div class="product-preview">
-    <div class="product-preview-image">
-        @if (Model.Images.Any())
-        {
-            <img src="data:image;base64,@Convert.ToBase64String(Model.Images.First().Bytes)"/><br>
-        }
-    </div>
-    <div class="product-preview-info">
-        <div class="product-preview-name">
-            <a asp-controller="Catalog" asp-action="Product" asp-route-id="@Model.Id">@Model.Name</a><br>
+<div class="col product-preview-container">
+    <div class="product-preview">
+        <div class="product-preview-image">
+            @if (Model.Images.Any())
+            {
+                <img src="data:image;base64,@Convert.ToBase64String(Model.Images.First().Bytes)"/><br>
+            }
         </div>
-        <div class="product-preview-spec">
-            512 Gb SSD<br>
-            Retina display<br>
-            Touch bar
-        </div>
-        <div class="row product-preview-price">
-            <div class="col">
-                Buy
+        <div class="product-preview-info">
+            <div class="product-preview-name">
+                <a asp-controller="Catalog" asp-action="Product" asp-route-id="@Model.Id">@Model.Name</a><br>
             </div>
-            <div class="col text-end">
-                1000$
+            <div class="product-preview-spec">
+                512 Gb SSD<br>
+                Retina display<br>
+                Touch bar
+            </div>
+            <div class="row product-preview-price">
+                <div class="col buy-btn">
+                    Buy
+                </div>
+                <div class="col text-end">
+                    1000$
+                </div>
             </div>
         </div>
     </div>
