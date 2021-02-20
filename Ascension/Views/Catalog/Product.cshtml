@@ -14,13 +14,13 @@
         </div>
         <div class="row">
             <div class="main-image">
-                <img id="@Model.Images.First().Id" src="data:image;base64,@Convert.ToBase64String(Model.Images.First().Bytes)"/>
+                <img id="main" src="data:image;base64,@Convert.ToBase64String(Model.Images.First().Bytes)"/>
             </div>
             <div class="row images">
                 @foreach (var image in Model.Images)
                 {
                     <div class="col mini-image">
-                        <img id="@image.Id" src="data:image;base64,@Convert.ToBase64String(image.Bytes)"/><br>
+                        <img class="image" id="@image.Id" src="data:image;base64,@Convert.ToBase64String(image.Bytes)"/>
                     </div>
                 }
             </div>
@@ -101,5 +101,14 @@ window.onload = function () {
     document.getElementById('reviews-btn').addEventListener('click', function () {
         changeElement(document.getElementById('reviews'));
     });
+    
+    let images = document.getElementsByClassName("image");
+    let main = document.getElementById("main");
+    
+    for (let i = 0; i < images.length; i++) {
+        images[i].addEventListener("click", function () {
+           main.setAttribute("src", images[i].getAttribute("src")); 
+        });
+    }
 }
 </script>

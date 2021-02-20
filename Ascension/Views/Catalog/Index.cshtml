@@ -11,20 +11,20 @@
             @foreach (var superCategory in Model)
             {
                 <p>
-                    <a class="super-category" id="@superCategory.Id">@superCategory.Name</a>
+                    <a class="super-category fs-5" id="@superCategory.Id">@superCategory.Name</a>
                 </p>
             }
         </div>
         @foreach (var superCategory in Model)
         {
             <div class="categories" super-category-id="@superCategory.Id">
-                <p class="back-btn">
+                <p class="back-btn fs-5">
                     🡨 Back
                 </p>
                 @foreach (var category in superCategory.Categories)
                 {
                     <p>
-                        <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name" class="category">@category.Name</a>
+                        <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name" class="category fs-5">@category.Name</a>
                     </p>
                 }
             </div>
