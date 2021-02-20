@@ -5,14 +5,101 @@
     Layout = "_Layout";
 }
 
-@Model.Name<br>
+<div class="row">
+    <div class="col-4">
+        <div class="row">
+            <p class="fs-4">
+                @Model.Name
+            </p>
+        </div>
+        <div class="row">
+            <div class="main-image">
+                <img id="@Model.Images.First().Id" src="data:image;base64,@Convert.ToBase64String(Model.Images.First().Bytes)"/>
+            </div>
+            <div class="row images">
+                @foreach (var image in Model.Images)
+                {
+                    <div class="col mini-image">
+                        <img id="@image.Id" src="data:image;base64,@Convert.ToBase64String(image.Bytes)"/><br>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div id="description" class="col-8 product-info description">
+        <div class="row">
+            <p class="fs-4">
+                Description
+            </p>
+        </div>
+        <div class="row">
+            <div class="col fs-5">
+                @Model.Description
+            </div>
+        </div>
+    </div>
+    <div id="specifications" class="col-8 product-info specifications">
+        <div class="row">
+            <p class="fs-4">
+                Specifications
+            </p>
+        </div>
+        <div class="row">
+            @foreach (var specificationOption in Model.SpecificationOptions)
+            {
+                <div class="col-6 fs-5">
+                    @specificationOption.Specification.Name
+                </div>
+                <div class="col-6 fs-5">
+                    @specificationOption.Name
+                </div>
+            }
+        </div>
+    </div>
+    <div id="reviews" class="col-8 product-info reviews">
+        <div class="row">
+            <p class="fs-4">
+                Reviews
+            </p>
+        </div>
+        <div class="row">
+            <div class="col fs-5">Empty part</div>
+        </div>
+    </div>
+    
+</div>
+<div class="row product-btns">
+    <div class="col-9">
+        <button id="description-btn" class="btn btn-outline-light product-btn">Description</button>
+        <button id="specifications-btn" class="btn btn-outline-light product-btn">Specifications</button>
+        <button id="reviews-btn" class="btn btn-outline-light product-btn">Reviews</button>
+    </div>
+    <div class="col-3">
+        <button class="btn btn-outline-light product-btn">Buy now</button>
+        <button class="btn btn-outline-light product-btn">To the cart</button>
+    </div>
+</div>
 
-@foreach (var image in Model.Images)
-{
-    <img style='width:150px; height:150px;' src="data:image;base64,@Convert.ToBase64String(image.Bytes)"/><br>
+<script>
+window.onload = function () {
+    let current = document.getElementById('description');
+    
+    let changeElement = function (newElement) {
+        if (current !== newElement) {
+            current.style.display = 'none';
+            newElement.style.display = 'block';
+            current = newElement;
+        }
+    }
+    
+    document.getElementById('description-btn').addEventListener('click', function () {
+        changeElement(document.getElementById('description'));
+    });
+    document.getElementById('specifications-btn').addEventListener('click', function () {
+        changeElement(document.getElementById('specifications'));
+    });
+    document.getElementById('reviews-btn').addEventListener('click', function () {
+        changeElement(document.getElementById('reviews'));
+    });
 }
-
-@foreach (var sOp in Model.SpecificationOptions)
-{
-    @sOp.Specification.Name<text>  :  </text>@sOp.Name<br>
-}
+</script>

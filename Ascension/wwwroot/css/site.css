@@ -95,19 +95,17 @@ img {
 }
 
 .product-preview-container {
-  max-width: 364px;
+  max-width: 25vw;
 }
 
 .product-preview {
   border: 1px solid #dee2e6;
   border-radius: 8px;
-  max-width: 335px;
 }
 
 .product-preview-image {
-  width: 310px;
-  height: 310px;
   margin: auto;
+  padding-top: 8px;
   border-bottom: 1px solid #dee2e6;
 }
 
@@ -167,5 +165,41 @@ img {
 
 .dropdown-item:active {
   background-color: #edbc7b !important;
+}
+
+.main-image {
+  padding: 0;
+}
+
+.images {
+  padding: 0;
+}
+
+.mini-image {
+  cursor: pointer;
+}
+
+.product-info {
+  padding-left: 50px;
+}
+
+.product-btns {
+  margin-top: 40px;
+}
+
+.product-btn {
+  color: #edbc7b;
+  border-color: #edbc7b;
+  margin-right: 15px;
+}
+
+.product-btn:hover{
+  background-color: #edbc7b;
+  color: white;
+}
+
+.specifications, 
+.reviews {
+  display: none;
 }
 

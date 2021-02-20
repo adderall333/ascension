@@ -8,7 +8,7 @@ namespace Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Cost { get; set; }
-        public JsonDocument Specifications { get; set; }
+        public string Description { get; set; }
         
         public Category Category { get; set; }
         public IEnumerable<SpecificationOption> SpecificationOptions { get; set; }
