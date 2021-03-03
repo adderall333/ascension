@@ -22,23 +22,22 @@
     
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom">
         <div class="container">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
+                <ul class="navbar-nav flex-grow-1 justify-space-between">
                     <li>
-                        <div>City</div>
+                        <div class="nav-link text-dark">City</div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Catalog" asp-action="Index">Catalog</a>
                     </li>
                     <li class="nav-item">
-                        <div>Место для инпута поиска</div>
+                        <div class="nav-link text-dark">Место для инпута поиска</div>
                     </li>
                     <li>
-                        <a href="#">Account</a>
+                        <a class="nav-link text-dark" href="#">Account</a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark" href="#">Cart</a>
                     </li>
                 </ul>
             </div>
