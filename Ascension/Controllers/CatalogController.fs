@@ -90,8 +90,18 @@ type CatalogController() =
                         .Include(fun c -> c.Specifications)
                         .ThenInclude(fun (s:Specification) -> s.SpecificationOptions)
                         .AsSplitQuery()
-                        .First()
-        this.View(model)
+                        .ToList()
+        if not (model.Any())
+        then
+            this.Response.StatusCode <- 404
+            let reqId = 
+                if isNull Activity.Current then
+                    this.HttpContext.TraceIdentifier
+                else
+                    Activity.Current.Id
+            this.View("Error", ErrorViewModel(reqId))
+        else
+            this.View(model.First())
         
     member this.GetProducts(sortOption : string, category : string, ids : string) =
         use context = new ApplicationContext()
@@ -116,7 +126,7 @@ type CatalogController() =
                            
         if products.Count = 0
         then
-            this.Response.StatusCode <- 400
+            this.Response.StatusCode <- 404
             let reqId = 
                 if isNull Activity.Current then
                     this.HttpContext.TraceIdentifier

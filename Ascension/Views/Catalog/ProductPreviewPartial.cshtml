@@ -5,7 +5,7 @@
         <div class="product-preview-image">
             @if (Model.Images.Any())
             {
-                <img src="data:image;base64,@Convert.ToBase64String(Model.Images.First().Bytes)"/><br>
+                <img src="data:image;base64,@Convert.ToBase64String(Model.Images.OrderBy(i => i.Id).First().Bytes)"/><br>
             }
         </div>
         <div class="product-preview-info">
