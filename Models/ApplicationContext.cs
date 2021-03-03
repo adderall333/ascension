@@ -25,7 +25,7 @@ namespace Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Host=localhost;Database=ascension_db;Username=postgres;Password=qweasd123");
+                optionsBuilder.UseNpgsql("Host=ec2-34-201-248-246.compute-1.amazonaws.com;Database=d93siims2cr0ac;Username=eycpyuyshcnrul;Password=4a936f7226c7a80e69a0981476e758cbe4dc27ad6d12c339c89735b2cb3eee30;sslmode=Require;TrustServerCertificate=true");
             }
         }
         
