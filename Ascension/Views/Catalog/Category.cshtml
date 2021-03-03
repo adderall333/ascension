@@ -6,33 +6,43 @@
 }
 
 <div class="row">
-    <div class="col">
-        <div class="dropdown my-2">
-            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Сортировать
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a href="#" class="dropdown-item" sortOption="cheapFirst">Сначала дешевые</a>
-                <a href="#" class="dropdown-item" sortOption="expensiveFirst">Сначала дорогие</a>
-                <a href="#" class="dropdown-item" sortOption="alphabet">По алфавиту</a>
-            </div>
+    <div class="col-2 filters-block">
+        <div class="row">
+            <p class="fs-4">
+                Specifications
+            </p>
+        </div>
+        <div class="row">
+            @foreach (var specification in Model.Specifications)
+            {
+                @await Html.PartialAsync("SpecificationFilterPartial", specification)
+            }
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-3">
-        @foreach (var specification in Model.Specifications)
-        {
-            @specification.Name<br>
-            @foreach (var specificationOption in specification.SpecificationOptions)
+    <div class="col-10 content-block">
+        <div class="row search-sort-block">
+            <form class="d-flex col-10">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-dark search-btn" type="submit">Search</button>
+            </form>
+            
+            <div class="dropdown col-2">
+                <button class="btn dropdown-toggle sort-btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort
+                </button>
+                <ul class="dropdown-menu sort-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a sortOption="cheapFirst" class="dropdown-item" href="#">Cheap first</a></li>
+                    <li><a sortOption="expensiveFirst" class="dropdown-item" href="#">Expensive first</a></li>
+                    <li><a sortOption="alphabet" class="dropdown-item" href="#">By alphabet</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="products" class="row">
+            @foreach (var product in Model.Products)
             {
-                <input class="filter" id="@specificationOption.Id" type="checkbox">@specificationOption.Name<br>
+                @await Html.PartialAsync("ProductPreviewPartial", product)
             }
-        }
-    </div>
-    <div id="products" class="col-9">
-        @await Html.PartialAsync("ProductsPartial", Model.Products)
+        </div>
     </div>
 </div>
 

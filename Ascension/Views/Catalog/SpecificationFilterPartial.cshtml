@@ -1,0 +1,14 @@
+@model Models.Specification
+
+<div class="specification">
+    <p class="fs-5">
+        @Model.Name
+    </p>
+    @foreach (var specificationOption in Model.SpecificationOptions)
+    {
+        <div class="form-check">
+            <input class="filter form-check-input" id="@specificationOption.Id" type="checkbox">
+            <label>@specificationOption.Name</label>
+        </div>
+    }
+</div>
