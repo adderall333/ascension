@@ -9,7 +9,7 @@ a.navbar-brand {
 
 a,
 a :hover {
-  color: black !important;
+  color: black;
   text-decoration: none !important;
 }
 

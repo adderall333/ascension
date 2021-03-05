@@ -7,9 +7,15 @@
     <link href="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    
+    <script src="~/js/nav.js"></script>
+    
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css"/>
+    
+    <link rel="stylesheet" href="~/css/nav.css">
+    
 </head>
 <body>
 <header class="header-fixed">
@@ -20,6 +26,7 @@
         </div>
     </div>
     
+    <!--
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom">
         <div class="container">
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -43,8 +50,46 @@
             </div>
         </div>
     </nav>
+    -->
+
+    <nav class="navbar navbar-expand-lg navbar-mainbg">
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars text-white"></i>
+        </button> -->
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto my-style">
+                    
+                    <div class="hori-selector">
+                        <div class="left"></div>
+                        <div class="right"></div>
+                    </div>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);">City</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-controller="Catalog" asp-action="Index">Catalog</a>
+                    </li>
+                    <div>
+                        <input type="text">
+                        <button>Найти</button>
+                    </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);">Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);">Cart</a>
+                    </li>
+                    
+                </ul>
+            </div>
+
+        </div>
+    </nav>
     
 </header>
+
 <div class="container">
     <main role="main" class="pb-3">
         @RenderBody()
