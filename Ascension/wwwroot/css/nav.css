@@ -1,7 +1,7 @@
 ﻿i {
     margin-right: 10px;
 }
-/*----------multi-level-accordian-menu------------*/
+
 .navbar-logo{
     padding: 15px;
     color: #fff;
@@ -108,7 +108,9 @@
     align-items: center;
 }
 
-
+.nav-item:not(.active) :hover {
+    color: rgba(255,255,255,0.8) !important;
+}
 
 @media (max-width: 991px){
     #navbarSupportedContent ul li a{
