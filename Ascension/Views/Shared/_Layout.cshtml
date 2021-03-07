@@ -9,8 +9,12 @@
     <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/css/site.css"/>
     <link rel="stylesheet" href="~/css/nav.css">
+    <link rel="stylesheet" href="~/css/footer.css">
+    <!-- Используйте для подключения своих стилей -->
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
 <header class="header-fixed">
@@ -59,10 +63,10 @@
                         <a class="nav-link" href="javascript:void(0);">Account</a>
                     </li>
                     <li class="nav-item">
-                        <!--Ссылка на корзину-->
-                        <a class="nav-link" href="javascript:void(0);">Cart</a>
+	                    <!--Ссылка на корзину-->
+	                    <a class="nav-link" href="javascript:void(0);">Cart</a>
                     </li>
-                    
+
                 </ul>
             </div>
         </div>
@@ -76,8 +80,66 @@
     </main>
 </div>
 
+<footer class="footer-distributed">
+	<div class="container">
+		<div class="footer-left">
+
+			<h3 class="footer-company-logo">Ascension</h3>
+
+			<!-- Какие-то ссылки -->
+			<p class="footer-links">
+				<a href="#">Home</a>
+				·
+				<a href="#">Blog</a>
+				·
+				<a href="#">Pricing</a>
+				·
+				<a href="#">About</a>
+				·
+				<a href="#">Faq</a>
+				·
+				<a href="#">Contact</a>
+			</p>
+
+			<p class="footer-company-name">Ascension © 2021</p>
+		</div>
+
+		<div class="footer-center">
+
+			<div>
+				<i class="fa fa-map-marker"></i>
+				<p><span>35 Kremlevskaya Street</span> Kazan, Tatarstan</p>
+			</div>
+
+			<div>
+				<i class="fa fa-phone"></i>
+				<p>+7 777 123-45-67</p>
+			</div>
+
+			<div>
+				<i class="fa fa-envelope"></i>
+				<p>
+					<a href="mailto:support@company.com">support@company.com</a>
+				</p>
+			</div>
+
+		</div>
+
+		<div class="footer-right">
+
+			<!-- Написать текст про Ascension Online Store -->
+			<p class="footer-company-about">
+				<span>About the company</span>
+				Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor lacus vehicula sit amet.
+			</p>
+
+		</div>
+	</div>
+</footer>
+
 <script src="~/js/site.js"></script>
 <script src="~/js/nav.js"></script>
+<!-- Используйте для подключения своих скриптов --> 
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

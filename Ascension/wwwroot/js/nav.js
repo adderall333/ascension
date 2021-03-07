@@ -1,7 +1,8 @@
 ﻿function test(){
     
-    var location = window.location.href; 
-    var cur_url = '/' + location.split('/').pop(); // текущий адрес
+    var location = window.location.pathname; 
+    var tt = location.split('/')
+    var cur_url = '/' + location.split('/')[1]; // текущий адрес
 
     //var cur_active;
     $('.navbar-collapse li').each(function () { // проходимся по всем пунктам меню
