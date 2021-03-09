@@ -167,8 +167,8 @@ img {
 .sort-btn:hover {
   width: 150px;
   color: white;
-  background-color: #edbc7b !important;
-  border-color: #edbc7b !important;
+  background-color: black !important;
+  border-color: black !important;
   box-shadow: none !important;
 }
 
@@ -186,8 +186,8 @@ img {
 }
 
 .form-check-input {
-  background-color: #edbc7b !important;
-  border-color: #edbc7b !important;
+  background-color: black !important;
+  border-color: black !important;
   box-shadow: none !important;
 }
 
@@ -199,11 +199,11 @@ img {
 }
 
 .buy-btn {
-  color: #edbc7b;
+  color: black;
 }
 
 .dropdown-item:active {
-  background-color: #edbc7b !important;
+  background-color: black !important;
 }
 
 .main-image {

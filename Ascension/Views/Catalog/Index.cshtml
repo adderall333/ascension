@@ -31,12 +31,30 @@
         }
     </div>
     <div class="col-10 content-block">
-        Some text
+        <div class="row search-sort-block">
+            <div class="dropdown col-2">
+                <button class="btn dropdown-toggle sort-btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort
+                </button>
+                <ul class="dropdown-menu sort-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a sortOption="cheapFirst" class="dropdown-item" href="#">Cheap first</a></li>
+                    <li><a sortOption="expensiveFirst" class="dropdown-item" href="#">Expensive first</a></li>
+                    <li><a sortOption="alphabet" class="dropdown-item" href="#">By alphabet</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="products" class="row"></div>
     </div>
 </div>
 
 <script>
-    window.onload = function () {
+    async function getProducts() {
+        let response = await fetch("@Url.Action("GetProducts")");
+        document.getElementById("products").innerHTML = await response.text();
+    }
+
+    window.onload = async function () {
+        getProducts();
         let superCategoryBlock = document.getElementsByClassName("super-categories").item(0);
         let superCategories = document.getElementsByClassName("super-category");
         let categoryBlocks = document.getElementsByClassName("categories");  
@@ -65,6 +83,5 @@
                current = superCategoryBlock;
             });
         }
-    }
-        
+    } 
 </script>

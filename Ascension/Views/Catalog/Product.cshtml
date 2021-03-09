@@ -14,13 +14,13 @@
         </div>
         <div class="row">
             <div class="main-image">
-                <img id="main" src="data:image;base64,@Convert.ToBase64String(Model.Images.First().Bytes)"/>
+                <img id="main" src="@Model.Images.First().Path"/>
             </div>
             <div class="row images">
                 @foreach (var image in Model.Images)
                 {
                     <div class="col mini-image">
-                        <img class="image" id="@image.Id" src="data:image;base64,@Convert.ToBase64String(image.Bytes)"/>
+                        <img class="image" id="@image.Id" src="@image.Path"/>
                     </div>
                 }
             </div>

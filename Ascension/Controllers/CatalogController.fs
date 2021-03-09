@@ -85,8 +85,6 @@ type CatalogController() =
         let model = context
                         .Category
                         .Where(fun c -> c.Name = name)
-                        .Include(fun c -> c.Products)
-                        .ThenInclude(fun (p:Product) -> p.Images)
                         .Include(fun c -> c.Specifications)
                         .ThenInclude(fun (s:Specification) -> s.SpecificationOptions)
                         .AsSplitQuery()
@@ -103,14 +101,22 @@ type CatalogController() =
         else
             this.View(model.First())
         
-    member this.GetProducts(sortOption : string, category : string, ids : string) =
+    member this.GetProducts(category : string, sortOption : string,  ids : string) =
         use context = new ApplicationContext()
-        let products = ids
-                            |> parseIds
-                            |> getRequiredOptions context category
-                            |> getProducts context category
-                            |> sortProducts sortOption
-        this.PartialView("ProductsPartial", products)
+        if category = null
+        then
+            let products = context
+                               .Product
+                               .Include(fun p -> p.Images)
+                               .ToList()
+            this.PartialView("ProductsPartial", products)
+        else
+            let products = ids
+                                |> parseIds
+                                |> getRequiredOptions context category
+                                |> getProducts context category
+                                |> sortProducts sortOption
+            this.PartialView("ProductsPartial", products)
             
         
     member this.Product(id : int) =
