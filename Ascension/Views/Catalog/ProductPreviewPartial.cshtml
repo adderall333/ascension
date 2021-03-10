@@ -5,7 +5,7 @@
         <div class="product-preview-image">
             @if (Model.Images.Any())
             {
-                <img src="@Model.Images.First().Path"/><br>
+                <img src="@Model.Images.OrderBy(image => image.Id).First().Path"/><br>
             }
         </div>
         <div class="product-preview-info">

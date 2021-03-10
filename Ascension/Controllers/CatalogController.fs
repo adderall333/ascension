@@ -77,6 +77,7 @@ type CatalogController() =
         let model = context
                         .SuperCategory
                         .Include(fun sc -> sc.Categories)
+                        .AsSplitQuery()
                         .ToList()
         this.View(model)
     
@@ -108,6 +109,7 @@ type CatalogController() =
             let products = context
                                .Product
                                .Include(fun p -> p.Images)
+                               .AsSplitQuery()
                                .ToList()
             this.PartialView("ProductsPartial", products)
         else
@@ -128,6 +130,7 @@ type CatalogController() =
                            .Include(fun p -> p.SpecificationOptions)
                            .ThenInclude(fun (sOp:SpecificationOption) -> sOp.Specification)
                            .Include(fun p -> p.Category)
+                           .AsSplitQuery()
                            .ToList()
                            
         if products.Count = 0
