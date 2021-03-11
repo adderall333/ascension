@@ -5,83 +5,59 @@
     Layout = "_Layout";
 }
 
-<div class="row">
-    <div class="col-2 filters-block">
-        <div class="super-categories">
-            @foreach (var superCategory in Model)
-            {
-                <p>
-                    <a class="super-category fs-5" id="@superCategory.Id">@superCategory.Name</a>
-                </p>
-            }
+<div class="super-categories row">
+    @foreach (var superCategory in Model)
+    {
+        <div class="col-3">
+            <a class="super-category" id="@superCategory.Id">@await Html.PartialAsync("CategoryPreviewPartial", superCategory.Name)</a>
         </div>
-        @foreach (var superCategory in Model)
+    }
+</div>
+@foreach (var superCategory in Model)
+{
+    <div class="categories row" super-category-id="@superCategory.Id">
+        <p class="back-btn fs-4">
+            🡨 Back
+        </p>
+        @foreach (var category in superCategory.Categories)
         {
-            <div class="categories" super-category-id="@superCategory.Id">
-                <p class="back-btn fs-5">
-                    🡨 Back
-                </p>
-                @foreach (var category in superCategory.Categories)
-                {
-                    <p>
-                        <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name" class="category fs-5">@category.Name</a>
-                    </p>
-                }
+            <div class="col-3">
+                <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name" class="category">@await Html.PartialAsync("CategoryPreviewPartial", category.Name)</a>
             </div>
         }
     </div>
-    <div class="col-10 content-block">
-        <div class="row search-sort-block">
-            <div class="dropdown col-2">
-                <button class="btn dropdown-toggle sort-btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Sort
-                </button>
-                <ul class="dropdown-menu sort-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a sortOption="cheapFirst" class="dropdown-item" href="#">Cheap first</a></li>
-                    <li><a sortOption="expensiveFirst" class="dropdown-item" href="#">Expensive first</a></li>
-                    <li><a sortOption="alphabet" class="dropdown-item" href="#">By alphabet</a></li>
-                </ul>
-            </div>
-        </div>
-        <div id="products" class="row"></div>
-    </div>
-</div>
+}
+    
 
 <script>
-    async function getProducts() {
-        let response = await fetch("@Url.Action("GetProducts")");
-        document.getElementById("products").innerHTML = await response.text();
+window.onload = async function () {
+    let superCategoryBlock = document.getElementsByClassName("super-categories").item(0);
+    let superCategories = document.getElementsByClassName("super-category");
+    let categoryBlocks = document.getElementsByClassName("categories");  
+    let backButtons = document.getElementsByClassName("back-btn");
+    let categoryMap = new Map();
+    
+    let current = superCategoryBlock;
+    
+    for (let i = 0; i < categoryBlocks.length; i++) {
+        categoryMap.set(categoryBlocks[i].getAttribute("super-category-id"), categoryBlocks[i]);
     }
-
-    window.onload = async function () {
-        getProducts();
-        let superCategoryBlock = document.getElementsByClassName("super-categories").item(0);
-        let superCategories = document.getElementsByClassName("super-category");
-        let categoryBlocks = document.getElementsByClassName("categories");  
-        let backButtons = document.getElementsByClassName("back-btn");
-        let categoryMap = new Map();
-        
-        let current = superCategoryBlock;
-        
-        for (let i = 0; i < categoryBlocks.length; i++) {
-            categoryMap.set(categoryBlocks[i].getAttribute("super-category-id"), categoryBlocks[i]);
-        }
-        
-        for (let i = 0; i < superCategories.length; i++) {
-            superCategories[i].addEventListener("click", function () {
-                let toDisplay = categoryMap.get(superCategories[i].getAttribute("id"));
-                current.style.display = "none";
-                toDisplay.style.display = "block";
-                current = toDisplay;
-            });
-        }
-        
-        for (let i = 0; i < backButtons.length; i++) {
-            backButtons[i].addEventListener("click", function () {
-               current.style.display = "none";
-               superCategoryBlock.style.display = "block";
-               current = superCategoryBlock;
-            });
-        }
-    } 
+    
+    for (let i = 0; i < superCategories.length; i++) {
+        superCategories[i].addEventListener("click", function () {
+            let toDisplay = categoryMap.get(superCategories[i].getAttribute("id"));
+            current.style.display = "none";
+            toDisplay.style.display = "flex";
+            current = toDisplay;
+        });
+    }
+    
+    for (let i = 0; i < backButtons.length; i++) {
+        backButtons[i].addEventListener("click", function () {
+           current.style.display = "none";
+           superCategoryBlock.style.display = "flex";
+           current = superCategoryBlock;
+        });
+    }
+} 
 </script>

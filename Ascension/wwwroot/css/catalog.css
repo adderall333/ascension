@@ -1,0 +1,252 @@
+.filters-block,
+.content-block {
+    height: 100%;
+}
+
+.super-category,
+.category,
+.back-btn {
+    cursor: pointer;
+}
+
+.categories {
+    display: none;
+}
+
+.content-block {
+    padding-left: 20px;
+}
+
+.search-sort-block {
+    margin-bottom: 20px;
+}
+
+.sort-btn,
+.sort-btn:hover {
+    width: 150px;
+    color: white;
+    background-color: black !important;
+    border-color: black !important;
+    box-shadow: none !important;
+}
+
+.sort-menu {
+    transform: translate(0px, 40px);
+}
+
+.search,
+.sort {
+    width: 40%;
+}
+
+.specification {
+    margin-bottom: 20px;
+}
+
+.form-check-input {
+    background-color: black !important;
+    border-color: black !important;
+    box-shadow: none !important;
+}
+
+.search-btn {
+    color: white !important;
+    border-color: #edbc7b !important;
+    box-shadow: none !important;
+    background-color: #edbc7b !important;
+}
+
+.buy-btn {
+    color: black;
+}
+
+.dropdown-item:active {
+    background-color: black !important;
+}
+
+.main-image {
+    padding: 0;
+}
+
+.images {
+    padding: 0;
+}
+
+.mini-image {
+    cursor: pointer;
+}
+
+.product-info {
+    padding-left: 50px;
+}
+
+.product-btns {
+    margin-top: 40px;
+}
+
+.product-btn {
+    color: black;
+    border-color: black;
+    margin-right: 15px;
+}
+
+.product-btn:hover{
+    background-color: black;
+    color: white;
+}
+
+.specifications,
+.reviews {
+    display: none;
+}
+
+.category-container {
+    width: 220px;
+    height: 200px;
+    cursor: pointer;
+    -webkit-box-shadow: 0 0 5px #000;
+    box-shadow: 0 0 5px #000;
+}
+.overlay {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 2fr 2fr 1fr;
+    background: rgba(10, 10, 10, 0.9);
+    color: white;
+    opacity: 0;
+    transition: all 0.5s;
+}
+.items {
+    padding-left: 20px;
+    letter-spacing: 3px;
+}
+.head {
+    font-size: 30px;
+    line-height: 40px;
+    transform: translateY(40px);
+    transition: all 0.7s;
+}
+.head hr {
+    display: block;
+    width: 0;
+    border: none;
+    border-bottom: solid 2px white;
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    transition: all 0.5s;
+}
+.price {
+    font-size: 22px;
+    line-height: 10px;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.7s;
+}
+.cart {
+    font-size: 12px;
+    opacity: 0;
+    letter-spacing: 1px;
+    font-family: 'Lato', sans-serif;
+    transform: translateY(40px);
+    transition: all 0.7s;
+}
+.cart i {
+    font-size: 16px;
+}
+.cart span {
+    margin-left: 10px;
+}
+.category-container:hover .overlay {
+    opacity: 1;
+}
+.category-container:hover .overlay .head {
+    transform: translateY(0px);
+}
+.category-container:hover .overlay hr {
+    width: 75px;
+    transition-delay: 0.4s;
+}
+.category-container:hover .overlay .price {
+    transform: translateY(0px);
+    transition-delay: 0.3s;
+    opacity: 1;
+}
+.category-container:hover .overlay .cart {
+    transform: translateY(0px);
+    transition-delay: 0.6s;
+    opacity: 1;
+}
+
+.grid__item {
+    background-color: #fff;
+    border-radius: 0.4rem;
+    overflow: hidden;
+    box-shadow: 0 3rem 6rem rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: 0.2s;
+}
+.grid__item:hover {
+    transform: translateY(-0.5%);
+    box-shadow: 0 4rem 8rem rgba(0, 0, 0, 0.2);
+}
+.card__img {
+    display: block;
+    object-fit: cover;
+}
+.card__content,
+.card__img,
+.card__btn {
+    padding: 0 1rem 0 1rem;
+}
+.card__header {
+    font-weight: 400;
+    color: #0d0d0d;
+}
+.card__text {
+    color: #3d3d3d;
+}
+
+.product-preview-container {
+    max-width: 14vw;
+}
+
+.card__btn {
+    padding: 0.5rem;
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: white;
+    background-color: #3d3d3d;
+    border: none;
+    border-radius: 0.4rem;
+    transition: 0.2s;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+.card__btn span {
+    margin-left: 1rem;
+    transition: 0.2s;
+}
+.card__btn:hover, .card__btn:active {
+    background-color: black;
+}
+.card__btn:hover span, .card__btn:active span {
+    margin-left: 1.5rem;
+}
+
+.card__price {
+    color: black;
+}
+
+#load {
+    display: none;
+}
+
+.load-img {
+    width: 37px;
+    height: 37px;
+}

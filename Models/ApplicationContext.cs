@@ -5,7 +5,7 @@ namespace Models
     public class ApplicationContext : DbContext
     {
         private const string HerokuConnectionString =
-            "Host=ec2-34-201-248-246.compute-1.amazonaws.com;Database=d93siims2cr0ac;Username=eycpyuyshcnrul;Password=4a936f7226c7a80e69a0981476e758cbe4dc27ad6d12c339c89735b2cb3eee30;sslmode=Require;TrustServerCertificate=true";
+            "Host=ec2-176-34-222-188.eu-west-1.compute.amazonaws.com;Database=d3p2plhcg9prre;Username=hwuxdanoihasjy;Password=c6c4ce1fd9426a50359518d76885f62cb8da94049eeec4d89d00db60dbcd94a6;sslmode=Require;TrustServerCertificate=true";
 
         private const string LocalConnectionString =
             "Host=localhost;Database=ascension_db;Username=postgres;Password=qweasd123";
