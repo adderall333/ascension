@@ -1,12 +1,12 @@
 ﻿function test(){
     
-    var location = window.location.pathname; 
-    var tt = location.split('/')
+    var location = window.location.pathname;
     var cur_url = '/' + location.split('/')[1]; // текущий адрес
 
     //var cur_active;
     $('.navbar-collapse li').each(function () { // проходимся по всем пунктам меню
         var link = $(this).find('a').attr('href'); // выделяем ссылку 
+        link = '/' + link.split('/')[1];
         if(cur_url === link){
             //cur_active = $(this);
             $(this).addClass('active'); // если ссылка является текущим url, то <li> мы добавляем класс .active
