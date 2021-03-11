@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="ProductFilter.fs" />
         <Compile Include="Controllers/HomeController.fs" />
         <Compile Include="Controllers\CatalogController.fs" />
         <Compile Include="Startup.fs" />
@@ -81,6 +82,10 @@
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\img\static" />
     </ItemGroup>
 
 </Project>

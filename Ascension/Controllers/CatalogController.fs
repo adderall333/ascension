@@ -1,7 +1,7 @@
 ﻿namespace Ascension
 
 open System
-open System.Collections.Generic
+open ProductFilter
 open System.Diagnostics
 open System.Linq
 open Microsoft.AspNetCore.Mvc
@@ -10,114 +10,56 @@ open Models
 
 type CatalogController() =
     inherit Controller()
-    
-    let getProducts (context : ApplicationContext) (category : string) (options : List<SpecificationOption>) =
-        let productsQuery = context
-                                .Product
-                                .Where(fun p -> p.Category.Name = category)
-                                .Include(fun p -> p.Images)
-                                .Include(fun p -> p.SpecificationOptions)
-                                .Include(fun p -> p.Category)
-        if options = null
-        then
-            productsQuery
-                .ToList()
-        else
-            productsQuery
-                .Where(fun p -> p
-                                    .SpecificationOptions
-                                    .All(fun sOp -> options.Contains(sOp)))
-                .ToList()
-      
-    let getRequiredOptions (context : ApplicationContext) (category : string) (ids : List<int>) =
-        if ids = null
-        then
-            null
-        else
-            let specifications = context
-                                     .Specification
-                                     .Where(fun s -> s.Category.Name = category)
-                                     .Include(fun s -> s.SpecificationOptions)
-                                     .ToList()
-            let checkedOptions = context
-                                     .SpecificationOption
-                                     .Where(fun sOp -> ids.Contains(sOp.Id))
-                                     .ToList()
-            specifications
-                .Where(fun s -> not (s
-                                    .SpecificationOptions
-                                    .Any(fun sOp -> ids.Contains(sOp.Id))))
-                .SelectMany(fun s -> s.SpecificationOptions)
-                .Concat(checkedOptions)
-                .ToList()
-            
-    let sortProducts (sortOption : string) (products : List<Product>) =
-        if sortOption = null
-        then
-            products
-        else
-            match sortOption with
-            | "cheapFirst" -> products.OrderBy(fun p -> p.Cost).ToList()
-            | "expensiveFirst" -> products.OrderByDescending(fun p -> p.Cost).ToList()
-            | "alphabet" -> products.OrderBy(fun p -> p.Name).ToList()
-            | _ -> failwith "There is no such sort option"
-        
-    let parseIds (ids : string) =
-        if ids = null
-        then
-            null
-        else
-            ids
-                .Split(",")
-                .Select(fun id -> id |> int)
-                .ToList()
 
+    let errorHandling (this : Controller) =
+        this.Response.StatusCode <- 404
+        let reqId = 
+            if isNull Activity.Current then
+                this.HttpContext.TraceIdentifier
+            else
+                Activity.Current.Id
+        this.View("Error", ErrorViewModel(reqId))
+    
     member this.Index() =
         use context = new ApplicationContext()
         let model = context
                         .SuperCategory
                         .Include(fun sc -> sc.Categories)
-                        .AsSplitQuery()
                         .ToList()
         this.View(model)
     
+    
     member this.Category(name) =
         use context = new ApplicationContext()
-        let model = context
-                        .Category
-                        .Where(fun c -> c.Name = name)
-                        .Include(fun c -> c.Specifications)
-                        .ThenInclude(fun (s:Specification) -> s.SpecificationOptions)
-                        .AsSplitQuery()
-                        .ToList()
-        if not (model.Any())
+        let category = context
+                           .Category
+                           .FirstOrDefault(fun c -> c.Name = name)
+        if category = null
         then
-            this.Response.StatusCode <- 404
-            let reqId = 
-                if isNull Activity.Current then
-                    this.HttpContext.TraceIdentifier
-                else
-                    Activity.Current.Id
-            this.View("Error", ErrorViewModel(reqId))
+            errorHandling this
         else
-            this.View(model.First())
+            category.Specifications <- context
+                                     .Specification
+                                     .Where(fun s -> s.CategoryId = category.Id)
+                                     .ToList()
+            for specification in category.Specifications do
+                specification.SpecificationOptions <- context
+                                                          .SpecificationOption
+                                                          .Where(fun s -> s.SpecificationId = specification.Id)
+                                                          .ToList()
+            this.View(category)
         
     member this.GetProducts(category : string, sortOption : string,  ids : string) =
         use context = new ApplicationContext()
         if category = null
         then
-            let products = context
-                               .Product
-                               .Include(fun p -> p.Images)
-                               .AsSplitQuery()
-                               .ToList()
-            this.PartialView("ProductsPartial", products)
+            null
         else
-            let products = ids
-                                |> parseIds
-                                |> getRequiredOptions context category
-                                |> getProducts context category
-                                |> sortProducts sortOption
+            let products = category
+                           |> selectByCategory context
+                           |> filter context ids
+                           |> sortProducts sortOption
+                           |> loadImages context
             this.PartialView("ProductsPartial", products)
             
         
@@ -135,12 +77,6 @@ type CatalogController() =
                            
         if products.Count = 0
         then
-            this.Response.StatusCode <- 404
-            let reqId = 
-                if isNull Activity.Current then
-                    this.HttpContext.TraceIdentifier
-                else
-                    Activity.Current.Id
-            this.View("Error", ErrorViewModel(reqId))
+            errorHandling this
         else    
             this.View(products.First())

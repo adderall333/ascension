@@ -1,0 +1,13 @@
+@model string
+@{
+    var imagePath = "/img/static/" + Model + ".jpg";
+}
+
+<div class="category-container" style="background: black url('@imagePath'); background-size: cover;">
+    <div class="overlay">
+        <div class = "items"></div>
+        <div class = "items head">
+            <p>@Model</p>
+        </div>
+    </div>
+</div>
