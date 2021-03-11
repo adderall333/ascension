@@ -31,6 +31,9 @@
                     <li><a sortOption="alphabet" class="dropdown-item" href="#">By alphabet</a></li>
                 </ul>
             </div>
+            <div id="load" class="col">
+                <img class="load-img" src="/img/static/load.gif" alt=""/>
+            </div>
         </div>
         <div id="products" class="row"></div>
     </div>
@@ -69,15 +72,20 @@ function toString(set) {
 }
 
 async function getProducts() {
+    document.getElementById("load").style.display = "block";
     let response = await fetch("@Url.Action("GetProducts")?" + 
                                                "category=" + params['name'] + 
                                                "&sortOption="+ sortOption + 
                                                "&ids=" + toString(optionIds));
     document.getElementById("products").innerHTML = await response.text();
+    document.getElementById("load").style.display = "none";
 }
 
 window.onload = async function () {
-        getProducts();
+    getProducts();
+    
+    //let load = document.Get
+    
     let sortOptions = document.getElementsByClassName('dropdown-item');
     for (let i = 0; i < sortOptions.length; i++ )
         sortOptions[i].addEventListener('click', function (){
