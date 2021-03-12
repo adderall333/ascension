@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "Signup";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/authentication.css">
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+}
+
+<section class="signup">
+    <div class="container-auth">
+        <div class="signup-content">
+            <div class="signup-form">
+                <h2 class="h2-auth form-title">Sign up</h2>
+
+                <div id="error-block">
+                </div>
+
+                <form method="POST" name="signUp" class="register-form" id="register-form" onsubmit="return false;">
+                    <div class="form-group">
+                        <label class="auth-label" for="name">
+                            <i class="zmdi zmdi-account material-icons-name"></i>
+                        </label>
+                        <input class="auth-input" type="text" name="name" id="name" placeholder="Your Name"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="auth-label" for="surname">
+                            <i class="zmdi zmdi-account-o material-icons-name"></i>
+                        </label>
+                        <input class="auth-input" type="text" name="surname" id="surname" placeholder="Your Surname"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="auth-label" for="email">
+                            <i class="zmdi zmdi-email"></i>
+                        </label>
+                        <input class="auth-input" type="email" name="email" id="email" placeholder="Your Email"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="auth-label" for="pass">
+                            <i class="zmdi zmdi-lock"></i>
+                        </label>
+                        <input class="auth-input" type="password" name="pass" id="pass" placeholder="Password"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="auth-label" for="re_pass">
+                            <i class="zmdi zmdi-lock-outline"></i>
+                        </label>
+                        <input class="auth-input" type="password" name="re_pass" id="re_pass" placeholder="Repeat your password"/>
+                    </div>
+                    <div class="form-group form-button">
+                        <input type="submit" name="signup" id="signup" class="auth-input form-submit" value="Register"/>
+                    </div>
+                </form>
+            </div>
+            <div class="signup-image">
+                <figure>
+                    <img class="auth-logo" src="~/img/ascension_logo.png" alt="sing up image">
+                </figure>
+                <a asp-controller="Authentication" asp-action="Signin" class="a-auth signup-image-link">I am already member</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script src="~/js/signup.js"></script>
+}
