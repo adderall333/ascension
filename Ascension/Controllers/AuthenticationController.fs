@@ -12,3 +12,6 @@ type AuthenticationController() =
     
     member this.Signin() =
         this.View()
+        
+    member this.Signup() =
+        this.View()
