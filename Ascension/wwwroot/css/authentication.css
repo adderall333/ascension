@@ -77,9 +77,6 @@ a.a-auth:focus, a.a-auth:active {
     transform: translate(-50%, -50%); 
 }
 
-.signup {
-    margin-bottom: 150px; }
-
 .signup-content {
     padding: 75px 0; }
 
@@ -88,13 +85,13 @@ a.a-auth:focus, a.a-auth:active {
     overflow: hidden; }
 
 .signup-image {
-    margin: 0 55px; }
+    margin-right: 110px;
+    margin-left: 20px;
+    margin-top: 10px;
+}
 
 .form-title {
     margin-bottom: 33px; }
-
-.signup-image {
-    margin-top: 45px; }
 
 figure {
     margin-bottom: 50px;
