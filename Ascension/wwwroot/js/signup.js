@@ -1,20 +1,4 @@
-﻿/*function signup() {
-    
-    let form = document.getElementById('register-form');
-    let name = form.name.value;
-    let surname = form.surname.value;
-    let email = form.email.value;
-    let pass = form.pass.value;
-    let re_pass = form.re_pass.value;
-    
-    let checkName = /^[A-Z][a-zA-Z]+$/.test(name);
-    let checkSurname = /^[A-Z][a-zA-Z]+$/.test(surname);
-    let checkEmail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}$/.test(email)
-    let checkPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(pass);
-    
-}
-*/
-let signup_button = document.getElementById('signup');
+﻿let signup_button = document.getElementById('signup');
 
 signup_button.addEventListener("click", () => {
     let form = document.getElementById('register-form');
