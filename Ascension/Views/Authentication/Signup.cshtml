@@ -13,7 +13,11 @@
         <div class="signup-content">
             <div class="signup-form">
                 <h2 class="h2-auth form-title">Sign up</h2>
-                <form method="POST" class="register-form" id="register-form">
+
+                <div id="error-block">
+                </div>
+
+                <form method="POST" name="signUp" class="register-form" id="register-form" onsubmit="return false;">
                     <div class="form-group">
                         <label class="auth-label" for="name">
                             <i class="zmdi zmdi-account material-icons-name"></i>
@@ -21,10 +25,10 @@
                         <input class="auth-input" type="text" name="name" id="name" placeholder="Your Name"/>
                     </div>
                     <div class="form-group">
-                        <label class="auth-label" for="your_surname">
+                        <label class="auth-label" for="surname">
                             <i class="zmdi zmdi-account-o material-icons-name"></i>
                         </label>
-                        <input class="auth-input" type="text" name="your_surname" id="your_surname" placeholder="Your Surname"/>
+                        <input class="auth-input" type="text" name="surname" id="surname" placeholder="Your Surname"/>
                     </div>
                     <div class="form-group">
                         <label class="auth-label" for="email">
@@ -58,3 +62,8 @@
         </div>
     </div>
 </section>
+
+@section Scripts
+{
+    <script src="~/js/signup.js"></script>
+}
