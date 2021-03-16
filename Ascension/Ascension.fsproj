@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="Crypto.fs" />
         <Compile Include="ProductFilter.fs" />
         <Compile Include="Controllers/HomeController.fs" />
         <Compile Include="Controllers\CatalogController.fs" />
