@@ -37,25 +37,56 @@ signup_button.addEventListener("click", () => {
 
     if (name.length < 1 || surname.length < 1 || email.length < 1 || pass.length < 1 || re_pass.length < 1) {
         createErrorMessage('Fill in all the fields');
+        return;
     }
     else {
         if (!checkName) {
             createErrorMessage('Invalid name')
+            return;
         }
         if (!checkSurname) {
             createErrorMessage('Invalid surname')
+            return;
         }
         if (!checkEmail) {
             createErrorMessage('Invalid email')
+            return;
         }
         if (!checkPass) {
             createErrorMessage('Invalid password.\nThe password must be at least 6 characters long and contain at least one number, one uppercase and one lowercase letter.')
+            return;
         }
         if (!checkRePass) {
             createErrorMessage('Password mismatch')
+            return;
         }
     }
     
     // отправлять запрос на сервер
+
+    let fD = new FormData();
+    fD.append('name', name);
+    fD.append('surname', surname);
+    fD.append('email', email);
+    fD.append('pass', pass);
+    
+    $.ajax({
+        type: 'POST',
+        url: '/Authentication/TryRegister',
+        //data: {name:name, surname:surname, email:email, pass:pass},
+        data: fD,
+        processData: false,
+        contentType: false,
+        success: function(res, status, xhr) {
+            let result = xhr.getResponseHeader("result")
+            if (result === "ok")
+                //document.location.href = "Account"
+                createErrorMessage('ВСE ОК!!!!!!')
+            //else if (result === "error")
+                //alert("Произошла ошибка при регистрации. Провертье введенные данные")
+            else
+                createErrorMessage('ИМЯ УЖЕ ЗАНЯТО ((((((')
+        }
+    })
     
 });
