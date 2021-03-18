@@ -10,7 +10,7 @@ open Newtonsoft.Json
 type IPController() =
     inherit Controller()
 
-    member this.GetIp(lat: float, lot: float) =
+    member this.Index(lat: float, lot: float) =
         let typ = 1
         if lat.GetType() <> typ.GetType() && lot.GetType() <> typ.GetType()
           then

@@ -21,14 +21,13 @@
 </head>
 <body>
 <header class="header-fixed">
-    
-    <div class="header-top-line">
-        <div class="header-top-line-container">
-            <a class="store-name" asp-controller="Home" asp-action="Index">Ascension</a>
-        </div>
-    </div>
-    
-    <nav class="navbar navbar-expand-lg navbar-mainbg">
+	<div class="header-top-line">
+		<div class="header-top-line-container">
+			<button id="get-btn" class="cnt-btn" style="border: 0;  background: transparent; color: #9e9e9e">Определить город:<p id="demo" style="color: #9e9e9e"></p></button> 
+			<a class="store-name" asp-controller="Home" asp-action="Index">Ascension</a>
+		</div>
+	</div>
+	<nav class="navbar navbar-expand-lg navbar-mainbg">
         <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
         </button> -->
@@ -42,17 +41,12 @@
                     </div>
 
                     <li class="nav-item">
-                        <!--
-                        Ссылка на страницу выбора города.
-                        Пока перенаправляет на главную страницу для тестирования активной ссылки.
-                        -->
-                        <a class="nav-link" asp-controller="Home" asp-action="Index">City(Home)</a>
+	                    <a  class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Catalog" asp-action="Index">Catalog</a>
                     </li>
                    
-                    <!--Полнотекстовый поиск-->
                     <div>
                         <input type="text">
                         <button>Search</button>
