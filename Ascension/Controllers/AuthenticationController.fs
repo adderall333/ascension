@@ -21,8 +21,22 @@ type AuthenticationController() =
     
     [<HttpPost>]  
     member this.TryRegister(user : UserToRegister) =
-        if user.Name <> "Kirill"
+        use context = new ApplicationContext()
+        let alreadyRegistered = context
+                                    .User
+                                    .Where(fun e -> e.Email = user.Email)
+                                    .ToList()
+                                    .Any()
+        if alreadyRegistered
         then
-            this.Response.Headers.Add("result", StringValues("ok"))
+            this.Response.Headers.Add("registration_result", StringValues("failed"))
         else
-            this.Response.Headers.Add("result", StringValues("error"))
+            let hashedPassword = Crypto.GetHashPassword user.Pass
+            let newUser = new User()
+            newUser.Name <- user.Name
+            newUser.Surname <- user.Surname
+            newUser.Email <- user.Email
+            newUser.HashedPassword <- hashedPassword
+            context.User.Add(newUser) |> ignore
+            context.SaveChanges() |> ignore
+            this.Response.Headers.Add("registration_result", StringValues("ok"))

@@ -78,14 +78,14 @@ signup_button.addEventListener("click", () => {
         processData: false,
         contentType: false,
         success: function(res, status, xhr) {
-            let result = xhr.getResponseHeader("result")
+            let result = xhr.getResponseHeader("registration_result")
             if (result === "ok")
                 //document.location.href = "Account"
                 createErrorMessage('ВСE ОК!!!!!!')
-            //else if (result === "error")
-                //alert("Произошла ошибка при регистрации. Провертье введенные данные")
+            else if (result === "failed")
+                createErrorMessage('This email address already exists.\nPlease choose a unique one.')
             else
-                createErrorMessage('ИМЯ УЖЕ ЗАНЯТО ((((((')
+                createErrorMessage('An error occurred while registering.\nPlease try again')
         }
     })
     
