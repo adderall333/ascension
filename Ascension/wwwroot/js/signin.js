@@ -4,6 +4,7 @@ signin_button.addEventListener("click", () => {
     let form = document.getElementById('login-form');
     let email = form.email.value;
     let pass = form.pass.value;
+    let remember = form.remember.checked;
 
     function createErrorMessage(message) {
         let div = document.createElement('div');
@@ -26,10 +27,28 @@ signin_button.addEventListener("click", () => {
         error_block.removeChild(error_block.lastChild);
     }
 
-    if (name.length < 1 || surname.length < 1 || email.length < 1 || pass.length < 1 || re_pass.length < 1) {
+    if (email.length < 1 || pass.length < 1) {
         createErrorMessage('Fill in all the fields');
     }
+
+    let fD = new FormData();
+    fD.append('email', email);
+    fD.append('pass', pass);
+    fD.append('remember', remember);
     
-    // отправлять запрос на сервер
+    $.ajax({
+        type: 'POST',
+        url: '/Authentication/TryLogin',
+        data: fD,
+        processData: false,
+        contentType: false,
+        success: function(res, status, xhr) {
+            let result = xhr.getResponseHeader("login_result")
+            if (result === "ok")
+                window.location.href = "/Account"
+            else
+                createErrorMessage('Invalid email or password')
+        }
+    })
 
 });
