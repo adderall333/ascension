@@ -295,6 +295,12 @@ label.auth-label.valid:after {
     padding-top: 3px;
 }
 
+#timer {
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: 400;
+}
+
 @media screen and (max-width: 1200px) {
     .container-auth {
         width: calc( 100% - 30px);
