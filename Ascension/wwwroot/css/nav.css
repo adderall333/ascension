@@ -142,8 +142,12 @@
         bottom: -25px;
         left: -25px;
     }
-    .cnt-btn{
-        
-    }
-   
 }
+
+.cnt-btn{
+    border: 0;
+    background: transparent;
+    position: fixed;
+    color: #9e9e9e;
+}
+   
