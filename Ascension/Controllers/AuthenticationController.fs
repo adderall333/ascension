@@ -60,5 +60,11 @@ type AuthenticationController() =
         if check
         then
             this.Response.Headers.Add("login_result", StringValues("ok"))
+            this.HttpContext.Session.SetInt32("isAuth", 1)
+            this.HttpContext.Session.SetString("email", user.Email)
+            if user.Remember
+            then
+                this.HttpContext.Response.Cookies.Append("email", user.Email)
+                this.HttpContext.Response.Cookies.Append("hashedPass", Crypto.GetHashPassword user.Pass)
         else
             this.Response.Headers.Add("registration_result", StringValues("failed"))
