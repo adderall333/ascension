@@ -1,4 +1,5 @@
-﻿module Ascension
+﻿namespace Ascension
+
 open Microsoft.AspNetCore.Http
 open System.Linq
 open Models
