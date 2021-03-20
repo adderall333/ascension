@@ -12,19 +12,6 @@ open Models
 type AuthenticationController() =
     inherit Controller()
     
-    let checkUser(user : UserToLogin) =
-        use context = new ApplicationContext()
-        let dbUser = context
-                         .User
-                         .FirstOrDefault(fun e -> e.Email = user.Email)
-        if dbUser = null
-        then
-            false
-        else
-            let hashedInputPass = Crypto.GetHashPassword user.Pass
-            hashedInputPass = dbUser.HashedPassword
-        
-    
     member this.Signin() =
         this.View()
       
@@ -56,15 +43,20 @@ type AuthenticationController() =
        
     [<HttpPost>]
     member this.TryLogin(user : UserToLogin) =
-        let check = checkUser user
+        use context = new ApplicationContext()
+        let dbUser = context
+                         .User
+                         .FirstOrDefault(fun e -> e.Email = user.Email)
+        let check = Crypto.VerifyHashedPassword user.Pass dbUser.HashedPassword
         if check
         then
             this.Response.Headers.Add("login_result", StringValues("ok"))
-            this.HttpContext.Session.SetInt32("isAuth", 1)
-            this.HttpContext.Session.SetString("email", user.Email)
+            this.HttpContext.Session.SetString("isAuth", "true")
+            this.HttpContext.Session.SetInt32("id", dbUser.Id) 
+            this.HttpContext.Session.SetString("email", dbUser.Email)
             if user.Remember
             then
-                this.HttpContext.Response.Cookies.Append("email", user.Email)
-                this.HttpContext.Response.Cookies.Append("hashedPass", Crypto.GetHashPassword user.Pass)
+                this.HttpContext.Response.Cookies.Append("email", dbUser.Email)
+                this.HttpContext.Response.Cookies.Append("hashedPass", dbUser.HashedPassword)
         else
             this.Response.Headers.Add("registration_result", StringValues("failed"))

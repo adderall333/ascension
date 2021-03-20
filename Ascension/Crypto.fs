@@ -17,7 +17,7 @@ module Crypto =
             |> shaM.ComputeHash
             |> Convert.ToBase64String
         
-    let VerifyHashedPassword (inputPas : string, hashedPas : string) =
+    let VerifyHashedPassword inputPas hashedPas =
         if inputPas = null || hashedPas = null
         then
             false

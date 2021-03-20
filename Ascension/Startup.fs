@@ -22,6 +22,7 @@ type Startup private () =
         // Add framework services.
         services.AddControllersWithViews().AddRazorRuntimeCompilation() |> ignore
         services.AddRazorPages() |> ignore
+        services.AddDistributedMemoryCache() |> ignore
         services.AddSession() |> ignore
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
