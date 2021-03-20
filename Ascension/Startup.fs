@@ -39,6 +39,7 @@ type Startup private () =
         app.UseStaticFiles() |> ignore
 
         app.UseSession() |> ignore
+        app.UseMiddleware<AuthorizationByCookiesMiddleware>() |> ignore
         
         app.UseRouting() |> ignore
 

@@ -8,6 +8,7 @@
         <Compile Include="Crypto.fs" />
         <Compile Include="UserToRegister.fs" />
         <Compile Include="UserToLogin.fs" />
+        <Compile Include="AuthorizationByCookiesMiddleware.fs" />
         <Compile Include="ProductFilter.fs" />
         <Compile Include="Controllers/HomeController.fs" />
         <Compile Include="Controllers\CatalogController.fs" />
