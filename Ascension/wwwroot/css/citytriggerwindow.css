@@ -191,29 +191,40 @@ span {
 }
 
 .close-button{
+    
     margin-top: -90px;
     margin-left: 235px;
     color: gray;
 }
 
 .main-txt{
-    font-family: 'Abril Fatface', cursive;
-    color: gray;
+    font-family: 'Abril Fatface', cursive; 
+    color: black;
     margin-right: 90px;
     margin-top: -25px;
 }
 
 .city-txt{
+    font-family: 'Abril Fatface', cursive;
     color: gray;
     margin-right: 400px;
 }
 
 .detect-cd{
-    margin-left: -105px; 
-    margin-top: 10px;
+    margin-left: 155px; 
+    margin-top: -66px;
 }
-
+    
 .form-select{
+    background: transparent;
+    outline: none;
+    border: none;
     width: 200px;
     max-width: 100%;
 }
+
+.choose-btn {
+    margin-top: 10px;
+    margin-left: -190px;
+}
+
