@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="~/css/nav.css">
     <link rel="stylesheet" href="~/css/footer.css">
     <link rel="stylesheet" href="~/css/catalog.css">
+	<link rel="stylesheet" href="~/css/citytriggerwindow.css">
     <link href="/favicon.ico" rel="icon"  type="image/x-icon">
     <!-- Используйте для подключения своих стилей -->
     @await RenderSectionAsync("Styles", required: false)
@@ -62,12 +63,37 @@
 	                    <a class="nav-link" href="javascript:void(0);">Cart</a>
                     </li>
                 </ul>
+                
+                
             </div>
         </div>
     </nav>
     
 </header>
 
+ <div class="row pop-up" style="display: none;">
+             	   <div class="box1 small-6 large-centered shadow-lg p-3 mb-5 bg-white rounded">
+             		<a href="#" class="close-button">Close</a>
+                    <h3 class="main-txt">City selection</h3>	
+                    <select class="form-select" size="3" aria-label="size 3 select example">
+                        <option value="1">Kazan</option>
+                        <option value="2">Moscow</option>
+                        <option value="3">Kiev</option>
+                        <option value="4">Kazan</option>
+                        <option value="5">Moscow</option>   
+                        <option value="6">Kiev</option>
+                        <option value="7">Kazan</option>
+                        <option value="8">Moscow</option>
+                        <option value="9">Kiev</option>
+                    </select>
+                     <div>
+                        <button class="choose-btn btn btn-outline-secondary">Choose</button>
+                     </div>
+                    <div>
+                        <button class="detect-cd btn btn-outline-secondary" id="get-btn">Auto-Select</button>
+                    </div>
+                  </div>
+               </div>
 
 <div class="container">
     <main role="main" class="pb-3">
