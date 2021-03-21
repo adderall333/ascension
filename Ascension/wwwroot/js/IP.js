@@ -15,6 +15,7 @@
         fetch('/geoapi/get?lat=' + position.coords.latitude +'&lot='+ position.coords.longitude)
             .then(x => x.json())
             .then(x => x1.innerHTML = x.city)
+            
     }
 }
 

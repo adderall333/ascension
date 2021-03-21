@@ -149,9 +149,11 @@
     margin: 0 auto;
     padding-top: 100px;
 }
+
 span {
     color: dimgray;
 }
+
 .pop-up {
     position: fixed;
     margin: 5% auto;
@@ -159,29 +161,59 @@ span {
     right: 0;
     z-index: 2;
 }
+
 .box {
     background-color: whitesmoke;
     text-align: center;
-    margin-left: 400px;
-    margin-right: 105px;
+    margin-left: 600px;
+    margin-right: 15px;
     margin-top: -150px;
     position: fixed;
-    width: 5000px;
-    max-width: 50%;
-    height: 3000px;
-    max-height: 50%;
-    -webkit-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
-    -moz-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
-    box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+    width: 300px;
+    max-width: 100%;
+    height: 200px;
+    max-height: 100%;
+    -webkit-box-shadow: 0px 4px 6px 0px gray;
+    -moz-box-shadow: 0px 4px 6px 0px gainsboro;
+    box-shadow: 0px 4px 6px 0px darkgray;
 }
+
 .button {
     margin: 0 auto;
-    background-color: #FF8566;
+    color: gray;
     margin-bottom: 33px;
 }
+
 .button:hover {
-    background-color: #7CCF29;
-    -webkit-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
-    -moz-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
-    box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0px 4px 6px 0px gray;
+    -moz-box-shadow: 0px 4px 6px 0px gainsboro;
+    box-shadow: 0px 4px 6px 0px darkgray;
+}
+
+.close-button{
+    margin-top: -90px;
+    margin-left: 235px;
+    color: gray;
+}
+
+.main-txt{
+    font-family: 'Abril Fatface', cursive;
+    color: gray;
+    margin-right: 90px;
+    margin-top: -25px;
+}
+
+.city-txt{
+    color: gray;
+    margin-right: 400px;
+}
+
+.detect-cd{
+    margin-left: -105px; 
+    margin-top: 10px;
+}
+
+.form-select{
+    width: 200px;
+    max-width: 100%;
 }
