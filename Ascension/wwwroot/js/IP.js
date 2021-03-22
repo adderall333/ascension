@@ -1,70 +1,75 @@
-﻿const CITY_KEY = 'x-city';
-const setCity = city => localStorage.setItem(CITY_KEY, city);
-const getCity = () => localStorage.getItem(CITY_KEY);
+﻿const storageKeys = {
+    CITY: 'x-city',
+};
 
-const updateCityElem = (x) => {
+function showPosition(position) {
+    fetch(
+        '/geoapi/get?lat=' +
+        position.coords.latitude +
+        '&lot=' +
+        position.coords.longitude
+    )
+        .then((x) => x.json())
+        .then(({ city }) => {
+            setCity(city);
+        });
+}
+    
+const refreshCityTag = () => {
     const city = getCity();
+
     if (city) {
-        x.innerHTML = city;
+        document.querySelector('.home').innerText = city;
     }
-}
+};
 
-window.onload = function () {
-    checkCity();
-    const x1 = document.getElementById("demo");
+const setCity = (city, reload) => {
+    localStorage.setItem(storageKeys.CITY, city);
 
-    document.getElementById("get-btn").addEventListener('click', getLocation);
-    document.getElementById("chs-btn").addEventListener('click', showPosition1);
-    updateCityElem(x1);
+    refreshCityTag();
 
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            x1.innerHTML = "Geolocation is not supported by this browser.";
-        }
+    if (reload) return location.reload();
+
+    document.querySelector('.suggested-city').innerText = `${city}?`;
+};
+
+const getCity = () => localStorage.getItem(storageKeys.CITY);
+
+const getGeolocation = () =>
+    new Promise((rs, rj) => navigator.geolocation.getCurrentPosition(rs, rj));
+
+const getGeoSuggestion = async () => {
+    if (navigator.geolocation) {
+        try {
+            const location = await getGeolocation();
+            if (location) showPosition(location);
+        } catch (error) {}
     }
+};
 
-    function showPosition(position) {
-        fetch('/geoapi/get?lat=' + position.coords.latitude + '&lot=' + position.coords.longitude)
-            .then(x => x.json())
-            .then(({city}) => {
-                setCity(city)
-                updateCityElem(x1)
-            })
+$(async () => {
+    refreshCityTag();
+    if (getCity()) return;
 
-    }
-    function showPosition1() {
-        const select = document.getElementById("slc-city");
-        const value = select.value;
-        console.log(value)
-        setCity(value)
-
-    }
-}
-
-
-function checkCity() {
-    const city = getCity();
-    if (city) {
-        $('.pop-up').hide();
-    }
-    const cityEl = document.querySelector('#demo');
-    updateCityElem(cityEl);
-}
-
-$(function () {
     $('.pop-up').hide();
-    const city = getCity();
-    if (city) {
-        return;
-    }
+
+    await getGeoSuggestion();
     $('.pop-up').fadeIn(1200);
-    $('.close-button').click(function (e) {
+
+    $('.detect-cd').click(function (e) {
         $('.pop-up').fadeOut(700);
         $('#overlay').removeClass('blur-in');
+
         $('#overlay').addClass('blur-out');
+
         e.stopPropagation();
+    });
+
+    $('.choose-btn').click(() => {
+        const city = $('#slc-city option:selected').text();
+        if (city) {
+            setCity(city, true);
+        }
     });
 });
 
