@@ -9,15 +9,15 @@ const updateCityElem = (x) => {
     }
 }
 
-window.onload = function() {
+window.onload = function () {
     checkCity();
     const x1 = document.getElementById("demo");
 
     document.getElementById("get-btn").addEventListener('click', getLocation);
-    
-    
+
+
     updateCityElem(x1);
-    
+
     function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
@@ -27,14 +27,21 @@ window.onload = function() {
     }
 
     function showPosition(position) {
-        fetch('/geoapi/get?lat=' + position.coords.latitude +'&lot='+ position.coords.longitude)
+        fetch('/geoapi/get?lat=' + position.coords.latitude + '&lot=' + position.coords.longitude)
             .then(x => x.json())
-            .then(({ city }) => {
+            .then(({city}) => {
                 setCity(city)
                 updateCityElem(x1)
             })
-            
+
     }
+}
+
+function cityChooser() {
+    var select = document.getElementById("slc-city");
+    var value = select.value;
+    alert(value)
+
 }
 
 function checkCity() {
@@ -42,11 +49,11 @@ function checkCity() {
     if (city) {
         $('.pop-up').hide();
     }
-     const cityEl = document.querySelector('#demo');
-     updateCityElem(cityEl);
+    const cityEl = document.querySelector('#demo');
+    updateCityElem(cityEl);
 }
 
-$(function() {
+$(function () {
     $('.pop-up').hide();
     const city = getCity();
     if (city) {
@@ -60,3 +67,5 @@ $(function() {
         e.stopPropagation();
     });
 });
+
+

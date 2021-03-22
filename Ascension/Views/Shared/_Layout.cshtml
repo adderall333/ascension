@@ -73,20 +73,19 @@
 
 <div class="row pop-up" style="display: none;">
     <div class="box1 small-6 large-centered shadow-lg p-3 pt-0 mb-5 bg-white rounded">
-
-       <span class="close close-button"></span>
+        <span class="close close-button"></span>
         <div class="box_in_box1">
             <h3 class="main-txt">City selection</h3>
-            <select class="form-select" size="3" aria-label="size 3 select example">
-                <option value="1">Казань</option>
-                <option value="2">Москва</option>
-                <option value="3">Санкт-Питербург</option>
-                <option value="4">Уфа</option>
-                <option value="5">Зеленодольск</option>
-                <option value="6">Челябинск</option>
+            <select class="form-select" id="slc-city" size="3" aria-label="size 3 select example">
+                <option value="Казань">Казань</option>
+                <option value="Москва">Москва</option>
+                <option value="Санкт-Петербург">Санкт-Петербург</option>
+                <option value="Уфа">Уфа</option>
+                <option value="Зеленодольск">Зеленодольск</option>
+                <option value="Челябинск">Челябинск</option>
             </select>
             <div>
-                <button class="choose-btn btn btn-outline-secondary">Choose</button>
+                <button class="choose-btn btn btn-outline-secondary" onclick="cityChooser()">Choose</button>
             </div>
             <div>
                 <button class="detect-cd btn btn-outline-secondary" id="get-btn">Auto-Select</button>
