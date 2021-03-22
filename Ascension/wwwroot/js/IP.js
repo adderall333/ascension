@@ -14,8 +14,7 @@ window.onload = function () {
     const x1 = document.getElementById("demo");
 
     document.getElementById("get-btn").addEventListener('click', getLocation);
-
-
+    document.getElementById("chs-btn").addEventListener('click', showPosition1);
     updateCityElem(x1);
 
     function getLocation() {
@@ -35,14 +34,15 @@ window.onload = function () {
             })
 
     }
+    function showPosition1() {
+        const select = document.getElementById("slc-city");
+        const value = select.value;
+        console.log(value)
+        setCity(value)
+
+    }
 }
 
-function cityChooser() {
-    var select = document.getElementById("slc-city");
-    var value = select.value;
-    alert(value)
-
-}
 
 function checkCity() {
     const city = getCity();
@@ -67,5 +67,6 @@ $(function () {
         e.stopPropagation();
     });
 });
+
 
 
