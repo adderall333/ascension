@@ -22,6 +22,7 @@ type Startup private () =
         // Add framework services.
         services.AddControllersWithViews().AddRazorRuntimeCompilation() |> ignore
         services.AddRazorPages() |> ignore
+        services.AddMvc() |> ignore
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     member this.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
@@ -44,6 +45,8 @@ type Startup private () =
             endpoints.MapControllerRoute(
                 name = "default",
                 pattern = "{controller=Home}/{action=Index}/{id?}") |> ignore
-            endpoints.MapRazorPages() |> ignore) |> ignore
+            endpoints.MapRazorPages() |> ignore
+            endpoints.MapControllers() |> ignore
+            ) |> ignore
 
     member val Configuration : IConfiguration = null with get, set

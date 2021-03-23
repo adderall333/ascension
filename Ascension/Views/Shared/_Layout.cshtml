@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - Ascension</title>
     <link href="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="~/js/IP.js" async></script>
     <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
@@ -14,19 +15,19 @@
     <link rel="stylesheet" href="~/css/nav.css">
     <link rel="stylesheet" href="~/css/footer.css">
     <link rel="stylesheet" href="~/css/catalog.css">
-    <link href="/favicon.ico" rel="icon"  type="image/x-icon">
+    <link rel="stylesheet" href="~/css/citytriggerwindow.css">
+    <link href="/favicon.ico" rel="icon" type="image/x-icon">
     <!-- Используйте для подключения своих стилей -->
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
 <header class="header-fixed">
-    
     <div class="header-top-line">
         <div class="header-top-line-container">
             <a class="store-name" asp-controller="Home" asp-action="Index">Ascension</a>
         </div>
     </div>
-    
+
     <nav class="navbar navbar-expand-lg navbar-mainbg">
         <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars text-white"></i>
@@ -34,31 +35,24 @@
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto my-style">
-                    
                     <div class="hori-selector" style="display: none">
                         <div class="left"></div>
                         <div class="right"></div>
                     </div>
-
                     <li class="nav-item">
-                        <!--
-                        Ссылка на страницу выбора города.
-                        Пока перенаправляет на главную страницу для тестирования активной ссылки.
-                        -->
-                        <a class="nav-link" asp-controller="Home" asp-action="Index">City(Home)</a>
+                        <a class="nav-link home" href="#" onclick="city();">Your City</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Catalog" asp-action="Index">Catalog</a>
                     </li>
-                   
-                    <!--Полнотекстовый поиск-->
+
                     <div>
 	                    <form class="row" asp-controller="Catalog" asp-action="Index" method="get">
 							<input autocomplete="off" placeholder="Enter something" class="col form-control search-input" type="text" name="searchString">
 							<button class="col btn btn-light search-btn">Search</button>
 	                    </form>
                     </div>
-                    
+
                     <li class="nav-item">
                         <!--
                         Ccылка в личный кабиент или страницу входа.
@@ -67,16 +61,49 @@
                         <a class="nav-link" asp-controller="Authentication" asp-action="Signin">Signin</a>
                     </li>
                     <li class="nav-item">
-	                    <!--Ссылка на корзину-->
-	                    <a class="nav-link" href="javascript:void(0);">Cart</a>
+                        <!--Ссылка на корзину-->
+                        <a class="nav-link" href="javascript:void(0);">Cart</a>
                     </li>
-
                 </ul>
+
+
             </div>
         </div>
     </nav>
-    
+
 </header>
+<div class="row pop-up" style="display: none">
+        <div
+          class="box1 small-6 large-centered shadow-lg p-3 pt-0 mb-5 bg-white rounded"
+        >
+          <a href="#" class="close close-button"></a>
+          <div class="box_in_box1">
+            <h3 class="main-txt">City selection</h3>
+            <select
+              class="form-select"
+              id="slc-city"
+              size="3"
+              aria-label="size 3 select example"
+            >
+              <option value="Казань">Казань</option>
+              <option value="Москва">Москва</option>
+              <option value="Санкт-Петербург">Санкт-Петербург</option>
+              <option value="Уфа">Уфа</option>
+              <option value="Зеленодольск">Зеленодольск</option>
+              <option value="Челябинск">Челябинск</option>
+            </select>
+            <div>
+              <button class="choose-btn btn btn-outline-secondary" id="chs-btn">
+                Choose
+              </button>
+            </div>
+            <div>
+              <div><p class="suggested-city"></p></div>
+              <button class="detect-cd btn btn-outline-secondary" id="get-btn"> Yes </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 <div class="container">
     <main role="main" class="pb-3">
@@ -85,65 +112,65 @@
 </div>
 
 <footer class="footer-distributed">
-	<div class="container">
-		<div class="footer-left">
+    <div class="container">
+        <div class="footer-left">
 
-			<h3 class="footer-company-logo">Ascension</h3>
+            <h3 class="footer-company-logo">Ascension</h3>
 
-			<!-- Какие-то ссылки -->
-			<p class="footer-links">
-				<a href="#">Home</a>
-				·
-				<a href="#">Blog</a>
-				·
-				<a href="#">Pricing</a>
-				·
-				<a href="#">About</a>
-				·
-				<a href="#">Faq</a>
-				·
-				<a href="#">Contact</a>
-			</p>
+            <!-- Какие-то ссылки -->
+            <p class="footer-links">
+                <a href="#">Home</a>
+                ·
+                <a href="#">Blog</a>
+                ·
+                <a href="#">Pricing</a>
+                ·
+                <a href="#">About</a>
+                ·
+                <a href="#">Faq</a>
+                ·
+                <a href="#">Contact</a>
+            </p>
 
-			<p class="footer-company-name">Ascension © 2021</p>
-		</div>
+            <p class="footer-company-name">Ascension © 2021</p>
+        </div>
 
-		<div class="footer-center">
+        <div class="footer-center">
 
-			<div>
-				<i class="fa fa-map-marker"></i>
-				<p><span>35 Kremlevskaya Street</span> Kazan, Tatarstan</p>
-			</div>
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>35 Kremlevskaya Street</span> Kazan, Tatarstan</p>
+            </div>
 
-			<div>
-				<i class="fa fa-phone"></i>
-				<p>+7 777 123-45-67</p>
-			</div>
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+7 777 123-45-67</p>
+            </div>
 
-			<div>
-				<i class="fa fa-envelope"></i>
-				<p>
-					<a href="mailto:support@company.com">support@company.com</a>
-				</p>
-			</div>
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p>
+                    <a href="mailto:support@company.com">support@company.com</a>
+                </p>
+            </div>
 
-		</div>
+        </div>
 
-		<div class="footer-right">
+        <div class="footer-right">
 
-			<!-- Написать текст про Ascension Online Store -->
-			<p class="footer-company-about">
-				<span>About the company</span>
-				Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor lacus vehicula sit amet.
-			</p>
+            <!-- Написать текст про Ascension Online Store -->
+            <p class="footer-company-about">
+                <span>About the company</span>
+                Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor lacus vehicula sit amet.
+            </p>
 
-		</div>
-	</div>
+        </div>
+    </div>
 </footer>
 
 <script src="~/js/site.js"></script>
 <script src="~/js/nav.js"></script>
-<!-- Используйте для подключения своих скриптов --> 
+<!-- Используйте для подключения своих скриптов -->
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

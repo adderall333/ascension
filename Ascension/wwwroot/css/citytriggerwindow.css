@@ -1,0 +1,282 @@
+﻿.cover {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+}
+.blur-in {
+    -webkit-animation: blur 2s forwards;
+    -moz-animation: blur 2s forwards;
+    -o-animation: blur 2s forwards;
+    animation: blur 2s forwards;
+}
+.blur-out {
+    -webkit-animation: blur-out 2s forwards;
+    -moz-animation: blur-out 2s forwards;
+    -o-animation: blur-out 2s forwards;
+    animation: blur-out 2s forwards;
+}
+@-webkit-keyframes blur {
+    0% {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    }
+    100% {
+        -webkit-filter: blur(4px);
+        -moz-filter: blur(4px);
+        -o-filter: blur(4px);
+        -ms-filter: blur(4px);
+        filter: blur(4px);
+    }
+}
+@-moz-keyframes blur {
+    0% {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    }
+    100% {
+        -webkit-filter: blur(4px);
+        -moz-filter: blur(4px);
+        -o-filter: blur(4px);
+        -ms-filter: blur(4px);
+        filter: blur(4px);
+    }
+}
+@-o-keyframes blur {
+    0% {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    }
+    100% {
+        -webkit-filter: blur(4px);
+        -moz-filter: blur(4px);
+        -o-filter: blur(4px);
+        -ms-filter: blur(4px);
+        filter: blur(4px);
+    }
+}
+@keyframes blur {
+    0% {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    }
+    100% {
+        -webkit-filter: blur(4px);
+        -moz-filter: blur(4px);
+        -o-filter: blur(4px);
+        -ms-filter: blur(4px);
+        filter: blur(4px);
+    }
+}
+@-webkit-keyframes blur-out {
+    0% {
+        -webkit-filter: blur(4px);
+        -moz-filter: blur(4px);
+        -o-filter: blur(4px);
+        -ms-filter: blur(4px);
+        filter: blur(4px);
+    }
+    100% {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    }
+}
+@-moz-keyframes blur-out {
+    0% {
+        -webkit-filter: blur(4px);
+        -moz-filter: blur(4px);
+        -o-filter: blur(4px);
+        -ms-filter: blur(4px);
+        filter: blur(4px);
+    }
+    100% {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    }
+}
+@-o-keyframes blur-out {
+    0% {
+        -webkit-filter: blur(4px);
+        -moz-filter: blur(4px);
+        -o-filter: blur(4px);
+        -ms-filter: blur(4px);
+        filter: blur(4px);
+    }
+    100% {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    }
+}
+@keyframes blur-out {
+    0% {
+        -webkit-filter: blur(4px);
+        -moz-filter: blur(4px);
+        -o-filter: blur(4px);
+        -ms-filter: blur(4px);
+        filter: blur(4px);
+    }
+    100% {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    }
+}
+.content {
+    width: 650px;
+    margin: 0 auto;
+    padding-top: 100px;
+}
+
+span {
+    color: dimgray;
+}
+
+.pop-up {
+    position: fixed;
+    margin: 5% auto;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+.box1 {
+    background-color: whitesmoke;
+    text-align: center;
+    margin-left: 600px;
+    margin-right: 15px;
+    margin-top: -50px;
+    position: fixed;
+    width: 300px;
+    max-width: 100%;
+    height: 200px;
+    padding-top: 0;
+    max-height: 100%;
+    -webkit-box-shadow: 0px 4px 6px 0px gray;
+    -moz-box-shadow: 0px 4px 6px 0px gainsboro;
+    box-shadow: 0px 4px 6px 0px darkgray;
+}
+
+.box_in_box1 {
+    margin-top: 15px;
+}
+
+.button {
+    margin: 0 auto;
+    color: gray;
+    margin-bottom: 33px;
+}
+
+.button:hover {
+    -webkit-box-shadow: 0px 4px 6px 0px gray;
+    -moz-box-shadow: 0px 4px 6px 0px gainsboro;
+    box-shadow: 0px 4px 6px 0px darkgray;
+}
+
+option:active, option:hover, option:focus {
+    outline: 0;
+    outline-offset: 0;
+}
+
+
+.main-txt{
+    font-family: 'Abril Fatface', cursive; 
+    color: black;
+    margin-right: 90px;
+    margin-top: 0px;
+}
+
+.city-txt{
+    font-family: 'Abril Fatface', cursive;
+    color: gray;
+    margin-right: 400px;
+}
+
+.close:before, .close:after{
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 20px!important;
+    width: 2px;
+    background-color: #333;
+}
+
+.detect-cd{
+    margin-left: 195px; 
+    margin-top: -80px;
+}
+    
+.form-select{
+    background: transparent;
+    outline: none;
+    border: none;
+    width: 400px;
+    max-width: 100%;
+}
+
+.choose-btn {
+    margin-top: 10px;
+    margin-left: -190px;
+}
+
+.close {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.3;
+    color: #3d3d3d!important;
+}
+
+.others {
+    color:black!important;
+}
+
+
+.close:hover {
+    opacity: 1;
+}
+
+.close:before, .close:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: #333;
+}
+.close:before {
+    transform: rotate(45deg);
+}
+.close:after {
+    transform: rotate(-45deg);
+}
+
+.suggested-city{
+    margin-top: -33px;
+    margin-left: 45px;
+}
+
