@@ -1,5 +1,5 @@
 ﻿const storageKeys = {
-    CITY: 'x-city',
+    CITY: 'xcity',
 };
 
 function showPosition(position) {
@@ -72,6 +72,29 @@ $(async () => {
         }
     });
 });
+
+function city() {
+    $('.pop-up').hide();
+
+    getGeoSuggestion();
+    $('.pop-up').fadeIn(1200);
+
+    $('.detect-cd').click(function (e) {
+        $('.pop-up').fadeOut(700);
+        $('#overlay').removeClass('blur-in');
+
+        $('#overlay').addClass('blur-out');
+
+        e.stopPropagation();
+    });
+
+    $('.choose-btn').click(() => {
+        const city = $('#slc-city option:selected').text();
+        if (city) {
+            setCity(city, true);
+        }
+    });
+}
 
 
 
