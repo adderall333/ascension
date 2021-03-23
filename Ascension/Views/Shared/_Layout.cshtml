@@ -53,9 +53,9 @@
                    
                     <!--Полнотекстовый поиск-->
                     <div>
-	                    <form asp-controller="Catalog" asp-action="Index" method="get">
-							<input class="search" type="text" name="searchString">
-							<button class="">Search</button>
+	                    <form class="row" asp-controller="Catalog" asp-action="Index" method="get">
+							<input autocomplete="off" placeholder="Enter something" class="col form-control search-input" type="text" name="searchString">
+							<button class="col btn btn-light search-btn">Search</button>
 	                    </form>
                     </div>
                     

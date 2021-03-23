@@ -50,10 +50,12 @@
 }
 
 .search-btn {
-    color: white !important;
-    border-color: #edbc7b !important;
-    box-shadow: none !important;
-    background-color: #edbc7b !important;
+    width: 90px;
+    margin-left: 20px;
+}
+
+.search-input {
+    width: 200px;
 }
 
 .buy-btn {
