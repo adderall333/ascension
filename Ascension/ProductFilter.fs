@@ -53,18 +53,22 @@ module ProductFilter =
                                 .All(fun s -> requiredOptionsIds.Contains(s.Id)))
             .ToList()
     
-    let selectByCategory (context : ApplicationContext) (categoryName : string) =
-        let category = context
-                           .Category
-                           .FirstOrDefault(fun c -> c.Name = categoryName)
-        if category = null
+    let selectByCategory  (context : ApplicationContext) (categoryName : string) (products : List<Product>)= 
+        if products = null || products.Count <= 0
         then
-            null
+            let category = context
+                               .Category
+                               .FirstOrDefault(fun c -> c.Name = categoryName)
+            if category = null
+            then
+                null
+            else
+                context
+                       .Product
+                       .Where(fun p -> p.CategoryId = category.Id)
+                       .ToList()
         else
-            context
-                   .Product
-                   .Where(fun p -> p.CategoryId = category.Id)
-                   .ToList()
+            products
             
     let filter (context : ApplicationContext) (checkedOptions : string) (products : List<Product>) =
         if products = null

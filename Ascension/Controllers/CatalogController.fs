@@ -1,6 +1,7 @@
 ﻿namespace Ascension
 
 open System
+open System.Collections.Generic
 open ProductFilter
 open System.Diagnostics
 open System.Linq
@@ -10,7 +11,17 @@ open Models
 
 type CatalogController() =
     inherit Controller()
-
+    
+    let search (context : ApplicationContext) (searchString : string) =
+        if searchString <> null && searchString <> ""
+        then
+            context
+                .Product
+                .Where(fun p -> p.SearchVector.Matches(searchString))
+                .ToList()
+        else
+            null
+        
     let errorHandling (this : Controller) =
         this.Response.StatusCode <- 404
         let reqId = 
@@ -20,13 +31,24 @@ type CatalogController() =
                 Activity.Current.Id
         this.View("Error", ErrorViewModel(reqId))
     
-    member this.Index() =
+    member this.Index(searchString : string) =
         use context = new ApplicationContext()
         let model = context
-                        .SuperCategory
-                        .Include(fun sc -> sc.Categories)
-                        .ToList()
+                            .SuperCategory
+                            .Include(fun sc -> sc.Categories)
+                            .ToList()
+        if (searchString <> null) && (searchString <> "")
+        then
+            this.ViewData.Add("searchString", searchString)
+            let searchResult = context
+                                   .Product
+                                   .Where(fun p -> p.SearchVector.Matches(searchString))
+                                   .Select(fun p -> p.Category)
+                                   .Distinct()
+                                   .ToList()
+            this.ViewData.Add("searchResult", searchResult)
         this.View(model)
+        
     
     
     member this.Category(name) =
@@ -49,20 +71,20 @@ type CatalogController() =
                                                           .ToList()
             this.View(category)
         
-    member this.GetProducts(category : string, sortOption : string,  ids : string) =
+    member this.GetProducts(category : string, sortOption : string,  ids : string, searchString : string) =
         use context = new ApplicationContext()
         if category = null
         then
             null
         else
-            let products = category
-                           |> selectByCategory context
+            let products = searchString
+                           |> search context  
+                           |> selectByCategory context category
                            |> filter context ids
                            |> sortProducts sortOption
                            |> loadImages context
             this.PartialView("ProductsPartial", products)
             
-        
     member this.Product(id : int) =
         use context = new ApplicationContext()
         let products = context

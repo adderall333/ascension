@@ -76,7 +76,9 @@ async function getProducts() {
     let response = await fetch("@Url.Action("GetProducts")?" + 
                                                "category=" + params['name'] + 
                                                "&sortOption="+ sortOption + 
-                                               "&ids=" + toString(optionIds));
+                                               "&ids=" + toString(optionIds) + 
+                                               "&searchString=" + params['searchString']
+                                               );
     document.getElementById("products").innerHTML = await response.text();
     document.getElementById("load").style.display = "none";
 }
