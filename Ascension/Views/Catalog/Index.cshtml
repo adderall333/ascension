@@ -1,63 +1,83 @@
-﻿@model List<Models.SuperCategory>
+﻿@using Models
+@model List<Models.SuperCategory>
 
 @{
     ViewBag.Title = "Catalog";
     Layout = "_Layout";
+    var searchResult = ViewData.ContainsKey("searchResult") ? (List<Category>) ViewData["searchResult"] : null;
 }
-
-<div class="super-categories row">
-    @foreach (var superCategory in Model)
-    {
-        <div class="col-3">
-            <a class="super-category" id="@superCategory.Id">@await Html.PartialAsync("CategoryPreviewPartial", superCategory.Name)</a>
-        </div>
-    }
-</div>
-@foreach (var superCategory in Model)
+@if (ViewData.ContainsKey("searchString") && searchResult != null)
 {
-    <div class="categories row" super-category-id="@superCategory.Id">
-        <p class="back-btn fs-4">
-            🡨 Back
-        </p>
-        @foreach (var category in superCategory.Categories)
+    @foreach (var category in Model.SelectMany(sc => sc.Categories))
+    {
+        @if (searchResult.Contains(category))
         {
             <div class="col-3">
-                <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name" class="category">@await Html.PartialAsync("CategoryPreviewPartial", category.Name)</a>
+                <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name" asp-route-searchString="@ViewData["searchString"]"
+                   class="category">@await Html.PartialAsync("CategoryPreviewPartial", category.Name)</a>
+            </div>
+        }
+    }
+}
+else
+{
+    <div class="super-categories row">
+        @foreach (var superCategory in Model)
+        {
+            <div class="col-3">
+                <a class="super-category" id="@superCategory.Id">@await Html.PartialAsync("CategoryPreviewPartial", superCategory.Name)</a>
             </div>
         }
     </div>
+    @foreach (var superCategory in Model)
+    {
+        <div class="categories row" super-category-id="@superCategory.Id">
+            <p class="back-btn fs-4">
+                🡨 Back
+            </p>
+            @foreach (var category in superCategory.Categories)
+            {
+                <div class="col-3">
+                    <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name" asp-route-searchString="@ViewData["searchString"]"
+                       class="category">@await Html.PartialAsync("CategoryPreviewPartial", category.Name)</a>
+                </div>
+            }
+        </div>
+    }
 }
-    
 
 <script>
 window.onload = async function () {
-    let superCategoryBlock = document.getElementsByClassName("super-categories").item(0);
-    let superCategories = document.getElementsByClassName("super-category");
-    let categoryBlocks = document.getElementsByClassName("categories");  
-    let backButtons = document.getElementsByClassName("back-btn");
-    let categoryMap = new Map();
-    
-    let current = superCategoryBlock;
-    
-    for (let i = 0; i < categoryBlocks.length; i++) {
-        categoryMap.set(categoryBlocks[i].getAttribute("super-category-id"), categoryBlocks[i]);
-    }
-    
-    for (let i = 0; i < superCategories.length; i++) {
-        superCategories[i].addEventListener("click", function () {
-            let toDisplay = categoryMap.get(superCategories[i].getAttribute("id"));
-            current.style.display = "none";
-            toDisplay.style.display = "flex";
-            current = toDisplay;
-        });
-    }
-    
-    for (let i = 0; i < backButtons.length; i++) {
-        backButtons[i].addEventListener("click", function () {
-           current.style.display = "none";
-           superCategoryBlock.style.display = "flex";
-           current = superCategoryBlock;
-        });
+    if (document.getElementsByClassName("super-categories").length > 0)
+    {
+        let superCategoryBlock = document.getElementsByClassName("super-categories").item(0);
+        let superCategories = document.getElementsByClassName("super-category");
+        let categoryBlocks = document.getElementsByClassName("categories");  
+        let backButtons = document.getElementsByClassName("back-btn");
+        let categoryMap = new Map();
+        
+        let current = superCategoryBlock;
+        
+        for (let i = 0; i < categoryBlocks.length; i++) {
+            categoryMap.set(categoryBlocks[i].getAttribute("super-category-id"), categoryBlocks[i]);
+        }
+        
+        for (let i = 0; i < superCategories.length; i++) {
+            superCategories[i].addEventListener("click", function () {
+                let toDisplay = categoryMap.get(superCategories[i].getAttribute("id"));
+                current.style.display = "none";
+                toDisplay.style.display = "flex";
+                current = toDisplay;
+            });
+        }
+        
+        for (let i = 0; i < backButtons.length; i++) {
+            backButtons[i].addEventListener("click", function () {
+               current.style.display = "none";
+               superCategoryBlock.style.display = "flex";
+               current = superCategoryBlock;
+            });
+        }       
     }
 } 
 </script>

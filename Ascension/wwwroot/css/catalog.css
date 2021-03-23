@@ -211,7 +211,9 @@
 }
 
 .product-preview-container {
-    max-width: 14vw;
+    max-width: 231px;
+    min-width: 231px;
+    margin-bottom: 20px;
 }
 
 .card__btn {

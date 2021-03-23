@@ -53,8 +53,10 @@
                    
                     <!--Полнотекстовый поиск-->
                     <div>
-                        <input type="text">
-                        <button>Search</button>
+	                    <form asp-controller="Catalog" asp-action="Index" method="get">
+							<input class="search" type="text" name="searchString">
+							<button class="">Search</button>
+	                    </form>
                     </div>
                     
                     <li class="nav-item">
