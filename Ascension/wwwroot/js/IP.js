@@ -102,6 +102,7 @@ $(function() {
         $('#overlay').removeClass('blur-in');
         $('#overlay').addClass('blur-out');
         e.stopPropagation();
+        location.reload()
     });
 });
 
