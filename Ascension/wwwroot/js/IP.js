@@ -10,14 +10,13 @@ function showPosition(position) {
         position.coords.longitude
     )
         .then((x) => x.json())
-        .then(({ city }) => {
+        .then(({city}) => {
             setCity(city);
         });
 }
-    
+
 const refreshCityTag = () => {
     const city = getCity();
-
     if (city) {
         document.querySelector('.home').innerText = city;
     }
@@ -43,7 +42,8 @@ const getGeoSuggestion = async () => {
         try {
             const location = await getGeolocation();
             if (location) showPosition(location);
-        } catch (error) {}
+        } catch (error) {
+        }
     }
 };
 
@@ -87,7 +87,7 @@ function city() {
 
         e.stopPropagation();
     });
-    
+
 
     $('.choose-btn').click(() => {
         const city = $('#slc-city option:selected').text();
@@ -96,7 +96,8 @@ function city() {
         }
     });
 }
-$(function() {
+
+$(function () {
     $('.close-button').click(function (e) {
         $('.pop-up').fadeOut(700);
         $('#overlay').removeClass('blur-in');
