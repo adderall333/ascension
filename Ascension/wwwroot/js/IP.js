@@ -87,6 +87,7 @@ function city() {
 
         e.stopPropagation();
     });
+    
 
     $('.choose-btn').click(() => {
         const city = $('#slc-city option:selected').text();
@@ -95,6 +96,14 @@ function city() {
         }
     });
 }
+$(function() {
+    $('.close-button').click(function (e) {
+        $('.pop-up').fadeOut(700);
+        $('#overlay').removeClass('blur-in');
+        $('#overlay').addClass('blur-out');
+        e.stopPropagation();
+    });
+});
 
 
 
