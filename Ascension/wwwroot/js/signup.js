@@ -85,7 +85,7 @@ signup_button.addEventListener("click", () => {
             }
             else if (result === "failed")
                 createErrorMessage('zmdi-close','This email address already exists.\nPlease choose a unique one.')
-            else
+            else // "error"
                 createErrorMessage('zmdi-close','An error occurred while registering.\nPlease try again')
         }
     })

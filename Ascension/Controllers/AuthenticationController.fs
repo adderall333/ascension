@@ -7,10 +7,35 @@ open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc
 open Microsoft.EntityFrameworkCore
 open Microsoft.Extensions.Primitives
+open System.Text.RegularExpressions;
 open Models
 
 type AuthenticationController() =
     inherit Controller()
+    
+    let ValidateUser(user : UserToRegister) =
+        let nameRegex = new Regex("^[A-Z][a-zA-Z]+$")
+        let nameCheck = nameRegex.IsMatch user.Name
+        
+        let surnameRegex = new Regex("^[A-Z][a-zA-Z]+$")
+        let surnameCheck = surnameRegex.IsMatch user.Surname
+        
+        let emailPattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                           @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$"
+        let emailCheck = Regex.IsMatch(user.Email, emailPattern, RegexOptions.IgnoreCase)
+        
+        let passRegex = new Regex("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$")
+        let passCheck = passRegex.IsMatch user.Pass
+        
+        nameCheck && surnameCheck && emailCheck && passCheck
+        
+    let FindUser email =
+        use context = new ApplicationContext()
+        context
+            .User
+            .Where(fun e -> e.Email = email)
+            .ToList()
+            .Any()
     
     member this.Signin() =
         this.View()
@@ -21,16 +46,11 @@ type AuthenticationController() =
     
     [<HttpPost>]  
     member this.TryRegister(user : UserToRegister) =
-        use context = new ApplicationContext()
-        let alreadyRegistered = context
-                                    .User
-                                    .Where(fun e -> e.Email = user.Email)
-                                    .ToList()
-                                    .Any()
-        if alreadyRegistered
-        then
-            this.Response.Headers.Add("registration_result", StringValues("failed"))
+        let valid = ValidateUser user
+        if not valid then this.Response.Headers.Add("registration_result", StringValues("error"))
+        elif FindUser user.Email then this.Response.Headers.Add("registration_result", StringValues("failed"))
         else
+            use context = new ApplicationContext()
             let hashedPassword = Crypto.GetHashPassword user.Pass
             let newUser = new User()
             newUser.Name <- user.Name
