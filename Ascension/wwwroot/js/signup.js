@@ -10,7 +10,7 @@ signup_button.addEventListener("click", () => {
 
     let checkName = /^[A-Z][a-zA-Z]+$/.test(name);
     let checkSurname = /^[A-Z][a-zA-Z]+$/.test(surname);
-    let checkEmail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}$/.test(email)
+    let checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)
     let checkPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(pass);
     let checkRePass = pass === re_pass;
     
