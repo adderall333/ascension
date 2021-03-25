@@ -37,12 +37,17 @@ type AuthenticationController() =
             .ToList()
             .Any()
     
+    [<HttpGet>]
     member this.Signin() =
-        this.View()
+        if this.HttpContext.Session.Keys.Contains("isAuth")
+        then this.Redirect("/Account") :> ActionResult
+        else this.View() :> ActionResult
       
     [<HttpGet>]  
     member this.Signup() =
-        this.View()
+        if this.HttpContext.Session.Keys.Contains("isAuth")
+        then this.Redirect("/Account") :> ActionResult
+        else this.View() :> ActionResult
     
     [<HttpPost>]  
     member this.TryRegister(user : UserToRegister) =
