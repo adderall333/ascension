@@ -5,6 +5,9 @@ signin_button.addEventListener("click", () => {
     let email = form.email.value;
     let pass = form.pass.value;
     let remember = form.remember.checked;
+    
+    form.email.classList.remove('error');
+    form.pass.classList.remove('error');
 
     function createErrorMessage(message) {
         let div = document.createElement('div');
@@ -29,6 +32,9 @@ signin_button.addEventListener("click", () => {
 
     if (email.length < 1 || pass.length < 1) {
         createErrorMessage('Fill in all the fields');
+        form.email.classList.add('error');
+        form.pass.classList.add('error');
+        return;
     }
 
     let fD = new FormData();
@@ -46,8 +52,11 @@ signin_button.addEventListener("click", () => {
             let result = xhr.getResponseHeader("login_result")
             if (result === "ok")
                 window.location.href = "/Account"
-            else
-                createErrorMessage('Invalid email or password')
+            else {
+                createErrorMessage('Invalid email or password');
+                form.email.classList.add('error');
+                form.pass.classList.add('error');
+            }
         }
     })
 

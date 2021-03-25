@@ -19,7 +19,7 @@ signup_button.addEventListener("click", () => {
     let checkPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(pass);
     let checkRePass = pass === re_pass;
     
-    function createErrorMessage(zmdi, message) {
+    function createMessage(zmdi, message) {
         let div = document.createElement('div');
         div.className = 'error-div';
         
@@ -47,34 +47,34 @@ signup_button.addEventListener("click", () => {
         }
         
         if (!check) {
-            createErrorMessage('zmdi-close','Fill in all the fields');
+            createMessage('zmdi-close','Fill in all the fields');
             return false;
         }
         
         if (!checkName) {
             check = false;
-            createErrorMessage('zmdi-close','Invalid name');
+            createMessage('zmdi-close','Invalid name');
             form.name.classList.add('error');
         }
         if (!checkSurname) {
             check = false;
-            createErrorMessage('zmdi-close','Invalid surname');
+            createMessage('zmdi-close','Invalid surname');
             form.surname.classList.add('error');
         }
         if (!checkEmail) {
             check = false;
-            createErrorMessage('zmdi-close','Invalid email');
+            createMessage('zmdi-close','Invalid email');
             form.email.classList.add('error');
         }
         if (!checkPass) {
             check = false;
-            createErrorMessage('zmdi-close','Invalid password' +
+            createMessage('zmdi-close','Invalid password' +
                 '</br>The password must be at least 6 characters long and contain at least one number, one uppercase and one lowercase letter');
             form.pass.classList.add('error');
         }
         if (!checkRePass) {
             check = false;
-            createErrorMessage('zmdi-close','Password mismatch');
+            createMessage('zmdi-close','Password mismatch');
             form.re_pass.classList.add('error');
         }
         
@@ -105,15 +105,15 @@ signup_button.addEventListener("click", () => {
         success: function(res, status, xhr) {
             let result = xhr.getResponseHeader("registration_result")
             if (result === "ok") {
-                createErrorMessage('zmdi-check','You have successfully registered in our site');
+                createMessage('zmdi-check','You have successfully registered in our site');
                 Timer();
             }
             else if (result === "failed") {
-                createErrorMessage('zmdi-close','This email address already exists</br>Please choose a unique one');
+                createMessage('zmdi-close','This email address already exists</br>Please choose a unique one');
                 form.email.classList.add('error');
             }
             else // "error"
-                createErrorMessage('zmdi-close','An error occurred while registering</br>Please try again')
+                createMessage('zmdi-close','An error occurred while registering</br>Please try again')
         }
     })
     
@@ -126,4 +126,23 @@ signup_button.addEventListener("click", () => {
         }
         setTimeout(() => Timer(), 1000);
     }
+    
+    /*
+    let count = 1;
+    let dot = '• ';
+    function Waiting() {
+        document.getElementById("timer").innerHTML = dot.repeat(count);
+        count++;
+        if (count > 3)
+            count = 1;
+        setTimeout(() => Waiting(), 500);
+    }
+
+    $(document).ajaxStart(function(){
+        Waiting();
+    });
+
+    $(document).ajaxStop(function(){
+        document.getElementById("timer").innerHTML = "";
+    });*/
 });

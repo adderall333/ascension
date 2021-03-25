@@ -67,9 +67,10 @@ type AuthenticationController() =
         let dbUser = context
                          .User
                          .FirstOrDefault(fun e -> e.Email = user.Email)
-        let check = Crypto.VerifyHashedPassword user.Pass dbUser.HashedPassword
-        if check
+        if dbUser = null || not <| Crypto.VerifyHashedPassword user.Pass dbUser.HashedPassword
         then
+            this.Response.Headers.Add("registration_result", StringValues("failed"))
+        else
             this.Response.Headers.Add("login_result", StringValues("ok"))
             this.HttpContext.Session.SetString("isAuth", "true")
             this.HttpContext.Session.SetInt32("id", dbUser.Id) 
@@ -78,5 +79,3 @@ type AuthenticationController() =
             then
                 this.HttpContext.Response.Cookies.Append("email", dbUser.Email)
                 this.HttpContext.Response.Cookies.Append("hashedPass", dbUser.HashedPassword)
-        else
-            this.Response.Headers.Add("registration_result", StringValues("failed"))
