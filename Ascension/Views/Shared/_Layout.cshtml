@@ -52,14 +52,18 @@
 							<button class="col btn btn-light search-btn">Search</button>
 	                    </form>
                     </div>
-
-                    <li class="nav-item">
-                        <!--
-                        Ccылка в личный кабиент или страницу входа.
-                        Возможно для входа добавим отдельную ссылку.
-                        -->
-                        <a class="nav-link" asp-controller="Authentication" asp-action="Signin">Signin</a>
-                    </li>
+                    @if (Context.Session.Keys.Contains("isAuth"))
+                    {
+	                    <li class="nav-item">
+		                    <a class="nav-link" href="/Account">Account</a>
+	                    </li>
+                    }
+                    else
+                    {
+	                    <li class="nav-item">
+		                    <a class="nav-link" asp-controller="Authentication" asp-action="Signin">Signin</a>
+	                    </li>
+                    }
                     <li class="nav-item">
                         <!--Ссылка на корзину-->
                         <a class="nav-link" href="javascript:void(0);">Cart</a>
