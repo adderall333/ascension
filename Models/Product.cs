@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
+using NpgsqlTypes;
 
 namespace Models
 {
@@ -14,5 +15,7 @@ namespace Models
         public Category Category { get; set; }
         public IEnumerable<SpecificationOption> SpecificationOptions { get; set; }
         public IEnumerable<Image> Images { get; set; }
+        
+        public NpgsqlTsVector SearchVector { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Models
 {
@@ -17,8 +18,7 @@ namespace Models
         public DbSet<SuperCategory> SuperCategory { get; set; }
         public DbSet<Image> Image { get; set; }
         public DbSet<User> User { get; set; }
-
-
+        
         public ApplicationContext()
         {
         }
@@ -39,6 +39,13 @@ namespace Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Russian_Russia.1251");
+            modelBuilder.Entity<Product>()
+                .HasGeneratedTsVectorColumn(
+                    p => p.SearchVector,
+                    "english",  // Text search config
+                    p => new { p.Name, p.Description })  // Included properties
+                .HasIndex(p => p.SearchVector)
+                .HasMethod("GIN"); // Index method on the search vector (GIN or GIST)
         }
     }
 }
