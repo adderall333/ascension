@@ -128,20 +128,16 @@
 
             <!-- Какие-то ссылки -->
             <p class="footer-links">
-                <a href="#">Home</a>
+                <a asp-controller="Home" asp-action="Index">Home</a>
                 ·
-                <a href="#">Blog</a>
+                <a asp-controller="Catalog" asp-action="Index">Catalog</a>
                 ·
-                <a href="#">Pricing</a>
+                <a href="#">Account</a>
                 ·
-                <a href="#">About</a>
-                ·
-                <a href="#">Faq</a>
-                ·
-                <a href="#">Contact</a>
+                <a href="#">Cart</a>
             </p>
 
-            <p class="footer-company-name">Ascension © 2021</p>
+            <p class="footer-company-name">Ascension © @DateTime.Now.Year</p>
         </div>
 
         <div class="footer-center">
