@@ -1,0 +1,28 @@
+@model List<Models.IModel>
+
+@{
+    ViewBag.Title = "Admin page";
+    Layout = "_Layout";
+}
+
+<div class="col">
+    <a asp-controller="Admin" asp-action="Create" asp-route-name="@Model.First().GetType().Name">Create</a>
+</div>
+
+@foreach (var obj in Model)
+{
+    <div class="row">
+        <div class="col">
+            @obj.ToString()
+        </div>
+        <div class="col">
+            <a asp-controller="Admin" asp-action="Read" asp-route-name="@Model.First().GetType().Name" asp-route-id="@obj.Id">Read</a>
+        </div>
+        <div class="col">
+            <a asp-controller="Admin" asp-action="Update" asp-route-name="@Model.First().GetType().Name" asp-route-id="@obj.Id">Update</a>
+        </div>
+        <div class="col">
+            <a asp-controller="Admin" asp-action="Delete" asp-route-name="@Model.First().GetType().Name" asp-route-id="@obj.Id">Delete</a>
+        </div>
+    </div>
+}

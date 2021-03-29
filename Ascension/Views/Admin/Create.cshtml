@@ -1,0 +1,13 @@
+@using Models
+@model Type
+
+@{
+    ViewBag.Title = "Admin page";
+    Layout = "_Layout";
+    var action = "/Admin/Create" + Model.Name;
+}
+
+<form id="create" method="post" action="@action">
+    @Html.GetHtml(CreateHelper.getCreateHtml(Model))
+    <button id="btn">Create</button>
+</form>

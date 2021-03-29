@@ -1,0 +1,9 @@
+@using Models
+@model IModel
+
+@{
+    ViewBag.Title = "Admin page";
+    Layout = "_Layout";
+}
+
+@Html.GetHtml(ReadHelper.getReadHtml(Model))
