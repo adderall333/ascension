@@ -18,7 +18,7 @@ function showPosition(position) {
 const refreshCityTag = () => {
     const city = getCity();
     if (city) {
-        document.querySelector('.home').innerText = city;
+        document.querySelector('.home').innerHTML = '<i class="fa fa-map-marker"></i>' + city;
     }
 };
 

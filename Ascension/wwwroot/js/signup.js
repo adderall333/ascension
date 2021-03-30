@@ -8,18 +8,23 @@ signup_button.addEventListener("click", () => {
     let pass = form.pass.value;
     let re_pass = form.re_pass.value;
 
+    for(let i=0; i<form.elements.length; i++) {
+        let input = form.elements[i];
+        input.classList.remove('error');
+    }
+
     let checkName = /^[A-Z][a-zA-Z]+$/.test(name);
     let checkSurname = /^[A-Z][a-zA-Z]+$/.test(surname);
-    let checkEmail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}$/.test(email)
+    let checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)
     let checkPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(pass);
     let checkRePass = pass === re_pass;
     
-    function createErrorMessage(message) {
+    function createMessage(zmdi, message) {
         let div = document.createElement('div');
         div.className = 'error-div';
         
         let i = document.createElement('i');
-        i.classList.add('zmdi', 'zmdi-close', 'error-icon');
+        i.classList.add('zmdi', zmdi, 'error-icon');
         
         let h6 = document.createElement('h6');
         h6.className = 'error-message';
@@ -30,32 +35,114 @@ signup_button.addEventListener("click", () => {
         error_block.appendChild(div);
     }
     
+    function checkInputs() {
+        let check = true;
+        
+        for(let i=0; i<form.elements.length; i++) {
+            let input = form.elements[i];
+            if (input.type !== 'submit' && input.value.length < 1) {
+                check = false;
+                input.classList.add('error');
+            }
+        }
+        
+        if (!check) {
+            createMessage('zmdi-close','Fill in all the fields');
+            return false;
+        }
+        
+        if (!checkName) {
+            check = false;
+            createMessage('zmdi-close','Invalid name');
+            form.name.classList.add('error');
+        }
+        if (!checkSurname) {
+            check = false;
+            createMessage('zmdi-close','Invalid surname');
+            form.surname.classList.add('error');
+        }
+        if (!checkEmail) {
+            check = false;
+            createMessage('zmdi-close','Invalid email');
+            form.email.classList.add('error');
+        }
+        if (!checkPass) {
+            check = false;
+            createMessage('zmdi-close','Invalid password' +
+                '</br>The password must be at least 6 characters long and contain at least one number, one uppercase and one lowercase letter');
+            form.pass.classList.add('error');
+        }
+        if (!checkRePass) {
+            check = false;
+            createMessage('zmdi-close','Password mismatch');
+            form.re_pass.classList.add('error');
+        }
+        
+        return check;
+    }
+    
     let error_block = document.getElementById('error-block');
     while (error_block.firstChild) {
         error_block.removeChild(error_block.lastChild);
     }
 
-    if (name.length < 1 || surname.length < 1 || email.length < 1 || pass.length < 1 || re_pass.length < 1) {
-        createErrorMessage('Fill in all the fields');
-    }
-    else {
-        if (!checkName) {
-            createErrorMessage('Invalid name')
+    let check = checkInputs();
+    if (!check)
+        return;
+
+    let fD = new FormData();
+    fD.append('name', name);
+    fD.append('surname', surname);
+    fD.append('email', email);
+    fD.append('pass', pass);
+    
+    $.ajax({
+        type: 'POST',
+        url: '/Authentication/TryRegister',
+        data: fD,
+        processData: false,
+        contentType: false,
+        success: function(res, status, xhr) {
+            let result = xhr.getResponseHeader("registration_result")
+            if (result === "ok") {
+                createMessage('zmdi-check','You have successfully registered in our site');
+                Timer();
+            }
+            else if (result === "failed") {
+                createMessage('zmdi-close','This email address already exists</br>Please choose a unique one');
+                form.email.classList.add('error');
+            }
+            else // "error"
+                createMessage('zmdi-close','An error occurred while registering</br>Please try again')
         }
-        if (!checkSurname) {
-            createErrorMessage('Invalid surname')
+    })
+    
+    let timer = 4;
+    function Timer() {
+        timer--;
+        document.getElementById("timer").innerHTML = 'Redirecting to SignIn: ' + timer;
+        if (timer === 0) {
+            location.replace('/Authentication/Signin')
         }
-        if (!checkEmail) {
-            createErrorMessage('Invalid email')
-        }
-        if (!checkPass) {
-            createErrorMessage('Invalid password.\nThe password must be at least 6 characters long and contain at least one number, one uppercase and one lowercase letter.')
-        }
-        if (!checkRePass) {
-            createErrorMessage('Password mismatch')
-        }
+        setTimeout(() => Timer(), 1000);
     }
     
-    // отправлять запрос на сервер
-    
+    /*
+    let count = 1;
+    let dot = '• ';
+    function Waiting() {
+        document.getElementById("timer").innerHTML = dot.repeat(count);
+        count++;
+        if (count > 3)
+            count = 1;
+        setTimeout(() => Waiting(), 500);
+    }
+
+    $(document).ajaxStart(function(){
+        Waiting();
+    });
+
+    $(document).ajaxStop(function(){
+        document.getElementById("timer").innerHTML = "";
+    });*/
 });

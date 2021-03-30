@@ -14,8 +14,9 @@
             <div class="signup-form">
                 <h2 class="h2-auth form-title">Sign up</h2>
 
-                <div id="error-block">
-                </div>
+                <div id="error-block"></div>
+                
+                <h6 id="timer"></h6>
 
                 <form method="POST" name="signUp" class="register-form" id="register-form" onsubmit="return false;">
                     <div class="form-group">
@@ -34,7 +35,7 @@
                         <label class="auth-label" for="email">
                             <i class="zmdi zmdi-email"></i>
                         </label>
-                        <input class="auth-input" type="email" name="email" id="email" placeholder="Your Email"/>
+                        <input class="auth-input" type="text" name="email" id="email" placeholder="Your Email"/>
                     </div>
                     <div class="form-group">
                         <label class="auth-label" for="pass">
@@ -57,7 +58,7 @@
                 <figure>
                     <img class="auth-logo" src="~/img/ascension_logo.png" alt="sing up image">
                 </figure>
-                <a asp-controller="Authentication" asp-action="Signin" class="a-auth signup-image-link">I am already member</a>
+                <a asp-controller="Authentication" asp-action="Signin" class="a-auth signup-image-link">I am already a member</a>
             </div>
         </div>
     </div>

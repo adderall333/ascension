@@ -158,24 +158,12 @@ input.auth-input {
     border-bottom: 1px solid #999;
     padding: 6px 30px;
     box-sizing: border-box; }
-input.auth-input::-webkit-input-placeholder {
-    color: #999; }
-input.auth-input::-moz-placeholder {
-    color: #999; }
-input.auth-input:-ms-input-placeholder {
-    color: #999; }
-input.auth-input:-moz-placeholder {
-    color: #999; }
 input.auth-input:focus {
     border-bottom: 1px solid #222; }
-input.auth-input:focus::-webkit-input-placeholder {
-    color: #222; }
-input.auth-input:focus::-moz-placeholder {
-    color: #222; }
-input.auth-input:focus:-ms-input-placeholder {
-    color: #222; }
-input.auth-input:focus:-moz-placeholder {
-    color: #222; }
+
+input.auth-input.error {
+    border-bottom: 1px solid #990000;
+}
 
 input.auth-input[type=checkbox]:not(old) {
     width: 2em;
@@ -293,6 +281,12 @@ label.auth-label.valid:after {
 
 .error-icon {
     padding-top: 3px;
+}
+
+#timer {
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: 400;
 }
 
 @media screen and (max-width: 1200px) {
