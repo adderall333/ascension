@@ -107,5 +107,15 @@ $(function () {
     });
 });
 
+$("#address").suggestions({
+    // Замените на свой API-ключ
+    token: "ef2db2da426469acd403d525ff8241bcb5487ef6",
+    type: "ADDRESS",
+    constraints: {
+        locations: { country: "*" },
+    },
+    language: "en",
+});
+
 
 
