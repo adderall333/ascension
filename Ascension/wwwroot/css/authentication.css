@@ -283,6 +283,14 @@ label.auth-label {
     font-weight: 400;
 }
 
+.processing {
+    width: 25px;
+    height: 25px;
+    background: url("../img/static/load.gif");
+    background-size: cover;
+    margin-bottom: 10px;
+}
+
 @media screen and (max-width: 1200px) {
     .container-auth {
         width: calc( 100% - 30px);
