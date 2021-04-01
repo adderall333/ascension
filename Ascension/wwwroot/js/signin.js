@@ -41,7 +41,8 @@ signin_button.addEventListener("click", () => {
     fD.append('email', email);
     fD.append('pass', pass);
     fD.append('remember', remember);
-    
+
+    $('#loading').addClass('processing');
     $.ajax({
         type: 'POST',
         url: '/Authentication/TryLogin',
@@ -49,6 +50,7 @@ signin_button.addEventListener("click", () => {
         processData: false,
         contentType: false,
         success: function(res, status, xhr) {
+            $('#loading').removeClass('processing');
             let result = xhr.getResponseHeader("login_result")
             if (result === "ok")
                 window.location.href = "/Account"

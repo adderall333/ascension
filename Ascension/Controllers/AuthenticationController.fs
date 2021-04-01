@@ -84,3 +84,14 @@ type AuthenticationController() =
             then
                 this.HttpContext.Response.Cookies.Append("email", dbUser.Email)
                 this.HttpContext.Response.Cookies.Append("hashedPass", dbUser.HashedPassword)
+    
+    [<HttpPost>]            
+    member this.Logout =
+        this.HttpContext.Session.Remove("isAuth")
+        this.HttpContext.Session.Remove("id")
+        this.HttpContext.Session.Remove("email")
+        if this.HttpContext.Request.Cookies.ContainsKey("email")
+        then this.HttpContext.Response.Cookies.Delete("email")
+        if this.HttpContext.Request.Cookies.ContainsKey("hashedPass")
+        then this.HttpContext.Response.Cookies.Delete("hashedPass")
+        this.Redirect("/Authentication/Signin")
