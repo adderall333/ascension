@@ -26,18 +26,6 @@
             </div>
         </div>
     </div>
-    <div id="description" class="col-8 product-info description">
-        <div class="row">
-            <p class="fs-4">
-                Description
-            </p>
-        </div>
-        <div class="row">
-            <div class="col fs-5">
-                @Model.Description
-            </div>
-        </div>
-    </div>
     <div id="specifications" class="col-8 product-info specifications">
         <div class="row">
             <p class="fs-4">
@@ -56,6 +44,18 @@
             }
         </div>
     </div>
+    <div id="description" class="col-8 product-info description">
+        <div class="row">
+            <p class="fs-4">
+                Description
+            </p>
+        </div>
+        <div class="row">
+            <div class="col fs-5">
+                @Model.Description
+            </div>
+        </div>
+    </div>
     <div id="reviews" class="col-8 product-info reviews">
         <div class="row">
             <p class="fs-4">
@@ -70,8 +70,8 @@
 </div>
 <div class="row product-btns">
     <div class="col-9">
-        <button id="description-btn" class="btn btn-outline-light product-btn">Description</button>
         <button id="specifications-btn" class="btn btn-outline-light product-btn">Specifications</button>
+        <button id="description-btn" class="btn btn-outline-light product-btn">Description</button>
         <button id="reviews-btn" class="btn btn-outline-light product-btn">Reviews</button>
     </div>
     <div class="col-3">
@@ -82,7 +82,7 @@
 
 <script>
 window.onload = function () {
-    let current = document.getElementById('description');
+    let current = document.getElementById('specifications');
     
     let changeElement = function (newElement) {
         if (current !== newElement) {
