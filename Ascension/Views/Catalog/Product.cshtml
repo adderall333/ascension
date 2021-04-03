@@ -13,8 +13,13 @@
             </p>
         </div>
         <div class="row">
-            <div class="main-image">
-                <img id="main" src="@Model.Images.First().Path"/>
+            <div class="main-image gallery">
+                @foreach (var image in Model.Images)
+                {
+                    <a class="gallery-image" href="@image.Path">
+                        <img src="@image.Path"/>
+                    </a>
+                }
             </div>
             <div class="row images">
                 @foreach (var image in Model.Images)
@@ -82,13 +87,15 @@
 
 <script>
 window.onload = function () {
-    let current = document.getElementById('specifications');
+    baguetteBox.run('.gallery');
+    
+    let currentElement = document.getElementById('specifications');
     
     let changeElement = function (newElement) {
-        if (current !== newElement) {
-            current.style.display = 'none';
+        if (currentElement !== newElement) {
+            currentElement.style.display = 'none';
             newElement.style.display = 'block';
-            current = newElement;
+            currentElement = newElement;
         }
     }
     
@@ -102,12 +109,27 @@ window.onload = function () {
         changeElement(document.getElementById('reviews'));
     });
     
+    let galleryImages = document.getElementsByClassName("gallery-image");
+    let currentImage = galleryImages[0];
+    
+    let changeImage = function (newImage) {
+        if (currentImage !== newImage) {
+            currentImage.style.display = 'none';
+            newImage.style.display = 'block';
+            currentImage = newImage;
+        }
+    }
+    
+    for (let i = 0; i < galleryImages.length; i++) {
+        if (i !== 0)
+            galleryImages[i].style.display = 'none';
+    } 
+    
     let images = document.getElementsByClassName("image");
-    let main = document.getElementById("main");
     
     for (let i = 0; i < images.length; i++) {
         images[i].addEventListener("click", function () {
-           main.setAttribute("src", images[i].getAttribute("src")); 
+           changeImage(galleryImages[i]);
         });
     }
 }
