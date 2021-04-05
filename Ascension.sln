@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csp
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Ascension", "Ascension\Ascension.fsproj", "{63F6ACFF-5A89-452F-B09D-3D6F2F4A7EA6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtAuth", "JwtAuth\JwtAuth.csproj", "{9EED8070-FB05-4F30-ADD3-5DE0A8FD2DB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{63F6ACFF-5A89-452F-B09D-3D6F2F4A7EA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63F6ACFF-5A89-452F-B09D-3D6F2F4A7EA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63F6ACFF-5A89-452F-B09D-3D6F2F4A7EA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EED8070-FB05-4F30-ADD3-5DE0A8FD2DB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EED8070-FB05-4F30-ADD3-5DE0A8FD2DB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EED8070-FB05-4F30-ADD3-5DE0A8FD2DB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EED8070-FB05-4F30-ADD3-5DE0A8FD2DB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
