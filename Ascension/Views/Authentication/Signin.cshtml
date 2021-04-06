@@ -6,7 +6,6 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/authentication.css">
-    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
 }
 
 <section class="sign-in">
@@ -22,8 +21,9 @@
             <div class="signin-form">
                 <h2 class="h2-auth form-title">Sign in</h2>
 
-                <div id="error-block">
-                </div>
+                <div id="error-block"></div>
+                
+                <div id="loading"></div>
                 
                 <form method="POST" class="register-form" id="login-form" onsubmit="return false;">
                     <div class="form-group">
@@ -38,14 +38,6 @@
                         </label>
                         <input class="auth-input" type="password" name="pass" id="pass" placeholder="Password"/>
                     </div>
-                    <!--<div class="form-group">
-                        <input type="checkbox" name="remember-me" id="remember-me" class="auth-input agree-term"/>
-                        <label for="remember-me" class="auth-label label-agree-term">
-                            <span>
-                                <span></span>
-                            </span>Remember me
-                        </label>
-                    </div>-->
                     <div class="form-group">
                         <input type="checkbox" name="remember" id="remember-me" class="auth-input agree-term"/>
                         <label for="remember-me" class="auth-label label-agree-term">

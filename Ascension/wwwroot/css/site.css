@@ -104,10 +104,18 @@ img {
   margin-right: -50px;
   text-transform: uppercase;
 }
+@media (max-width: 620px) {  .store-name {letter-spacing: 40px;margin-right: -40px;}  }
+@media (max-width: 520px) {  .store-name {letter-spacing: 6vw;margin-right: -6vw;}  }
+@media (max-width: 290px) {  .store-name {letter-spacing: 4vw;margin-right: -4vw;}  }
+@media (max-width: 225px) {  .store-name {letter-spacing: 0;margin-right: 0;}  }
 
 .justify-space-between {
   justify-content: space-between!important;
 }
 
-
+@media (min-width: 1400px) {
+  .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+    max-width: 1320px !important;
+  }
+}
 
