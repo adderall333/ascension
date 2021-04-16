@@ -15,6 +15,7 @@ namespace Models
         public Category Category { get; set; }
         public IEnumerable<SpecificationOption> SpecificationOptions { get; set; }
         public IEnumerable<Image> Images { get; set; }
+        public IEnumerable<Purchase> Purchases { get; set; }
         
         public NpgsqlTsVector SearchVector { get; set; }
     }

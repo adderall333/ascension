@@ -95,10 +95,19 @@ type CatalogController() =
                            .ThenInclude(fun (sOp:SpecificationOption) -> sOp.Specification)
                            .Include(fun p -> p.Category)
                            .AsSplitQuery()
-                           .ToList()
+                           .ToList()               
                            
         if products.Count = 0
         then
             errorHandling this
-        else    
-            this.View(products.First())
+        else
+            let product = products.First()
+            product.Purchases <- context
+                                    .Purchase
+                                    .Where(fun p -> p.FirstProductId = id)
+                                    .Include(fun p -> p.SecondProduct)
+                                    .ThenInclude(fun p -> p.Images)
+                                    .OrderByDescending(fun p -> p.Count)
+                                    .Take(5)
+                                    .ToList()
+            this.View(product)
