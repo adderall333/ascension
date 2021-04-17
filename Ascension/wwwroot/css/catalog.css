@@ -268,3 +268,7 @@
 .buy-with-it {
     margin-top: 45px;
 }
+
+.scroll-x {
+    overflow-x: auto;
+}

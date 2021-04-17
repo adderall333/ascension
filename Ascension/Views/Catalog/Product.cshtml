@@ -83,14 +83,17 @@
         <button class="btn btn-outline-light product-btn">Add to cart</button>
     </div>
 </div>
-<div class="row buy-with-it">
+
+<div class="buy-with-it">
     <p class="fs-4">
         Usually buy with it
     </p>
-    @foreach (var product in Model.Purchases.Select(p => p.SecondProduct))
-    {
-        @await Html.PartialAsync("ProductPreviewPartial", product)
-    }
+    <div class="row flex-nowrap scroll-x">
+        @foreach (var product in Model.Purchases.Select(p => p.SecondProduct))
+        {
+            @await Html.PartialAsync("ProductPreviewPartial", product)
+        }
+    </div>
 </div>
 
 <script>
