@@ -2,9 +2,9 @@ namespace Ascension
 
 open Ascension
 open Microsoft.AspNetCore.Mvc
-open Microsoft.EntityFrameworkCore.Metadata.Internal
 open Models
 open System.Linq
+open Models.Attributes
 open Selector
 open Editor
 
@@ -17,6 +17,7 @@ type AdminController() =
         let model = context
                       .GetType()
                       .GetProperties()
+                      .Where(fun p -> p.GetCustomAttributes(typedefof<DisplayedInAdminPanelAttribute>, false).Any())
                       .Select(fun p -> p.Name)
         this.View(model)
         
