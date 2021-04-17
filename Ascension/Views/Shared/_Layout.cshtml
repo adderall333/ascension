@@ -55,7 +55,7 @@
 
                 <div id="nav-search-open" class="nav-search">
                     <form class="row" asp-controller="Catalog" asp-action="Index" method="get">
-                        <input autocomplete="off" placeholder="Enter something" class="col form-control search-input" type="text" name="searchString">
+                        <input id="searchInput" autocomplete="off" placeholder="Enter something" class="col form-control search-input" type="text" name="searchString">
                         <button class="col btn btn-light search-btn">Search</button>
                     </form>
                 </div>
@@ -183,6 +183,24 @@
 <script src="~/js/site.js"></script>
 <script src="~/js/nav.js"></script>
 <script type="text/javascript" src="~/js/baguetteBox.min.js"></script>
+<script>
+let queryParams = window
+    .location
+    .search
+    .replace('?','')
+    .split('&')
+    .reduce(
+        function(p, e){
+            let a = e.split('=');
+            p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+            return p;
+        },
+        {}
+    );
+
+if (queryParams["searchString"] != null)
+    document.getElementById("searchInput").setAttribute("value", queryParams["searchString"]); 
+</script>
 
 <!-- Используйте для подключения своих скриптов -->
 @await RenderSectionAsync("Scripts", required: false)

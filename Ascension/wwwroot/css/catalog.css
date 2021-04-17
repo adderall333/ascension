@@ -264,3 +264,16 @@
     width: 37px;
     height: 37px;
 }
+
+.buy-with-it {
+    margin-top: 45px;
+}
+
+.scroll-x {
+    overflow-x: auto;
+}
+
+.product-price{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

@@ -18,6 +18,7 @@ namespace Models
         public DbSet<SuperCategory> SuperCategory { get; set; }
         public DbSet<Image> Image { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<Purchase> Purchase { get; set; }
         
         public ApplicationContext()
         {
