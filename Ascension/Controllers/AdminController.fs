@@ -6,7 +6,7 @@ open Models
 open System.Linq
 open Models.Attributes
 open Selector
-open Editor
+open Checker
 
 type AdminController() =
     inherit Controller()
@@ -26,51 +26,62 @@ type AdminController() =
         use context = new ApplicationContext()
         this.View(getModelsWithoutRelations name)
    
+    
+    //Create
     [<HttpGet>]     
     member this.Create(name : string) =
         this.View(getModelType name)
         
     [<HttpPost>]
-    member this.CreateSuperCategory(model : SuperCategoryModel) =
-        createSuperCategory model
-        this.Redirect("/admin")
+    member this.CreateSuperCategory(formModel : SuperCategoryModel) =
+        let checkResult = checkSuperCategory formModel
+        let createSuperCategory (model : SuperCategoryModel) =
+            use context = new ApplicationContext()
+            context.SuperCategory.Add(SuperCategory(model.Name, model.Categories)) |> ignore
+            context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect("/admin/models?name=SuperCategory") :> ActionResult
         
-    [<HttpPost>]
-    member this.CreateCategory(model : CategoryModel) =
-        createCategory model
-        this.Redirect("/admin") 
-    
-    [<HttpPost>]
-    member this.CreateSpecification(model : SpecificationModel) =
-        createSpecification model
-        this.Redirect("/admin")
+        match checkResult with
+        | Ok(checkedModel) -> createSuperCategory checkedModel
+        | Bad(message) -> this.BadRequest(message) :> ActionResult
         
-    [<HttpPost>]
-    member this.CreateSpecificationOption(model : SpecificationOptionModel) =
-        createSpecificationOption model
-        this.Redirect("/admin")
         
-    [<HttpPost>]
-    member this.CreateProduct(model : ProductModel) =
-        createProduct model
-        this.Redirect("/admin")
-        
-    [<HttpPost>]
-    member this.CreateImage(model : ImageModel) =
-        createImage model
-        this.Redirect("/admin")
-        
+    //Read    
     [<HttpGet>]
     member this.Read(name : string, id : int) =
         let model = getModelWithRelations name id
         this.View(model)
     
+    
+    //Update
     [<HttpGet>]    
     member this.Update(name : string, id : int) =
         let model = getModelWithRelations name id
         this.View(model)
-    
+        
     [<HttpPost>]    
-    member this.Delete(name : string, id : int) =
-        //todo
-        this.Redirect("/admin")
+    member this.UpdateSuperCategory(formModel : SuperCategoryModel) =
+        let checkResult = checkSuperCategory formModel
+        let updateSuperCategory (model : SuperCategoryModel) = 
+            use context = new ApplicationContext()
+            context
+                .SuperCategory
+                .First(fun sc -> sc.Id = model.Id)
+                .Update(model.Name, model.Categories, context)
+            context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect($"/admin/read?name=SuperCategory&id={model.Id}") :> ActionResult
+            
+        match checkResult with
+        | Ok(checkedModel) -> updateSuperCategory checkedModel
+        | Bad(message) -> this.BadRequest(message) :> ActionResult
+    
+    
+    //Delete
+    [<HttpPost>]    
+    member this.DeleteSuperCategory(id : int) =
+        use context = new ApplicationContext()
+        let modelToDelete = SuperCategory.GetModel(id) :?> SuperCategory
+        context.SuperCategory.Remove(modelToDelete) |> ignore
+        context.SaveChanges() |> ignore

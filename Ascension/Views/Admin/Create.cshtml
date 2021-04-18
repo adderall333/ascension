@@ -7,7 +7,13 @@
     var action = "/Admin/Create" + Model.Name;
 }
 
+<div>
+    <a asp-controller="Admin" asp-action="Models" asp-route-name="@Model.Name">Back</a>
+</div>
+
 <form id="create" method="post" action="@action">
     @Html.GetHtml(CreateHelper.getCreateHtml(Model))
-    <button id="btn">Create</button>
+    <div>
+        <button id="btn">Create</button>
+    </div>
 </form>

@@ -34,7 +34,16 @@ namespace Models
         {
             var context = new ApplicationContext();
             Name = name;
-            Categories = context.Category.Where(category => categories.Contains(category.Id)).ToList();
+            if (categories.Any())
+                Categories = context.Category.Where(category => categories.Contains(category.Id)).ToList();
+        }
+
+        public void Update(string name, List<int> categories, ApplicationContext context = null)
+        {
+            context ??= new ApplicationContext();
+            Name = name;
+            if (categories.Any())
+                Categories = context.Category.Where(category => categories.Contains(category.Id)).ToList();
         }
 
         public SuperCategory()

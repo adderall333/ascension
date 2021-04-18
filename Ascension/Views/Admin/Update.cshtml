@@ -4,6 +4,17 @@
 @{
     ViewBag.Title = "Admin page";
     Layout = "_Layout";
+    var action = "/Admin/Update" + Model.GetType().Name;
 }
 
-@Html.GetHtml(UpdateHelper.getUpdateHtml(Model))
+<div>
+    <a asp-controller="Admin" asp-action="Models" asp-route-name="@Model.GetType().Name">Back</a>
+</div>
+
+<form id="update" method="post" action="@action">
+    <input type="hidden" name="id" value="@Model.Id">
+    @Html.GetHtml(UpdateHelper.getUpdateHtml(Model))
+    <div>
+        <button id="btn">Update</button>    
+    </div>
+</form>

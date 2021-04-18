@@ -89,7 +89,7 @@ module UpdateHelper =
     let processSimpleProperty propertyType propertyValue propertyName =
         let sb = StringBuilder()
         sb.Append("<p><label>" + propertyName + "<label>") |> ignore
-        sb.Append("<input type=\"" + Tools.getInputType propertyType + "\"") |> ignore
+        sb.Append("<input type=\"" + Tools.getInputType propertyType + "\" name=\"" + propertyName + "\"") |> ignore
         sb.Append(getHtmlAttribute propertyType propertyValue propertyName + "\">" + "</p>") |> ignore
         sb.ToString()
         
@@ -122,34 +122,22 @@ module UpdateHelper =
                 sb.Append(processComplexProperty options property.Name checkedIds true) |> ignore
         sb.ToString()
         
-module Editor =
-    let createSuperCategory (model : SuperCategoryModel) =
+module Checker =
+    type Result<'TModel, 'TMessage> = 
+        | Ok of 'TModel
+        | Bad of 'TMessage
+    
+    let check condition failMessage previousResult =
+        match previousResult with
+        | Ok(model) -> if condition model then Ok(model) else Bad(failMessage)
+        | Bad(message) -> Bad(message)
+    
+    let checkSuperCategory (model : SuperCategoryModel) =
         use context = new ApplicationContext()
-        context.SuperCategory.Add(SuperCategory(model.Name, model.Categories)) |> ignore
-        context.SaveChanges() |> ignore
-        
-    let createCategory (model : CategoryModel) =
-        use context = new ApplicationContext()
-        context.Category.Add(Category(model.Name, model.SuperCategory, model.Products, model.Specifications)) |> ignore
-        context.SaveChanges() |> ignore
-        
-    let createSpecification (model : SpecificationModel) =
-        use context = new ApplicationContext()
-        context.Specification.Add(Specification(model.Name, model.Category, model.SpecificationOptions)) |> ignore
-        context.SaveChanges() |> ignore
-        
-    let createSpecificationOption (model : SpecificationOptionModel) =
-        use context = new ApplicationContext()
-        context.SpecificationOption.Add(SpecificationOption(model.Name, model.Specification, model.Products)) |> ignore
-        context.SaveChanges() |> ignore
-        
-    let createProduct (model : ProductModel) =
-        use context = new ApplicationContext()
-        let product = Product(model.Name, model.Cost, model.Description, model.Category, model.SpecificationOptions, model.Images)
-        context.Product.Add(product) |> ignore
-        context.SaveChanges() |> ignore
-        
-    let createImage (model : ImageModel) =
-        use context = new ApplicationContext()
-        context.Image.Add(Image(model.Path, model.Products)) |> ignore
-        context.SaveChanges() |> ignore
+        let emptyNameCheck (superCategory : SuperCategoryModel) = superCategory.Name <> null && superCategory.Name <> ""
+        let nonUniqueNameCheck (superCategory : SuperCategoryModel) = not (context
+                                                                            .SuperCategory
+                                                                            .Where(fun sc -> sc.Name = superCategory.Name)
+                                                                            .Any())
+        (Ok(model)) |> check emptyNameCheck "Super category name was empty"
+                    |> check nonUniqueNameCheck "Super category with same name already exists"

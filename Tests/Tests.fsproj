@@ -15,7 +15,13 @@
 
     <ItemGroup>
         <Compile Include="SimpleTests.fs" />
+        <Compile Include="IntegrationTests.fs" />
         <Compile Include="Program.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Ascension\Ascension.fsproj" />
+      <ProjectReference Include="..\Models\Models.csproj" />
     </ItemGroup>
 
 </Project>

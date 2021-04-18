@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="ViewModels.fs" />
+        <Compile Include="FormModels.fs" />
         <Compile Include="ProductFilter.fs" />
         <Compile Include="Selector.fs" />
         <Compile Include="AdminHelper.fs" />

@@ -1,4 +1,4 @@
-module Tests
+module SimpleTests
 
 open System.Net
 open System.Net.Http
@@ -15,6 +15,10 @@ let client = new HttpClient()
 [<TestCase("/catalog", TestName = "CatalogIndex")>]
 [<TestCase("/catalog/category?name=Laptops", TestName = "CatalogCategory")>]
 [<TestCase("/catalog/product/1", TestName = "CatalogProduct")>]
+
+//search
+[<TestCase("/catalog?searchString=apple", TestName = "Search_apple")>]
+[<TestCase("/catalog?searchString=lenovo", TestName = "Search_lenovo")>]
 
 //admin
 [<TestCase("/admin", TestName = "AdminIndex")>]
@@ -47,6 +51,6 @@ let client = new HttpClient()
 [<TestCase("/authentication/signin", TestName = "AuthSignin")>]
 [<TestCase("/authentication/signup", TestName = "AuthSignup")>]
 
-let StatusCode200 (page : string) =
+let statusCode200 (page : string) =
     let response = client.GetAsync(url + page) |> Async.AwaitTask |> Async.RunSynchronously
     Assert.That(response.StatusCode = HttpStatusCode.OK)
