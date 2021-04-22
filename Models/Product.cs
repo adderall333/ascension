@@ -20,6 +20,6 @@ namespace Models
         public NpgsqlTsVector SearchVector { get; set; }
         
         public IEnumerable<Review> Reviews { get; set; }
-        public ProductRating Rating { get; set; }
+        public  ProductRating Rating { get; set; }
     }
 }
