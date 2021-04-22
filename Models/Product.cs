@@ -18,5 +18,8 @@ namespace Models
         public IEnumerable<Purchase> Purchases { get; set; }
         
         public NpgsqlTsVector SearchVector { get; set; }
+        
+        public IEnumerable<Review> Reviews { get; set; }
+        public ProductRating Rating { get; set; }
     }
 }
