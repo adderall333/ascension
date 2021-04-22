@@ -1,0 +1,34 @@
+﻿.review_username {
+    float: left;
+    margin-right: 10px;
+}
+
+.review_date {
+    color: #3d3d3d;
+}
+
+.review {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 0.25rem;
+    margin-bottom: 10px;
+    margin-right: 5px;
+}
+
+.review_add_comment {
+    min-width: 100%;
+    min-height: 130px;
+    padding: 10px;
+    border-radius: 0.25rem;
+    resize: none;
+}
+
+.review_form {
+    margin-bottom: 30px;
+}
+
+.scrollable {
+    width: 100%;
+    height: 222px;
+    overflow: auto;
+}

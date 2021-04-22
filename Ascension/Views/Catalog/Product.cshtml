@@ -5,6 +5,10 @@
     Layout = "_Layout";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/review.css">
+}
+
 <div class="row">
     <div class="col-4">
         <div>
@@ -61,17 +65,76 @@
             </div>
         </div>
     </div>
+
     <div id="reviews" class="col-8 product-info reviews">
         <div class="row">
             <p class="fs-4">
-                Reviews
+                Rating: 4,8
             </p>
         </div>
         <div class="row">
-            <div class="col fs-5">Empty part</div>
+            <p class="fs-4">
+                Reviews (3)
+            </p>
+        </div>
+        <div class="row">
+            <div class="col fs-5">
+                <form class="review_form">
+                    <textarea class="review_add_comment" name="" id="" placeholder="Add comment..."></textarea>
+                    <button id="add-review-btn" class="btn btn-outline-light product-btn">Add review</button>
+                </form>
+                <div class="scrollable">
+
+                    <div class="review">
+                        <div class="review_username">
+                            Kirill
+                        </div>
+                        <div class="review_date">
+                            @DateTime.Now.ToString("d")
+                        </div>
+                        <div class="review_rating">
+                            ★★★☆☆
+                        </div>
+                        <div class="review_comment">
+                            Супер! Пушка! Калатушка! Всем советую!
+                        </div>
+                    </div>
+
+                    <div class="review">
+                        <div class="review_username">
+                            Kirill
+                        </div>
+                        <div class="review_date">
+                            @DateTime.Now.ToString("d")
+                        </div>
+                        <div class="review_rating">
+                            ★★★☆☆
+                        </div>
+                        <div class="review_comment">
+                            Супер! Пушка! Калатушка! Всем советую!
+                        </div>
+                    </div>
+                    
+                    <div class="review">
+                        <div class="review_username">
+                            Kirill
+                        </div>
+                        <div class="review_date">
+                            @DateTime.Now.ToString("d")
+                        </div>
+                        <div class="review_rating">
+                            ★★★☆☆
+                        </div>
+                        <div class="review_comment">
+                            Супер! Пушка! Калатушка! Всем советую!
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
-    
+
 </div>
 <div class="row product-btns">
     <div class="col-9">
@@ -148,3 +211,8 @@ window.onload = function () {
     }
 }
 </script>
+
+@section Scripts
+{
+    <script src="~/js/review.js"></script>
+}
