@@ -19,6 +19,8 @@ namespace Models
         public DbSet<Image> Image { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Purchase> Purchase { get; set; }
+        public DbSet<Review> Review { get; set; }
+        public DbSet<ProductRating> ProductRating { get; set; }
         
         public ApplicationContext()
         {
