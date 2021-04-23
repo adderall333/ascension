@@ -30,12 +30,11 @@ namespace Models
                 .First(superCategory => superCategory.Id == id);
         }
 
-        public SuperCategory(string name, List<int> categories)
+        public SuperCategory(string name, List<int> categories, ApplicationContext context = null)
         {
-            var context = new ApplicationContext();
             Name = name;
             if (categories.Any())
-                Categories = context.Category.Where(category => categories.Contains(category.Id)).ToList();
+                Categories = context?.Category.Where(category => categories.Contains(category.Id)).ToList();
         }
 
         public void Update(string name, List<int> categories, ApplicationContext context = null)

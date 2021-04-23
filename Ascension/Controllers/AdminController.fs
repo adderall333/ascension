@@ -37,7 +37,7 @@ type AdminController() =
         let checkResult = checkSuperCategory formModel
         let createSuperCategory (model : SuperCategoryModel) =
             use context = new ApplicationContext()
-            context.SuperCategory.Add(SuperCategory(model.Name, model.Categories)) |> ignore
+            context.SuperCategory.Add(SuperCategory(model.Name, model.Categories, context)) |> ignore
             context.SaveChanges() |> ignore
             this.Response.StatusCode = 200 |> ignore
             this.Redirect("/admin/models?name=SuperCategory") :> ActionResult
@@ -46,6 +46,18 @@ type AdminController() =
         | Ok(checkedModel) -> createSuperCategory checkedModel
         | Bad(message) -> this.BadRequest(message) :> ActionResult
         
+    member this.CreateCategory(formModel : CategoryModel) =
+        let checkResult = checkCategory formModel
+        let createCategory (model : CategoryModel) =
+            use context = new ApplicationContext()
+            context.Category.Add(Category(model.Name, model.SuperCategory, model.Products, model.Specifications, context)) |> ignore
+            context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect("/admin/models?name=Category") :> ActionResult
+            
+        match checkResult with
+        | Ok(checkedModel) -> createCategory checkedModel
+        | Bad(message) -> this.BadRequest(message) :> ActionResult
         
     //Read    
     [<HttpGet>]

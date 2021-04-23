@@ -1,7 +1,5 @@
 ﻿namespace Ascension
 
-open System
-open System.Collections.Generic
 open ProductFilter
 open System.Diagnostics
 open System.Linq

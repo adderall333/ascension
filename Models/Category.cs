@@ -38,13 +38,12 @@ namespace Models
                 .First(category => category.Id == id);
         }
 
-        public Category(string name, int superCategory, List<int> products, List<int> specifications)
+        public Category(string name, int superCategory, List<int> products, List<int> specifications, ApplicationContext context = null)
         {
-            var context = new ApplicationContext();
             Name = name;
-            SuperCategory = context.SuperCategory.First(sc => sc.Id == superCategory);
-            Products = context.Product.Where(product => products.Contains(product.Id)).ToList();
-            Specifications = context.Specification.Where(specification => specifications.Contains(specification.Id));
+            SuperCategory = context?.SuperCategory.First(sc => sc.Id == superCategory);
+            Products = context?.Product.Where(product => products.Contains(product.Id)).ToList();
+            Specifications = context?.Specification.Where(specification => specifications.Contains(specification.Id));
         }
 
         public Category()

@@ -141,3 +141,19 @@ module Checker =
                                                                             .Any())
         (Ok(model)) |> check emptyNameCheck "Super category name was empty"
                     |> check nonUniqueNameCheck "Super category with same name already exists"
+                    
+    let checkCategory (model : CategoryModel) =
+        use context = new ApplicationContext()
+        let emptyNameCheck (category : CategoryModel) = category.Name <> null && category.Name <> ""
+        let nonUniqueNameCheck (category : CategoryModel) = not (context
+                                                                    .Category
+                                                                    .Where(fun c -> c.Name = category.Name)
+                                                                    .Any())
+        let correctSuperCategoryCheck (category : CategoryModel) = context
+                                                                      .SuperCategory
+                                                                      .Where(fun sc -> sc.Id = category.SuperCategory)
+                                                                      .Any()
+        (Ok(model)) |> check emptyNameCheck "Category name was empty"
+                    |> check nonUniqueNameCheck "Category with same name already exists"
+                    |> check correctSuperCategoryCheck "Super category was not selected"
+        
