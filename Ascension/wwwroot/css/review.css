@@ -1,10 +1,21 @@
-﻿.review_username {
-    float: left;
+﻿.review_info {
+    display: flex;
+    flex-direction: row;
+}
+
+.review_username {
+    margin-right: 10px;
+}
+
+.review_rating {
     margin-right: 10px;
 }
 
 .review_date {
-    color: #3d3d3d;
+    color: gray;
+    font-size: 17px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .review {
@@ -17,18 +28,28 @@
 
 .review_add_comment {
     min-width: 100%;
-    min-height: 130px;
+    min-height: 110px;
     padding: 10px;
     border-radius: 0.25rem;
     resize: none;
 }
 
 .review_form {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .scrollable {
     width: 100%;
-    height: 222px;
+    max-height: 226px;
     overflow: auto;
+}
+
+.star_btn {
+    cursor: pointer;
+}
+
+.add_stars {
+    margin-top: -10px;
+    display: flex;
+    font-size: 25px;
 }

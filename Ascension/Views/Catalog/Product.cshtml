@@ -73,57 +73,38 @@
             </p>
         </div>
         <div class="row">
-            <p class="fs-4">
-                Reviews (3)
-            </p>
-        </div>
-        <div class="row">
             <div class="col fs-5">
                 <form class="review_form">
                     <textarea class="review_add_comment" name="" id="" placeholder="Add comment..."></textarea>
+                    <div class="add_stars">
+                        <div id="star1" class="star_btn">☆</div>
+                        <div id="star2" class="star_btn">☆</div>
+                        <div id="star3" class="star_btn">☆</div>
+                        <div id="star4" class="star_btn">☆</div>
+                        <div id="star5" class="star_btn">☆</div>
+                    </div>
                     <button id="add-review-btn" class="btn btn-outline-light product-btn">Add review</button>
                 </form>
+            </div>
+        </div>
+        <div class="row">
+            <p class="fs-4">
+                Reviews (3)
+            </p>
+            <div class="col fs-5">
                 <div class="scrollable">
 
                     <div class="review">
-                        <div class="review_username">
-                            Kirill
-                        </div>
-                        <div class="review_date">
-                            @DateTime.Now.ToString("d")
-                        </div>
-                        <div class="review_rating">
-                            ★★★☆☆
-                        </div>
-                        <div class="review_comment">
-                            Супер! Пушка! Калатушка! Всем советую!
-                        </div>
-                    </div>
-
-                    <div class="review">
-                        <div class="review_username">
-                            Kirill
-                        </div>
-                        <div class="review_date">
-                            @DateTime.Now.ToString("d")
-                        </div>
-                        <div class="review_rating">
-                            ★★★☆☆
-                        </div>
-                        <div class="review_comment">
-                            Супер! Пушка! Калатушка! Всем советую!
-                        </div>
-                    </div>
-                    
-                    <div class="review">
-                        <div class="review_username">
-                            Kirill
-                        </div>
-                        <div class="review_date">
-                            @DateTime.Now.ToString("d")
-                        </div>
-                        <div class="review_rating">
-                            ★★★☆☆
+                        <div class="review_info">
+                            <div class="review_username">
+                                Kirill
+                            </div>
+                            <div class="review_rating">
+                                ★★★☆☆
+                            </div>
+                            <div class="review_date">
+                                @DateTime.Now.ToString("d")
+                            </div>
                         </div>
                         <div class="review_comment">
                             Супер! Пушка! Калатушка! Всем советую!
