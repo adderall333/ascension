@@ -53,3 +53,26 @@
     display: flex;
     font-size: 25px;
 }
+
+.under_textarea {
+    display: flex;
+}
+
+#stars_message {
+    display: flex;
+    font-size: 18px;
+    margin-top: -3px;
+    margin-left: 20px;
+}
+
+#stars_arrow {
+    margin-right: 7px;
+}
+
+.textarea_error {
+    border-color: #990000;
+}
+
+.arrow_error {
+    color: #990000;
+}
