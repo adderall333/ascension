@@ -124,8 +124,9 @@ window.onload = function () {
         changeElement(document.getElementById('reviews'));
     });
     
+    //пример
     document.getElementById("add-to-cart").addEventListener("click", async function() {
-       let response = await fetch("/Cart/AddProduct?id=@Model.Id&user=@userId");
+       let response = await fetch("/Cart/AddProductLine?id=@Model.Id&user=@userId");
     });
     
     let galleryImages = document.getElementsByClassName("gallery-image");
