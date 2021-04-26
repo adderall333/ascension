@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = Model.Name;
     Layout = "_Layout";
-    var userId = 0; //todo
 }
 
 <div class="row">
@@ -126,7 +125,7 @@ window.onload = function () {
     
     //пример
     document.getElementById("add-to-cart").addEventListener("click", async function() {
-       let response = await fetch("/Cart/AddProductLine?id=@Model.Id&user=@userId");
+       let response = await fetch("/Cart/AddProductLine?productId=@Model.Id");
     });
     
     let galleryImages = document.getElementsByClassName("gallery-image");

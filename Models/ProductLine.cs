@@ -4,18 +4,22 @@
     {
         public int Id { get; set; }
         
-        public  int ClientId { get; set; }
+        public  int CartId { get; set; }
 
         public int ProductId { get; set; }
         
         public int ProductCount { get; set; }
 
 
-        public ProductLine(int clientId, int productId)
+        public ProductLine(int cartId, int productId)
         {
-            ClientId = clientId;
+            CartId = cartId;
             ProductId = productId;
             ProductCount = 1;
+        }
+
+        public ProductLine()
+        {
         }
     }
 }
