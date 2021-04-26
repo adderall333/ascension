@@ -13,13 +13,15 @@ type CartController () =
     inherit Controller()
 
     [<HttpGet>]
-    member this.Cart () =
-        this.View()
+    member this.Cart(userId : int) =
+        use context = new ApplicationContext()
+        let productLines = context.ProductLine.Where(fun p -> p.ClientId = userId).ToList()
+        this.View(productLines)
         
     [<HttpPost>]  
-    member this.AddProduct(id:int, user:int) =
+    member this.AddProduct(productId : int, userId : int) =
         use context = new ApplicationContext()
-        context.ProductLine.Add(ProductLine (user, id)) |> ignore
+        context.ProductLine.Add(ProductLine (userId, productId)) |> ignore
         context.SaveChanges |> ignore
         
         

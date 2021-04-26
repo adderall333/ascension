@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = Model.Name;
     Layout = "_Layout";
+    var userId = 0; //todo
 }
 
 <div class="row">
@@ -83,7 +84,7 @@
         @Model.Cost$
     </div>
     <div class="col-2">
-        <button class="btn btn-outline-light product-btn">Add to cart</button>
+        <button id="add-to-cart" class="btn btn-outline-light product-btn">Add to cart</button>
     </div>
 </div>
 
@@ -121,6 +122,10 @@ window.onload = function () {
     });
     document.getElementById('reviews-btn').addEventListener('click', function () {
         changeElement(document.getElementById('reviews'));
+    });
+    
+    document.getElementById("add-to-cart").addEventListener("click", async function() {
+       let response = await fetch("/Cart/AddProduct?id=@Model.Id&user=@userId");
     });
     
     let galleryImages = document.getElementsByClassName("gallery-image");
