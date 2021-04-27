@@ -1,6 +1,12 @@
 @using System.Collections.Specialized
 @using Models
 @model List<Models.ProductLine>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/cart.css">   
+}
+
 @{
     ViewBag.Title = "Cart";
     Layout = "_Layout";
