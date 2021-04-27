@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 using NpgsqlTypes;
 
@@ -18,5 +19,8 @@ namespace Models
         public IEnumerable<Purchase> Purchases { get; set; }
         
         public NpgsqlTsVector SearchVector { get; set; }
+
+        [NotMapped]
+        public bool IsInCart { get; set; }
     }
 }

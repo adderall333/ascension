@@ -1,9 +1,11 @@
 namespace Ascension
 
+open Microsoft.AspNetCore.Http
 open Models
 open System.Linq
 open System.Collections.Generic
 open Microsoft.EntityFrameworkCore
+open CartService
 
 module ProductFilter =
     
@@ -101,4 +103,9 @@ module ProductFilter =
                              .Take(1)
                              .ToList()
             product.Images <- images
+        products
+        
+    let loadIsInCart (context : ApplicationContext) (httpContext : HttpContext) (products : List<Product>) =
+        for product in products do               
+            product.IsInCart <- isInCart product httpContext context
         products

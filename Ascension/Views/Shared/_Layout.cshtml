@@ -10,7 +10,7 @@
     <!--Bootstrap CSS 4.6--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <!--Bootstrap CSS 5.0--><link href="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <!--Favicon--><link href="/favicon.ico" rel="icon" type="image/x-icon">
-  
+
     <link rel="stylesheet" href="~/css/site.css"/>
     <link rel="stylesheet" href="~/css/nav.css">
     <link rel="stylesheet" href="~/css/footer.css">
@@ -75,7 +75,7 @@
                 }
                 <li class="nav-item">
                     <!--Ссылка на корзину-->
-                    <a class="nav-link" href="javascript:void(0);"><i class="fa fa-shopping-cart"></i>Cart</a>
+                    <a class="nav-link" asp-controller="Cart" asp-action="Cart"><i class="fa fa-shopping-cart"></i>Cart</a>
                 </li>
 
             </ul>
@@ -89,16 +89,37 @@
         <div class="box_in_box1">
             <h3 class="main-txt">City selection</h3>
             <select
-              class="form-select"
-              id="slc-city"
-              size="3"
-              aria-label="size 3 select example">
+                class="form-select"
+                id="slc-city"
+                size="3"
+                aria-label="size 3 select example">
                 <option value="Казань">Kazan</option>
-                <option value = "Moscow"> Moscow </option>
-                <option value = "Saint Petersburg"> Saint-Piter </option>
-                <option value = "Ufa"> Ufa </option>
-                <option value = "Zelenodolsk"> Zelenodolsk </option>
-                <option value = "Chelyabinsk"> Chelyabinsk </option>
+                <option value="Moscow"> Moscow </option>
+                <option value="Saint Petersburg"> Saint-Piter </option>
+                <option value="Novosibirsk"> Novosibirsk </option>
+                <option value="Yekaterinburg"> Yekaterinburg </option>
+                <option value="Nizhny Novgorod"> Nizhny Novgorod </option>
+                <option value="Samara"> Samara </option>
+                <option value="Chelyabinsk"> Chelyabinsk </option>
+                <option value="Omsk"> Omsk </option>
+                <option value="Rostov-on-Don"> Rostov-on-Don </option>
+                <option value="Ufa"> Ufa </option>
+                <option value="Krasnoyarsk"> Krasnoyarsk </option>
+                <option value="Permian"> Permian </option>
+                <option value="Volgograd"> Volgograd </option>
+                <option value="Voronezh"> Voronezh </option>
+                <option value="Saratov"> Saratov </option>
+                <option value="Krasnodar"> Krasnodar </option>
+                <option value="Tolyatti"> Tolyatti </option>
+                <option value="Tyumen"> Tyumen </option>
+                <option value="Izhevsk"> Izhevsk </option>
+                <option value="Barnaul"> Barnaul </option>
+                <option value="Ulyanovsk"> Ulyanovsk </option>
+                <option value="Irkutsk"> Irkutsk </option>
+                <option value="Vladivostok"> Vladivostok </option>
+                <option value="Yaroslavl"> Yaroslavl </option>
+                <option value="Khabarovsk"> Khabarovsk </option>
+                <option value="Orenburg"> Orenburg </option>
             </select>
             <div>
                 <button class="choose-btn btn btn-outline-secondary" id="chs-btn">
