@@ -45,9 +45,13 @@ type CartController() =
         context.SaveChanges() |> ignore
 
     [<HttpPost>]
-    member this.AddProduct(productId: int) = None
-    //проверку на существование продуктлайна не забыть, если его нету ничего не делать
+    member this.AddProduct(productId: int) =
+        use context = new ApplicationContext()
+        let productCountAdd = context.ProductLine.Where(fun x -> x.Id = productId).Select(fun y -> y.ProductCount+1)
+        context.SaveChanges() |> ignore
 
     [<HttpPost>]
-    member this.RemoveProduct(productId: int) = None
-//и тут проверку такую же
+    member this.RemoveProduct(productId: int) = 
+     use context = new ApplicationContext()
+     let productCountAdd = context.ProductLine.Where(fun x -> x.Id = productId).Select(fun y -> y.ProductCount-1)
+     context.SaveChanges() |> ignore

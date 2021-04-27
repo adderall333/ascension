@@ -34,14 +34,14 @@
                     </div>
                     <div class="product-details">
                         <p>
-                            <strong>@productLine.Product.Name</strong>
+                     <strong>@productLine.Product.Name</strong>
                         </p>
                         <p>Product Code - @productLine.ProductId</p>
                     </div>
                 </div>  
                 <div class="price">@productLine.Product.Cost</div>
                 <div class="quantity">
-                    <input type="number" value="@productLine.ProductCount" min="1" class="quantity-field">
+                    <input type="number"  value="@productLine.ProductCount" min="@productLine.ProductCount" id="valuenum" onchange="document.getElementById('valuenum').value" class="quantity-field">
                 </div>
                 <div class="subtotal">@productLine.Product.Cost</div>
                 <div class="remove">
@@ -70,34 +70,40 @@
 
 
 window.onload = async function () {
-    var f = document.getElementsByClassName('delete-from-cart');
-    for (var i = 0; i < f.length; i++)
+    let f_delete = document.getElementsByClassName('delete-from-cart');
+    for (let i = 0; i < f_delete.length; i++)
         {
-             f[i].addEventListener('click', async function ()
+             f_delete[i].addEventListener('click', async function ()
              { 
-                 let response = await fetch("/Cart/RemoveProductLine?productLineId=" + f[i].id,
+                 let response = await fetch("/Cart/RemoveProductLine?productLineId=" + f_delete[i].id,
                  {
                     method: "POST"
                  });
              });
         }
-    }
-
-
-window.onload = async function () {
-    var f = document.getElementsByClassName('add-one-cart');
-    for (var i = 0; i < f.length; i++)
-        {
-             f[i].addEventListener('click', async function ()
-             { 
-                 let response = await fetch("/Cart/AddProduct?productLineId=" + f[i].id,
-                 {
-                    method: "POST"
+     let f_addone = document.getElementsByClassName('quantity-field');
+        for (let j = 0; j < f_addone.length; j++)
+            {
+                 f_addone[j].addEventListener('click', async function ()
+                 { 
+                     let response = await fetch("/Cart/AddProduct?productLineId=" + f_addone[j].id,
+                     {
+                        method: "POST"
+                     });
                  });
-             });
-        }
+            }
+         let f_deleteone = document.getElementsByClassName('quantity-field');
+            for (let k = 0; k < f_deleteone.length; k++)
+                {
+                     f_deleteone[k].addEventListener('onchange', async function ()
+                     { 
+                         let response = await fetch("/Cart/RemoveProduct?productLineId=" + f_deleteone[k].id,
+                         {
+                            method: "POST"
+                         });
+                     });
+                }
     }
-    
     
 </script>
 
