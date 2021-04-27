@@ -26,9 +26,6 @@ strong {
     font-weight: bold;
 }
 
-p {
-    margin: 0.75rem 0 0;
-}
 
 h1 {
     font-size: 0.75rem;
@@ -53,15 +50,12 @@ button:focus {
     background-color: #555;
 }
 
-img,
 .basket-module,
 .basket-labels,
 .basket-product {
     width: 100%;
 }
 
-input,
-button,
 .basket,
 .basket-module,
 .basket-labels,
@@ -80,7 +74,7 @@ button,
 .subtotal-value:before,
 .total-value:before,
 .promo-value:before {
-    content: '£';
+    content: '$';
 }
 
 .hide {
@@ -248,7 +242,7 @@ aside {
     padding: 1rem;
     position: fixed;
     width: 250px;
-    margin-left: 90px;
+    margin-left: 10px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
