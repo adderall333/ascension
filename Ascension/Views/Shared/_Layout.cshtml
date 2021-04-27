@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="~/css/footer.css">
     <link rel="stylesheet" href="~/css/catalog.css">
     <link rel="stylesheet" href="~/css/citytriggerwindow.css">
+    <link rel="stylesheet" href="~/css/profile.css">
     <link href="/favicon.ico" rel="icon" type="image/x-icon">
     <!-- Используйте для подключения своих стилей -->
     @await RenderSectionAsync("Styles", required: false)
@@ -45,6 +46,10 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Catalog" asp-action="Index">Catalog</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Profile" asp-action="Personal">Profile</a>
+                    </li>
+                        
 
                     <div>
 	                    <form class="row" asp-controller="Catalog" asp-action="Index" method="get">
