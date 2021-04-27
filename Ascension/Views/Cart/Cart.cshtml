@@ -4,20 +4,22 @@
 
 @section Styles
 {
-    <link rel="stylesheet" href="~/css/cart.css">   
+    <link rel="stylesheet" href="~/css/cart.css">
 }
 
 @{
     ViewBag.Title = "Cart";
     Layout = "_Layout";
 }
+<html lang="en">
+<body>
+<main>
 
 
-@foreach (var productLine in Model)
-{
-    <html lang="en">
-    <body>
-    <main>
+    
+
+    @foreach (var productLine in Model)
+    {
         <div class="basket">
             <div class="basket-labels">
                 <ul>
@@ -27,44 +29,50 @@
                     <li class="subtotal">Subtotal</li>
                 </ul>
             </div>
-            <div class="basket-product">
-                <div class="item">
-                    <div class="product-image">
-                        <img src="@productLine.Product.Images.First().Path" alt="Placholder Image 2" class="product-frame">
-                    </div>
-                    <div class="product-details">
-                        <p>
-                     <strong>@productLine.Product.Name</strong>
-                        </p>
-                        <p>Product Code - @productLine.ProductId</p>
-                    </div>
-                </div>  
-                <div class="price">@productLine.Product.Cost</div>
-                <div class="quantity">
-                    <input type="number"  value="@productLine.ProductCount" min="@productLine.ProductCount" id="valuenum" onchange="document.getElementById('valuenum').value" class="quantity-field">
+        </div>
+        <div class="basket-product">
+            <div class="item">
+                <div class="product-image">
+                    <img src="@productLine.Product.Images.First().Path" alt="Placholder Image 2" class="product-frame">
                 </div>
-                <div class="subtotal">@productLine.Product.Cost</div>
-                <div class="remove">
-                    <button id = "@productLine.Id" class="delete-from-cart">Remove</button>
+                <div class="product-details">
+                    <p>
+                        <strong>@productLine.Product.Name</strong>
+                    </p>
+                    <p>Product Code - @productLine.ProductId</p>
                 </div>
+            </div>
+            <div class="price">@productLine.Product.Cost</div>
+            <div class="quantity">
+                <input type="number" value="@productLine.ProductCount" min="@productLine.ProductCount" id="valuenum" onchange="document.getElementById('valuenum').value" class="quantity-field">
+            </div>
+            <div class="subtotal" >@productLine.Product.Cost</div>
+            <div class="remove">
+                <button id="@productLine.Id" class="delete-from-cart">Remove</button>
             </div>
         </div>
-        <aside>
-            <div class="summary">
-                <div class="summary-total-items"><span class="total-items"></span> Items in your Bag</div>
-                <div class="summary-total">
-                    <div class="total-title">Total</div>
-                    <div class="total-value final-value" id="basket-total">@productLine.Product.Cost</div>
-                </div>
-                <div class="summary-checkout">
-                    <button class="checkout-cta">Go to Checkout</button>
+        <input id="cost" value="@productLine.Product.Cost">
+    }
+
+    <aside>
+        <div class="summary">
+            <div class="summary-total-items"><span class="total-items"></span> Items in your Bag</div>
+            <div class="summary-total">
+                <div class="total-title">Total</div>
+                <div class="total-value final-value" id="basket-total">
+                    <script>
+                     document.getElementById('cost').value;
+                    </script>
                 </div>
             </div>
-        </aside>
-    </main>
-    </body>
-    </html>
-}
+            <div class="summary-checkout">
+                <button class="checkout-cta">Go to Checkout</button>
+            </div>
+        </div>
+    </aside>
+</main>
+</body>
+</html>
 <script>
 
 
@@ -106,5 +114,3 @@ window.onload = async function () {
     }
     
 </script>
-
-
