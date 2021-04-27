@@ -14,26 +14,6 @@ $(document).ready(function () {
     updateSumItems();
 });
 
-$('.promo-code-cta').click(function () {
-
-    promoCode = $('#promo-code').val();
-
-    if (promoCode == '10off' || promoCode == '10OFF') {
-        if (!promoPrice) {
-            promoPrice = 10;
-        } else if (promoCode) {
-            promoPrice = promoPrice * 1;
-        }
-    } else if (promoCode != '') {
-        alert("Invalid Promo Code");
-        promoPrice = 0;
-    }
-    if (promoPrice) {
-        $('.summary-promo').removeClass('hide');
-        $('.promo-value').text(promoPrice.toFixed(2));
-        recalculateCart(true);
-    }
-});
 
 function recalculateCart(onlyTotal) {
     var subtotal = 0;

@@ -38,13 +38,10 @@ type CartController() =
         context.SaveChanges() |> ignore
 
     [<HttpPost>]
-    member this.RemoveProductLine(productId: int) =
+    member this.RemoveProductLine(productLineId: int) =
         use context = new ApplicationContext()
-        let cartId = getCartId this.HttpContext
-
-        context.ProductLine.Remove(ProductLine(cartId, productId))
-        |> ignore
-
+        let productLineRemove = context.ProductLine.First(fun x -> x.Id = productLineId)
+        context.ProductLine.Remove(productLineRemove)|> ignore
         context.SaveChanges() |> ignore
 
     [<HttpPost>]

@@ -45,7 +45,7 @@
                 </div>
                 <div class="subtotal">@productLine.Product.Cost</div>
                 <div class="remove">
-                    <button id="delete-from-cart">Remove</button>
+                    <button id = "@productLine.Id" class="delete-from-cart">Remove</button>
                 </div>
             </div>
         </div>
@@ -66,15 +66,39 @@
     </html>
 }
 <script>
+
+
+
 window.onload = async function () {
-    document.getElementById('add-to-cart').addEventListener('click', async function() {
-        let response = await fetch("/Cart/RemoveProductLine?productId=@Model.)",
-            {
-                method: "POST"
-            }
-        );
-    });
-}
+    var f = document.getElementsByClassName('delete-from-cart');
+    for (var i = 0; i < f.length; i++)
+        {
+             f[i].addEventListener('click', async function ()
+             { 
+                 let response = await fetch("/Cart/RemoveProductLine?productLineId=" + f[i].id,
+                 {
+                    method: "POST"
+                 });
+             });
+        }
+    }
+
+
+window.onload = async function () {
+    var f = document.getElementsByClassName('add-one-cart');
+    for (var i = 0; i < f.length; i++)
+        {
+             f[i].addEventListener('click', async function ()
+             { 
+                 let response = await fetch("/Cart/AddProduct?productLineId=" + f[i].id,
+                 {
+                    method: "POST"
+                 });
+             });
+        }
+    }
+    
+    
 </script>
 
 
