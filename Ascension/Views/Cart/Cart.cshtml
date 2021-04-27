@@ -35,7 +35,7 @@
                 </div>
                 <div class="product-details">
                     <p>
-                        <strong>@productLine.Product.Name</strong>
+                        <a asp-controller="Catalog" asp-action="Product" asp-route-id="@productLine.ProductId"><strong>@productLine.Product.Name</strong></a>
                     </p>
                     <p>Product Code - @productLine.ProductId</p>
                 </div>

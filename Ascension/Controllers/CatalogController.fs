@@ -113,5 +113,8 @@ type CatalogController() =
                                     
             product.IsInCart <- isInCart product this.HttpContext context
             
+            for secondProduct in product.Purchases.Select(fun p -> p.SecondProduct) do
+                secondProduct.IsInCart <- isInCart secondProduct this.HttpContext context
+            
             this.View(product)
             
