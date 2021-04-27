@@ -23,7 +23,7 @@
             <li class="subtotal">Subtotal</li>
         </ul>
     </div>
-</div>
+
 
     @foreach (var productLine in Model)
     {
@@ -45,14 +45,14 @@
                 <input type="number" value="@productLine.ProductCount" min="1" id="@productLine.Id" class="quantity-field">
             </div>
             <div class="subtotal">
-                <input id="cost1" value="@productLine.Product.Cost">
+                <input class="cost1 popa" value="@productLine.Product.Cost">
             </div>
             <div class="remove">
                 <button id="@productLine.Id" class="delete-from-cart">Remove</button>
             </div>
         </div>
     }
-
+</div>
 <aside>
     <div class="summary">
         <div class="summary-total-items"><span class="total-items"></span> Items in your Bag</div>
@@ -72,7 +72,6 @@
         </div>
     </div>
 </aside>
-
 @section Scripts
 {
     <script src="~/js/cart.js"></script>

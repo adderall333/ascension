@@ -248,6 +248,7 @@ aside {
     padding: 1rem;
     position: fixed;
     width: 250px;
+    margin-left: 90px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
