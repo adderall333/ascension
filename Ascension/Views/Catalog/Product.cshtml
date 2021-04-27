@@ -124,8 +124,12 @@ window.onload = function () {
     });
     
     //пример
-    document.getElementById("add-to-cart").addEventListener("click", async function() {
-       let response = await fetch("/Cart/AddProductLine?productId=@Model.Id");
+    document.getElementById('add-to-cart').addEventListener('click', async function() {
+       let response = await fetch("/Cart/AddProductLine?productId=@Model.Id", 
+        {
+           method: "POST"
+        }
+       );
     });
     
     let galleryImages = document.getElementsByClassName("gallery-image");

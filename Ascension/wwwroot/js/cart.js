@@ -107,3 +107,4 @@ function removeItem(removeButton) {
         updateSumItems();
     });
 }
+
