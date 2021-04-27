@@ -64,5 +64,23 @@ add_review_button.addEventListener('click', () => {
     }
     
     let check = checkInputs();
-    alert(check);
+    if (!check)
+        return;
+    
+    let fD = new FormData()
+    fD.append('text', text);
+    fD.append('rating', starsCount);
+    let prodId = document.getElementById('prod_id').value;
+    fD.append('prodId', prodId);
+
+    $.ajax({
+        type: 'POST',
+        url: '/Catalog/AddReview',
+        data: fD,
+        processData: false,
+        contentType: false,
+        success: function(res, status, xhr) {
+            alert('Nice!');
+        }
+    })
 });

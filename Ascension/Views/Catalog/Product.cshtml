@@ -1,4 +1,5 @@
-﻿@model Models.Product
+﻿@using System.Text
+@model Models.Product
 
 @{
     ViewBag.Title = Model.Name;
@@ -69,7 +70,15 @@
     <div id="reviews" class="col-8 product-info reviews">
         <div class="row">
             <p class="fs-4">
-                Rating: 4,0
+                @{
+                    var rating = 0.0;
+                    var prodRating = Model.Rating;
+                    if (prodRating != null)
+                    {
+                        rating = Math.Round((double)Model.Rating.Sum / Model.Rating.Count, 1);
+                    }
+                }
+                Rating: @rating.ToString("0.0")
             </p>
         </div>
         <div class="row">
@@ -89,85 +98,56 @@
                             Rait this product from 1 to 5
                         </div>
                     </div>
+                    <input id="prod_id" style="display: none;" type="number" value="@Model.Id">
                     <button type="submit" id="add-review-btn" class="btn btn-outline-light product-btn">Add review</button>
                 </form>
             </div>
         </div>
         <div class="row">
             <p class="fs-4">
-                Reviews (4)
+                @{
+                    var reviewsCount = 0;
+                    if (Model.Reviews.Any())
+                        reviewsCount = Model.Rating.Count;
+                }
+                Reviews (@reviewsCount)
             </p>
             <div class="col fs-5">
                 <div class="scrollable">
-
-                    <div class="review">
-                        <div class="review_info">
-                            <div class="review_username">
-                                Lirik
-                            </div>
-                            <div class="review_rating">
-                                ★★★★★
-                            </div>
-                            <div class="review_date">
-                                @DateTime.Now.ToString("d")
-                            </div>
-                        </div>
-                        <div class="review_comment">
-                            Nice one! I'm happy with what I got.
-                        </div>
-                    </div>
-                    
-                    <div class="review">
-                        <div class="review_info">
-                            <div class="review_username">
-                                Metra
-                            </div>
-                            <div class="review_rating">
-                                ★★★★☆
-                            </div>
-                            <div class="review_date">
-                                @DateTime.Now.ToString("d")
-                            </div>
-                        </div>
-                        <div class="review_comment">
-                            It came to me with scratches BUT the store admitted non-conformity and offered to replace the defective product
-                        </div>
-                    </div>
-                    
-                    <div class="review">
-                        <div class="review_info">
-                            <div class="review_username">
-                                Alinad
-                            </div>
-                            <div class="review_rating">
-                                ★★★★★
-                            </div>
-                            <div class="review_date">
-                                @DateTime.Now.ToString("d")
-                            </div>
-                        </div>
-                        <div class="review_comment">
-                            I like it!!!
-                        </div>
-                    </div>
-                    
-                    <div class="review">
-                        <div class="review_info">
-                            <div class="review_username">
-                                Limak
-                            </div>
-                            <div class="review_rating">
-                                ★★☆☆☆
-                            </div>
-                            <div class="review_date">
-                                @DateTime.Now.ToString("d")
-                            </div>
-                        </div>
-                        <div class="review_comment">
-                            It seems to me that this is too expensive for this quality
-                        </div>
-                    </div>
-
+                    @{
+                        if (Model.Reviews.Any())
+                        {
+                            foreach (var review in Model.Reviews)
+                            {
+                                <div class="review">
+                                    <div class="review_info">
+                                        <div class="review_username">
+                                            @review.User.Name
+                                        </div>
+                                        <div class="review_rating">
+                                            @{
+                                                var sB = new StringBuilder();
+                                                sB.Append(new string('★', review.Rating));
+                                                sB.Append(new string('☆', 5-review.Rating));
+                                                var ratingStars = sB.ToString();
+                                            }
+                                            @ratingStars
+                                        </div>
+                                        <div class="review_date">
+                                            @review.PublicationDate.ToString("d")
+                                        </div>
+                                    </div>
+                                    <div class="review_comment">
+                                        @review.Comment
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div>No reviews</div>
+                        }
+                    }
                 </div>
             </div>
         </div>

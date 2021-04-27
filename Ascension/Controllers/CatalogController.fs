@@ -2,6 +2,7 @@
 
 open System
 open System.Collections.Generic
+open Microsoft.AspNetCore.Http
 open ProductFilter
 open System.Diagnostics
 open System.Linq
@@ -94,6 +95,9 @@ type CatalogController() =
                            .Include(fun p -> p.SpecificationOptions)
                            .ThenInclude(fun (sOp:SpecificationOption) -> sOp.Specification)
                            .Include(fun p -> p.Category)
+                           .Include(fun p -> p.Reviews)
+                           .ThenInclude(fun (r:Review) -> r.User)
+                           .Include(fun p -> p.Rating)
                            .AsSplitQuery()
                            .ToList()               
                            
@@ -111,3 +115,40 @@ type CatalogController() =
                                     .Take(5)
                                     .ToList()
             this.View(product)
+            
+    [<HttpPost>]        
+    member this.AddReview(review : ReviewToAdd) =
+        use context = new ApplicationContext()
+        
+        let userId = this.HttpContext.Session.GetInt32("id")
+        let mutable userIdValue = 0
+        if userId.HasValue then userIdValue <- userId.Value 
+        
+        let newReview = new Review()
+        newReview.Comment <- review.Text
+        newReview.Rating <- review.Rating
+        newReview.PublicationDate <- DateTime.Now
+        newReview.User <- context
+                              .User
+                              .Where(fun u -> u.Id = userIdValue)
+                              .First()
+        newReview.Product <- context
+                                 .Product
+                                 .Where(fun p -> p.Id = review.ProdId)
+                                 .First()                   
+        context.Review.Add(newReview) |> ignore
+        
+        let prodRating = context.ProductRating.Where(fun p -> p.ProductId = review.ProdId).FirstOrDefault()
+        if isNull prodRating
+        then
+            let newProdRating = new ProductRating()
+            newProdRating.Sum <- review.Rating
+            newProdRating.Count <- 1
+            newProdRating.ProductId <- review.ProdId
+            context.ProductRating.Add(newProdRating) |> ignore
+        else
+            prodRating.Sum <- prodRating.Sum + review.Rating
+            prodRating.Count <- prodRating.Count + 1 
+           
+        context.SaveChanges() 
+        
