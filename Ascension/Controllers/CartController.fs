@@ -45,13 +45,8 @@ type CartController() =
         context.SaveChanges() |> ignore
 
     [<HttpPost>]
-    member this.AddProduct(productId: int) =
+    member this.ChangeCount(productLineId: int, count : int) =
         use context = new ApplicationContext()
-        let productCountAdd = context.ProductLine.Where(fun x -> x.Id = productId).Select(fun y -> y.ProductCount+1)
+        let changedProductLine = context.ProductLine.First(fun x -> x.Id = productLineId)
+        changedProductLine.ProductCount <- count
         context.SaveChanges() |> ignore
-
-    [<HttpPost>]
-    member this.RemoveProduct(productId: int) = 
-     use context = new ApplicationContext()
-     let productCountAdd = context.ProductLine.Where(fun x -> x.Id = productId).Select(fun y -> y.ProductCount-1)
-     context.SaveChanges() |> ignore

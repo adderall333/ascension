@@ -11,25 +11,23 @@
     ViewBag.Title = "Cart";
     Layout = "_Layout";
 }
-<html lang="en">
-<body>
-<main>
 
 
-    
+
+<div class="basket">
+    <div class="basket-labels">
+        <ul>
+            <li class="item item-heading">Item</li>
+            <li class="price">Price</li>
+            <li class="quantity">Quantity</li>
+            <li class="subtotal">Subtotal</li>
+        </ul>
+    </div>
+</div>
 
     @foreach (var productLine in Model)
     {
-        <div class="basket">
-            <div class="basket-labels">
-                <ul>
-                    <li class="item item-heading">Item</li>
-                    <li class="price">Price</li>
-                    <li class="quantity">Quantity</li>
-                    <li class="subtotal">Subtotal</li>
-                </ul>
-            </div>
-        </div>
+        
         <div class="basket-product">
             <div class="item">
                 <div class="product-image">
@@ -44,73 +42,74 @@
             </div>
             <div class="price">@productLine.Product.Cost</div>
             <div class="quantity">
-                <input type="number" value="@productLine.ProductCount" min="@productLine.ProductCount" id="valuenum" onchange="document.getElementById('valuenum').value" class="quantity-field">
+                <input type="number" value="@productLine.ProductCount" min="1" id="@productLine.Id" class="quantity-field">
             </div>
-            <div class="subtotal" >@productLine.Product.Cost</div>
+            <div class="subtotal">
+                <input id="cost1" value="@productLine.Product.Cost">
+            </div>
             <div class="remove">
                 <button id="@productLine.Id" class="delete-from-cart">Remove</button>
             </div>
         </div>
-        <input id="cost" value="@productLine.Product.Cost">
     }
 
-    <aside>
-        <div class="summary">
-            <div class="summary-total-items"><span class="total-items"></span> Items in your Bag</div>
-            <div class="summary-total">
-                <div class="total-title">Total</div>
-                <div class="total-value final-value" id="basket-total">
-                    <script>
-                     document.getElementById('cost').value;
-                    </script>
-                </div>
-            </div>
-            <div class="summary-checkout">
-                <button class="checkout-cta">Go to Checkout</button>
+<aside>
+    <div class="summary">
+        <div class="summary-total-items"><span class="total-items"></span> Items in your Bag</div>
+        <div class="summary-total">
+            <div class="total-title">Total</div>
+            <div class="total-value final-value" id="basket-total">
+                @if (Model.Count == 0)
+                {
+                    <text>0</text>
+                }
+                    
             </div>
         </div>
-    </aside>
-</main>
-</body>
-</html>
+
+        <div class="summary-checkout">
+            <button class="checkout-cta">Go to Checkout</button>
+        </div>
+    </div>
+</aside>
+
+@section Scripts
+{
+    <script src="~/js/cart.js"></script>
+}
 <script>
 
 
 
 window.onload = async function () {
+    
+    
     let f_delete = document.getElementsByClassName('delete-from-cart');
     for (let i = 0; i < f_delete.length; i++)
+    {
+         f_delete[i].addEventListener('click', async function ()
+         { 
+             let response = await fetch("/Cart/RemoveProductLine?productLineId=" + f_delete[i].id,
+             {
+                method: "POST"
+             });
+         });
+    }
+    
+    let countInputs = document.getElementsByClassName('quantity-field');
+    for (let k = 0; k < countInputs.length; k++)
         {
-             f_delete[i].addEventListener('click', async function ()
+            updateQuantity(countInputs[k]);
+             countInputs[k].addEventListener('change', async function ()
              { 
-                 let response = await fetch("/Cart/RemoveProductLine?productLineId=" + f_delete[i].id,
+                 let response = await fetch("/Cart/ChangeCount?productLineId=" + countInputs[k].id
+                 + "&count=" + countInputs[k].value,
                  {
                     method: "POST"
                  });
+                 
              });
         }
-     let f_addone = document.getElementsByClassName('quantity-field');
-        for (let j = 0; j < f_addone.length; j++)
-            {
-                 f_addone[j].addEventListener('click', async function ()
-                 { 
-                     let response = await fetch("/Cart/AddProduct?productLineId=" + f_addone[j].id,
-                     {
-                        method: "POST"
-                     });
-                 });
-            }
-         let f_deleteone = document.getElementsByClassName('quantity-field');
-            for (let k = 0; k < f_deleteone.length; k++)
-                {
-                     f_deleteone[k].addEventListener('onchange', async function ()
-                     { 
-                         let response = await fetch("/Cart/RemoveProduct?productLineId=" + f_deleteone[k].id,
-                         {
-                            method: "POST"
-                         });
-                     });
-                }
     }
     
 </script>
