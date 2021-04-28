@@ -13,7 +13,6 @@
 }
 
 
-
 <div class="basket">
     <div class="basket-labels">
         <ul>
@@ -27,7 +26,6 @@
 
     @foreach (var productLine in Model)
     {
-        
         <div class="basket-product">
             <div class="item">
                 <div class="product-image">
@@ -35,17 +33,21 @@
                 </div>
                 <div class="product-details">
                     <p>
-                        <a asp-controller="Catalog" asp-action="Product" asp-route-id="@productLine.ProductId"><strong>@productLine.Product.Name</strong></a>
+                        <a asp-controller="Catalog" asp-action="Product" asp-route-id="@productLine.ProductId">
+                            <strong>@productLine.Product.Name</strong>
+                        </a>
                     </p>
                     <p>Product Code - @productLine.ProductId</p>
                 </div>
             </div>
             <div class="price">@productLine.Product.Cost</div>
+
             <div class="quantity">
-                <input type="number" value="@productLine.ProductCount" min="1" id="@productLine.Id" class="quantity-field">
+                    <input type="number" value="@productLine.ProductCount" min="1" id="@productLine.Id" class="quantity-field">
             </div>
+
             <div class="subtotal">
-                <input class="cost1 popa" value="@productLine.Product.Cost">
+                <input class="cost"  value="@productLine.Product.Cost">
             </div>
             <div class="remove">
                 <button id="@productLine.Id" class="delete-from-cart">Remove</button>
@@ -64,7 +66,7 @@
                 {
                     <text>0</text>
                 }
-                    
+
             </div>
         </div>
 
@@ -73,17 +75,17 @@
         </div>
     </div>
 </aside>
+
 @section Scripts
 {
     <script src="~/js/cart.js"></script>
 }
+
 <script>
 
 
 
 window.onload = async function () {
-    
-    
     let f_delete = document.getElementsByClassName('delete-from-cart');
     for (let i = 0; i < f_delete.length; i++)
     {
@@ -99,7 +101,13 @@ window.onload = async function () {
     let countInputs = document.getElementsByClassName('quantity-field');
     for (let k = 0; k < countInputs.length; k++)
         {
-            updateQuantity(countInputs[k]);
+            if (countInputs[k].value<1)
+                {
+                   document.getElementsByClassName('quantity-field').value = 1;
+                   countInputs[k].value = 1;
+                   
+                }
+             updateQuantity(countInputs[k]);
              countInputs[k].addEventListener('change', async function ()
              { 
                  let response = await fetch("/Cart/ChangeCount?productLineId=" + countInputs[k].id
