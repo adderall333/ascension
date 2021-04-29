@@ -23,16 +23,7 @@ function recalculateCart(onlyTotal) {
     });
 
     var total = subtotal;
-
-    var promoPrice = parseFloat($('.promo-value').text());
-    if (promoPrice) {
-        if (subtotal >= 10) {
-            total -= promoPrice;
-        } else {
-            alert('Order must be more than £10 for Promo code to apply.');
-            $('.summary-promo').addClass('hide');
-        }
-    }
+    
 
     if (onlyTotal) {
         $('.total-value').fadeOut(fadeTime, function () {
@@ -56,9 +47,14 @@ function recalculateCart(onlyTotal) {
 function updateQuantity(quantityInput) {
     var productRow = $(quantityInput).parent().parent();
     var price = parseFloat(productRow.children('.price').text());
-    var quantity = $(quantityInput).val();
+    var quantity1 = $(quantityInput).val();
+    
+    if (quantity1 < 1) {
+        quantity1 = 1;
+        alert("You can't choose quantity lower that 1!", location.reload())
+    }
+    var quantity = quantity1;
     var linePrice = price * quantity;
-
     productRow.children('.subtotal').each(function () {
         $(this).fadeOut(fadeTime, function () {
             $(this).text(linePrice.toFixed(2));
