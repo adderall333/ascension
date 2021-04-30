@@ -90,7 +90,7 @@ module UpdateHelper =
         let sb = StringBuilder()
         sb.Append("<p><label>" + propertyName + "<label>") |> ignore
         sb.Append("<input type=\"" + Tools.getInputType propertyType + "\" name=\"" + propertyName + "\"") |> ignore
-        sb.Append(getHtmlAttribute propertyType propertyValue propertyName + "\">" + "</p>") |> ignore
+        sb.Append(getHtmlAttribute propertyType propertyValue propertyName + "></p>") |> ignore
         sb.ToString()
         
     let processComplexProperty (options : IEnumerable<IModel>) propertyName (checkedIds : IEnumerable<int>) isEnumerable  =

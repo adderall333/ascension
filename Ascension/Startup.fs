@@ -41,7 +41,6 @@ type Startup private () =
 
         app.UseSession() |> ignore
         app.UseMiddleware<AuthorizationByCookiesMiddleware>() |> ignore
-        app.UseMiddleware<AdminCheckMiddleware>() |> ignore
         
         app.UseRouting() |> ignore
 
