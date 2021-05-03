@@ -114,6 +114,6 @@ type ImageModel() =
     member this.Path
         with get() = path
         and set(value) = path <- value
-    member this.Products
+    member this.Product
         with get() = product
         and set(value) = product <- value

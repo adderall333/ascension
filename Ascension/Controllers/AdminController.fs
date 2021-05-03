@@ -1,13 +1,15 @@
 namespace Ascension
 
+open System.IO
 open Ascension
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc
+open Microsoft.CodeAnalysis.CSharp.Syntax
 open Models
 open System.Linq
 open Models.Attributes
 open Selector
-open Checker
+open Checks
 
 type AdminController() =
     inherit Controller()
@@ -90,6 +92,77 @@ type AdminController() =
             | Bad(message) -> this.BadRequest(message) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
+            
+    [<HttpPost>]
+    member this.CreateSpecification(formModel : SpecificationModel) =
+        if isAdmin this.HttpContext
+        then
+            let checkResult = checkSpecification formModel
+            let createSpecification (model : SpecificationModel) =
+                use context = new ApplicationContext()
+                context.Specification.Add(Specification(model.Name, model.Category, model.SpecificationOptions, context)) |> ignore
+                context.SaveChanges() |> ignore
+                this.Response.StatusCode = 200 |> ignore
+                this.Redirect("/admin/models?name=Specification") :> ActionResult
+            
+            match checkResult with
+            | Ok(checkedModel) -> createSpecification checkedModel
+            | Bad(message) -> this.BadRequest(message) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
+    
+    [<HttpPost>]
+    member this.CreateSpecificationOption(formModel : SpecificationOptionModel) =
+        if isAdmin this.HttpContext
+        then
+            let checkResult = checkSpecificationOption formModel
+            let createSpecificationOption (model : SpecificationOptionModel) =
+                use context = new ApplicationContext()
+                context.SpecificationOption.Add(SpecificationOption(model.Name, model.Specification, model.Products, context)) |> ignore
+                context.SaveChanges() |> ignore
+                this.Response.StatusCode = 200 |> ignore
+                this.Redirect("/admin/models?name=SpecificationOption") :> ActionResult
+                
+            match checkResult with
+            | Ok(checkedModel) -> createSpecificationOption checkedModel
+            | Bad(message) -> this.BadRequest(message) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
+    
+    [<HttpPost>]
+    member this.CreateProduct(formModel : ProductModel) =
+        if isAdmin this.HttpContext
+        then
+            let checkResult = checkProduct formModel
+            let createProduct (model : ProductModel) =
+                use context = new ApplicationContext()
+                context.Product.Add(Product(model.Name, model.Cost, model.Description, model.Category, model.SpecificationOptions, model.Images)) |> ignore
+                context.SaveChanges() |> ignore
+                this.Response.StatusCode = 200 |> ignore
+                this.Redirect("/admin/models?name=Product") :> ActionResult
+                
+            match checkResult with
+            | Ok(checkedModel) -> createProduct checkedModel
+            | Bad(message) -> this.BadRequest(message) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
+    
+    [<HttpPost>]
+    member this.CreateImage(formModel : ImageModel, file : IFormFile) =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            
+            let path = "wwwroot/img/" + file.FileName
+            use fileStream = new FileStream(path, FileMode.Create)
+            file.CopyTo(fileStream)
+                        
+            context.Image.Add(Image(file.FileName, formModel.Product)) |> ignore
+            context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect("/admin/models?name=Image") :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
     
         
     //Read    
@@ -133,6 +206,18 @@ type AdminController() =
             | Bad(message) -> this.BadRequest(message) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
+            
+    //todo Category
+    
+    //todo Specification
+    
+    //todo Specification option
+    
+    //todo Product
+    
+    //todo Image
+    
+    //todo User
     
     
     //Delete
@@ -144,4 +229,15 @@ type AdminController() =
             let modelToDelete = SuperCategory.GetModel(id) :?> SuperCategory
             context.SuperCategory.Remove(modelToDelete) |> ignore
             context.SaveChanges() |> ignore
+            
+    //todo Category
         
+    //todo Specification
+    
+    //todo Specification option
+    
+    //todo Product
+    
+    //todo Image
+    
+    //todo User

@@ -17,7 +17,12 @@ namespace Models
         
         [ManyToOne]
         public Product Product { get; set; }
-        
+
+        public override string ToString()
+        {
+            return $"{Id}: {Path}";
+        }
+
         public static IModel GetModel(int id)
         {
             var context = new ApplicationContext();
@@ -31,7 +36,9 @@ namespace Models
         {
             var context = new ApplicationContext();
             Path = path; 
-            Product = context.Product.First(p => p.Id == product);
+            
+            if (product > 0)
+                Product = context.Product.First(p => p.Id == product);
         }
 
         public Image()

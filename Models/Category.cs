@@ -13,6 +13,8 @@ namespace Models
         [SimpleProperty]
         public string Name { get; set; }
         
+        //todo add image
+        
         [ManyToOne]
         public SuperCategory SuperCategory { get; set; }
         
@@ -41,9 +43,15 @@ namespace Models
         public Category(string name, int superCategory, List<int> products, List<int> specifications, ApplicationContext context = null)
         {
             Name = name;
-            SuperCategory = context?.SuperCategory.First(sc => sc.Id == superCategory);
-            Products = context?.Product.Where(product => products.Contains(product.Id)).ToList();
-            Specifications = context?.Specification.Where(specification => specifications.Contains(specification.Id));
+            
+            if (superCategory > 0)
+                SuperCategory = context?.SuperCategory.First(sc => sc.Id == superCategory);
+            
+            if (products.Any())
+                Products = context?.Product.Where(product => products.Contains(product.Id)).ToList();
+            
+            if (specifications.Any())
+                Specifications = context?.Specification.Where(specification => specifications.Contains(specification.Id));
         }
 
         public Category()

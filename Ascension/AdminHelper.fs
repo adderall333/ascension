@@ -49,6 +49,8 @@ module CreateHelper =
         sb.Append("<input type=\"" + Tools.getInputType propertyType + "\" name=\"" + propertyName + "\"></p>") |> ignore
         sb.ToString()
         
+    let processImageProperty = "<p><label>Image<lebel><input type=\"file\" name=\"file\"></p>"
+        
     let processComplexProperty (options : IEnumerable<IModel>) propertyName isEnumerable =
         let sb = StringBuilder()
         sb.Append("<p>" + propertyName) |> ignore
@@ -63,6 +65,9 @@ module CreateHelper =
             if property.GetCustomAttributes(typedefof<SimplePropertyAttribute>, false).Any()
             then
                 sb.Append(processSimpleProperty property.PropertyType property.Name) |> ignore
+            elif property.GetCustomAttributes(typedefof<ImagePropertyAttribute>, false).Any()
+            then
+                sb.Append(processImageProperty) |> ignore
             elif property.GetCustomAttributes(typedefof<OneToManyAttribute>, false).Any() ||
                  property.GetCustomAttributes(typedefof<ManyToManyAttribute>, false).Any()
             then
@@ -122,7 +127,7 @@ module UpdateHelper =
                 sb.Append(processComplexProperty options property.Name checkedIds true) |> ignore
         sb.ToString()
         
-module Checker =
+module Checks =
     type Result<'TModel, 'TMessage> = 
         | Ok of 'TModel
         | Bad of 'TMessage
@@ -134,7 +139,7 @@ module Checker =
     
     let checkSuperCategory (model : SuperCategoryModel) =
         use context = new ApplicationContext()
-        let emptyNameCheck (superCategory : SuperCategoryModel) = superCategory.Name <> null && superCategory.Name <> ""
+        let emptyNameCheck (superCategory : SuperCategoryModel) = not (String.IsNullOrEmpty(superCategory.Name))
         let nonUniqueNameCheck (superCategory : SuperCategoryModel) = not (context
                                                                             .SuperCategory
                                                                             .Where(fun sc -> sc.Name = superCategory.Name)
@@ -144,16 +149,49 @@ module Checker =
                     
     let checkCategory (model : CategoryModel) =
         use context = new ApplicationContext()
-        let emptyNameCheck (category : CategoryModel) = category.Name <> null && category.Name <> ""
+        let emptyNameCheck (category : CategoryModel) = not (String.IsNullOrEmpty(category.Name))
         let nonUniqueNameCheck (category : CategoryModel) = not (context
                                                                     .Category
                                                                     .Where(fun c -> c.Name = category.Name)
                                                                     .Any())
-        let correctSuperCategoryCheck (category : CategoryModel) = context
-                                                                      .SuperCategory
-                                                                      .Where(fun sc -> sc.Id = category.SuperCategory)
-                                                                      .Any()
         (Ok(model)) |> check emptyNameCheck "Category name was empty"
                     |> check nonUniqueNameCheck "Category with same name already exists"
-                    |> check correctSuperCategoryCheck "Super category was not selected"
+                    
+    let checkSpecification (model : SpecificationModel) =
+        use context = new ApplicationContext()
+        let emptyNameCheck (specification : SpecificationModel) = not (String.IsNullOrEmpty(specification.Name))
+        let nonUniqueNameCheck (specification : SpecificationModel) = not (context
+                                                                            .Specification
+                                                                            .Where(fun s -> s.Name = specification.Name)
+                                                                            .Any())
+        (Ok(model)) |> check emptyNameCheck "Specification name was empty"
+                    |> check nonUniqueNameCheck "Specification with same name already exists"
+    
+    let checkSpecificationOption (model : SpecificationOptionModel) =
+        use context = new ApplicationContext()
+        let emptyNameCheck (specificationOption : SpecificationOptionModel) = not (String.IsNullOrEmpty(specificationOption.Name))
+        let nonUniqueNameCheck (specificationOption : SpecificationOptionModel) = not (context
+                                                                                        .SpecificationOption
+                                                                                        .Where(fun sOp -> sOp.Name = specificationOption.Name)
+                                                                                        .Any())
+        (Ok(model)) |> check emptyNameCheck "Specification option name was empty"
+                    |> check nonUniqueNameCheck "Specification option with same name already exists"
+        
+    let checkProduct (model : ProductModel) =
+        use context = new ApplicationContext()
+        let emptyNameCheck (product : ProductModel) = not (String.IsNullOrEmpty(product.Name))
+        let nonUniqueNameCheck (product : ProductModel) = not (context
+                                                                    .Product
+                                                                    .Where(fun p -> p.Name = product.Name)
+                                                                    .Any())
+        let emptyDescriptionCheck (product : ProductModel) = not (String.IsNullOrEmpty(product.Description))
+        let substantialCostCheck (product : ProductModel) = product.Cost > 0 && product.Cost < 1000000
+        (Ok(model)) |> check emptyNameCheck "Product name was empty"
+                    |> check nonUniqueNameCheck "Product with same name already exists"
+                    |> check emptyDescriptionCheck "Product description was empty"
+                    |> check substantialCostCheck "Product cost was less than 0 or bigger than 1000000"
+                    
+    //todo image
+    
+    //todo user
         

@@ -37,12 +37,15 @@ namespace Models
                 .First(specification => specification.Id == id);
         }
 
-        public Specification(string name, int category, List<int> specificationOptions)
+        public Specification(string name, int category, List<int> specificationOptions, ApplicationContext context = null)
         {
-            var context = new ApplicationContext();
             Name = name;
-            Category = context.Category.First(c => c.Id == category);
-            SpecificationOptions = context.SpecificationOption.Where(sOp => specificationOptions.Contains(sOp.Id));
+            
+            if (category > 0)
+                Category = context?.Category.First(c => c.Id == category);
+                
+            if (specificationOptions.Any())
+                SpecificationOptions = context?.SpecificationOption.Where(sOp => specificationOptions.Contains(sOp.Id));
         }
 
         public Specification()

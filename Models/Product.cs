@@ -52,15 +52,20 @@ namespace Models
                 .First(product => product.Id == id);
         }
 
-        public Product(string name, int cost, string description, int category, List<int> specificationOptions, List<int> images)
+        public Product(string name, int cost, string description, int category, List<int> specificationOptions, List<int> images, ApplicationContext context = null)
         {
-            var context = new ApplicationContext();
             Name = name;
             Cost = cost;
             Description = description;
-            Category = context.Category.First(c => c.Id == category);
-            SpecificationOptions = context.SpecificationOption.Where(sOp => specificationOptions.Contains(sOp.Id));
-            Images = context.Image.Where(i => images.Contains(i.Id));
+            
+            if (category > 0)
+                Category = context?.Category.First(c => c.Id == category);
+            
+            if (specificationOptions.Any())
+                SpecificationOptions = context?.SpecificationOption.Where(sOp => specificationOptions.Contains(sOp.Id));
+            
+            if (images.Any())
+                Images = context?.Image.Where(i => images.Contains(i.Id));
         }
 
         public Product()

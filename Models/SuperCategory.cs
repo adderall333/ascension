@@ -12,6 +12,8 @@ namespace Models
         
         [SimpleProperty]
         public string Name { get; set; }
+        
+        //todo add image
                 
         [OneToMany]
         public IEnumerable<Category> Categories { get; set; }
@@ -33,16 +35,17 @@ namespace Models
         public SuperCategory(string name, List<int> categories, ApplicationContext context = null)
         {
             Name = name;
+            
             if (categories.Any())
                 Categories = context?.Category.Where(category => categories.Contains(category.Id)).ToList();
         }
 
         public void Update(string name, List<int> categories, ApplicationContext context = null)
         {
-            context ??= new ApplicationContext();
             Name = name;
+            
             if (categories.Any())
-                Categories = context.Category.Where(category => categories.Contains(category.Id)).ToList();
+                Categories = context?.Category.Where(category => categories.Contains(category.Id)).ToList();
         }
 
         public SuperCategory()

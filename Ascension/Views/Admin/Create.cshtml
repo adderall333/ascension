@@ -11,7 +11,7 @@
     <a asp-controller="Admin" asp-action="Models" asp-route-name="@Model.Name">Back</a>
 </div>
 
-<form id="create" method="post" action="@action">
+<form id="create" method="post" action="@action"  enctype="multipart/form-data">
     @Html.GetHtml(CreateHelper.getCreateHtml(Model))
     <div>
         <button id="btn">Create</button>
