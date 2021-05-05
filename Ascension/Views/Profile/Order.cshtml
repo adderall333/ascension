@@ -18,7 +18,7 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="profile.css" rel="stylesheet">
+    <link href="css/profile.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -53,7 +53,7 @@
 				<div class="profile-usermenu">
 					<ul class="nav">
 						<li>
-							<a href="personal.cshtml">
+							<a asp-controller="Profile" asp-action="Personal">
 							<i class="glyphicon glyphicon-home"></i>
 							<span class="hidden-xs">Personal</span> </a>
 						</li>
@@ -63,7 +63,7 @@
 							<span class="hidden-xs">Orders </span></a>
 						</li>
 						<li>
-							<a href="#">
+							<a asp-controller="Profile" asp-action="Cart">
 							<i class="glyphicon glyphicon-shopping-cart"></i>
 							<span class="hidden-xs">Shopping Bag</span> </a>
                             

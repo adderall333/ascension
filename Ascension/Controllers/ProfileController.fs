@@ -18,4 +18,7 @@ type ProfileController() =
         
     member this.Order () =
         this.View()
+        
+    member this.Cart () =
+        this.View()
 
