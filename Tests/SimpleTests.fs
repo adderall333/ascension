@@ -3,10 +3,12 @@ module SimpleTests
 open System.Net
 open System.Net.Http
 open NUnit.Framework
+open Tests
 
-let url = "http://localhost:5000"
+//let url = "http://localhost:5000"
 
-let client = new HttpClient()
+let factory = new AscensionFactory()
+let client = factory.CreateClient()
 
 //main
 [<TestCase("", TestName = "Index")>]
@@ -52,5 +54,5 @@ let client = new HttpClient()
 [<TestCase("/authentication/signup", TestName = "AuthSignup")>]
 
 let statusCode200 (page : string) =
-    let response = client.GetAsync(url + page) |> Async.AwaitTask |> Async.RunSynchronously
+    let response = client.GetAsync(page) |> Async.AwaitTask |> Async.RunSynchronously
     Assert.That(response.StatusCode = HttpStatusCode.OK)

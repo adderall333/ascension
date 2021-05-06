@@ -1,10 +1,9 @@
-namespace Ascension
+namespace Ascension.Controller
 
 open System.IO
 open Ascension
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc
-open Microsoft.CodeAnalysis.CSharp.Syntax
 open Models
 open System.Linq
 open Models.Attributes

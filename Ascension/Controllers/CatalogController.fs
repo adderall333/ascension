@@ -1,6 +1,6 @@
-﻿namespace Ascension
+﻿namespace Ascension.Controller
 
-open ProductFilter
+open Ascension.ProductFilter
 open System.Diagnostics
 open System.Linq
 open Microsoft.AspNetCore.Mvc

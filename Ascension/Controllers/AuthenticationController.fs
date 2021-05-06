@@ -1,11 +1,9 @@
-﻿namespace Ascension
+﻿namespace Ascension.Controller
 
-open System
-open System.Diagnostics
+open Ascension
 open System.Linq
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc
-open Microsoft.EntityFrameworkCore
 open Microsoft.Extensions.Primitives
 open System.Text.RegularExpressions;
 open Models
