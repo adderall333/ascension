@@ -1,0 +1,66 @@
+﻿@{
+    Layout = "_Layout";
+}
+<body>
+
+<div class="container">
+    <div class="row profile">
+        <div class="col-md-3">
+            <div class="profile-sidebar">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <!-- <img src="http://keenthemes.com/preview/metronic/theme/assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt=""> -->
+                </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
+                        <span class="hidden-xs">User Name</span>
+                    </div>
+
+                    <div class="profile-usertitle-job">
+                    </div>
+                </div>
+
+                <!-- END SIDEBAR USER TITLE -->
+                <!-- SIDEBAR MENU -->
+                <div class="navbar profile-usermenu">
+                    <ul class="navbar-nav mr-auto">
+                        <li>
+                            <a class="profile-item" asp-controller="Profile" asp-action="Personal">
+                                <span class="material-icons md-36">
+                                    account_circle
+                                </span><span class="hidden-xs"> Personal </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="profile-item current-page">
+                                <span class="material-icons md-36">
+                                    paid
+                                </span>
+                                <span class="hidden-xs">Orders </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="profile-item" asp-controller="Profile" asp-action="Cart">
+                                <span class="material-icons md-36">
+                                    shopping_cart
+                                </span>
+                                <span class="hidden-xs">Shopping Bag</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END MENU -->
+            </div>
+        </div>
+        <div class="col-md-9 order-content">
+
+            <div class="form_main col-md-4 col-sm-5 col-xs-7">
+                <h4 class="heading"><strong>Your </strong> Orders <span></span></h4>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
