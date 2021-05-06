@@ -18,7 +18,7 @@ function showPosition(position) {
 const refreshCityTag = () => {
     const city = getCity();
     if (city) {
-        document.querySelector('.home').innerText = city;
+        document.querySelector('.home').innerHTML = '<i class="fa fa-map-marker"></i>' + city;
     }
 };
 
@@ -105,6 +105,16 @@ $(function () {
         e.stopPropagation();
         location.reload()
     });
+});
+
+$("#address").suggestions({
+    // Замените на свой API-ключ
+    token: "ef2db2da426469acd403d525ff8241bcb5487ef6",
+    type: "ADDRESS",
+    constraints: {
+        locations: { country: "*" },
+    },
+    language: "en",
 });
 
 

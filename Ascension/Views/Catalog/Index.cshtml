@@ -8,23 +8,25 @@
 }
 @if (ViewData.ContainsKey("searchString") && searchResult != null)
 {
-    @foreach (var category in Model.SelectMany(sc => sc.Categories))
-    {
-        @if (searchResult.Contains(category))
-        {
-            <div class="col-3">
-                <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name" asp-route-searchString="@ViewData["searchString"]"
-                   class="category">@await Html.PartialAsync("CategoryPreviewPartial", category.Name)</a>
-            </div>
-        }
-    }
+    <div class="row">
+        @foreach (var category in Model.SelectMany(sc => sc.Categories))
+            {
+                @if (searchResult.Contains(category))
+                {
+                    <div class="col" style="max-width: 220px; margin-right: 30px;">
+                        <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name" asp-route-searchString="@ViewData["searchString"]"
+                           class="category">@await Html.PartialAsync("CategoryPreviewPartial", category.Name)</a>
+                    </div>
+                }
+            }
+    </div>
 }
 else
 {
     <div class="super-categories row">
         @foreach (var superCategory in Model)
         {
-            <div class="col-3">
+            <div class="col" style="max-width: 220px; margin-right: 30px;">
                 <a class="super-category" id="@superCategory.Id">@await Html.PartialAsync("CategoryPreviewPartial", superCategory.Name)</a>
             </div>
         }
@@ -37,7 +39,7 @@ else
             </p>
             @foreach (var category in superCategory.Categories)
             {
-                <div class="col-3">
+                <div class="col" style="max-width: 220px; margin-right: 30px;">
                     <a asp-controller="Catalog" asp-action="Category" asp-route-name="@category.Name" asp-route-searchString="@ViewData["searchString"]"
                        class="category">@await Html.PartialAsync("CategoryPreviewPartial", category.Name)</a>
                 </div>

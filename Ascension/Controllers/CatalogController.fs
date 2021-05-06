@@ -1,13 +1,12 @@
 ﻿namespace Ascension
 
-open System
-open System.Collections.Generic
 open ProductFilter
 open System.Diagnostics
 open System.Linq
 open Microsoft.AspNetCore.Mvc
 open Microsoft.EntityFrameworkCore
 open Models
+open CartService
 
 type CatalogController() =
     inherit Controller()
@@ -83,6 +82,7 @@ type CatalogController() =
                            |> filter context ids
                            |> sortProducts sortOption
                            |> loadImages context
+                           |> loadIsInCart context this.HttpContext
             this.PartialView("ProductsPartial", products)
             
     member this.Product(id : int) =
@@ -95,10 +95,26 @@ type CatalogController() =
                            .ThenInclude(fun (sOp:SpecificationOption) -> sOp.Specification)
                            .Include(fun p -> p.Category)
                            .AsSplitQuery()
-                           .ToList()
+                           .ToList()               
                            
         if products.Count = 0
         then
             errorHandling this
-        else    
-            this.View(products.First())
+        else
+            let product = products.First()
+            product.Purchases <- context
+                                    .Purchase
+                                    .Where(fun p -> p.FirstProductId = id)
+                                    .Include(fun p -> p.SecondProduct)
+                                    .ThenInclude(fun p -> p.Images)
+                                    .OrderByDescending(fun p -> p.Count)
+                                    .Take(5)
+                                    .ToList()
+                                    
+            product.IsInCart <- isInCart product this.HttpContext context
+            
+            for secondProduct in product.Purchases.Select(fun p -> p.SecondProduct) do
+                secondProduct.IsInCart <- isInCart secondProduct this.HttpContext context
+            
+            this.View(product)
+            

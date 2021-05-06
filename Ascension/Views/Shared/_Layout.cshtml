@@ -13,12 +13,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!--Google Fonts--><link rel="preconnect" href="https://fonts.gstatic.com">
+    <!--Abril Fatface Font--><link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
+    <!--FontAwesome--><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--Bootstrap CSS 4.6--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <!--Bootstrap CSS 5.0--><link href="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <!--Favicon--><link href="/favicon.ico" rel="icon" type="image/x-icon">
     <link rel="stylesheet" href="~/css/site.css"/>
     <link rel="stylesheet" href="~/css/nav.css">
     <link rel="stylesheet" href="~/css/footer.css">
     <link rel="stylesheet" href="~/css/catalog.css">
     <link rel="stylesheet" href="~/css/citytriggerwindow.css">
     <link rel="stylesheet" href="~/css/profile.css">
+    <link rel="stylesheet" href="~/css/baguetteBox.min.css">
+    <link rel="stylesheet" href="~/css/main.css">
     <link href="/favicon.ico" rel="icon" type="image/x-icon">
     <!-- Используйте для подключения своих стилей -->
     @await RenderSectionAsync("Styles", required: false)
@@ -30,90 +38,115 @@
             <a class="store-name" asp-controller="Home" asp-action="Index">Ascension</a>
         </div>
     </div>
+    <nav class="navbar-flex navbar navbar-expand-custom navbar-mainbg">
+        <div id="nav-search-hidden" class="nav-search">
+            <form class="row" asp-controller="Catalog" asp-action="Index" method="get">
+                <input autocomplete="off" placeholder="Enter something" class="col form-control search-input" type="text" name="searchString">
+                <button class="col btn btn-light search-btn">Search</button>
+            </form>
+        </div>
+        <button class="navbar-pd navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa fa-bars text-white"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav nav-ul">
+                <div class="hori-selector" style="display: none">
+                    <div class="left"></div>
+                    <div class="right"></div>
+                </div>
 
-    <nav class="navbar navbar-expand-lg navbar-mainbg">
-        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fas fa-bars text-white"></i>
-        </button> -->
-        <div class="container">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto my-style">
-                    <div class="hori-selector" style="display: none">
-                        <div class="left"></div>
-                        <div class="right"></div>
-                    </div>
-                    <li class="nav-item">
-                        <a class="nav-link home" href="#" onclick="city();">Your City</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Catalog" asp-action="Index">Catalog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Profile" asp-action="Personal">Profile</a>
-                    </li>
-                        
+                <li class="nav-item">
+                    <a class="nav-link home" href="#" onclick="city();"><i class="fa fa-map-marker"></i>Your City</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Catalog" asp-action="Index"><i class="fa fa-th-large"></i>Catalog</a>
+                </li>
 
-                    <div>
-	                    <form class="row" asp-controller="Catalog" asp-action="Index" method="get">
-							<input autocomplete="off" placeholder="Enter something" class="col form-control search-input" type="text" name="searchString">
-							<button class="col btn btn-light search-btn">Search</button>
-	                    </form>
-                    </div>
+                <div id="nav-search-open" class="nav-search">
+                    <form class="row" asp-controller="Catalog" asp-action="Index" method="get">
+                        <input id="searchInput" autocomplete="off" placeholder="Enter something" class="col form-control search-input" type="text" name="searchString">
+                        <button class="col btn btn-light search-btn">Search</button>
+                    </form>
+                </div>
 
+                @if (Context.Session.Keys.Contains("isAuth"))
+                {
                     <li class="nav-item">
-                        <!--
-                        Ccылка в личный кабиент или страницу входа.
-                        Возможно для входа добавим отдельную ссылку.
-                        -->
-                        <a class="nav-link" asp-controller="Authentication" asp-action="Signin">Signin</a>
+                        <a class="nav-link" asp-controller="Profile" asp-action="Personal"><i class="fa fa-user"></i>Account</a>
                     </li>
+                }
+                else
+                {
                     <li class="nav-item">
-                        <!--Ссылка на корзину-->
-                        <a class="nav-link" href="javascript:void(0);">Cart</a>
+                        <a class="nav-link" asp-controller="Authentication" asp-action="Signin"><i class="fa fa-user"></i>Signin</a>
                     </li>
-                </ul>
+                }
+                <li class="nav-item">
+                    <!--Ссылка на корзину-->
+                    <a class="nav-link" asp-controller="Cart" asp-action="Cart"><i class="fa fa-shopping-cart"></i>Cart</a>
+                </li>
 
-
-            </div>
+            </ul>
         </div>
     </nav>
-
 </header>
 <div class="row pop-up" style="display: none">
-        <div
-          class="box1 small-6 large-centered shadow-lg p-3 pt-0 mb-5 bg-white rounded"
-        >
-          <a href="#" class="close close-button"></a>
-          <div class="box_in_box1">
+    <div
+        class="box1 small-6 large-centered shadow-lg p-3 pt-0 mb-5 bg-white rounded">
+        <a href="#" class="close close-button"></a>
+        <div class="box_in_box1">
             <h3 class="main-txt">City selection</h3>
             <select
-              class="form-select"
-              id="slc-city"
-              size="3"
-              aria-label="size 3 select example"
-            >
-              <option value="Казань">Казань</option>
-              <option value="Москва">Москва</option>
-              <option value="Санкт-Петербург">Санкт-Петербург</option>
-              <option value="Уфа">Уфа</option>
-              <option value="Зеленодольск">Зеленодольск</option>
-              <option value="Челябинск">Челябинск</option>
+                class="form-select"
+                id="slc-city"
+                size="3"
+                aria-label="size 3 select example">
+                <option value="Казань">Kazan</option>
+                <option value="Moscow"> Moscow </option>
+                <option value="Saint Petersburg"> Saint-Piter </option>
+                <option value="Novosibirsk"> Novosibirsk </option>
+                <option value="Yekaterinburg"> Yekaterinburg </option>
+                <option value="Nizhny Novgorod"> Nizhny Novgorod </option>
+                <option value="Samara"> Samara </option>
+                <option value="Chelyabinsk"> Chelyabinsk </option>
+                <option value="Omsk"> Omsk </option>
+                <option value="Rostov-on-Don"> Rostov-on-Don </option>
+                <option value="Ufa"> Ufa </option>
+                <option value="Krasnoyarsk"> Krasnoyarsk </option>
+                <option value="Permian"> Permian </option>
+                <option value="Volgograd"> Volgograd </option>
+                <option value="Voronezh"> Voronezh </option>
+                <option value="Saratov"> Saratov </option>
+                <option value="Krasnodar"> Krasnodar </option>
+                <option value="Tolyatti"> Tolyatti </option>
+                <option value="Tyumen"> Tyumen </option>
+                <option value="Izhevsk"> Izhevsk </option>
+                <option value="Barnaul"> Barnaul </option>
+                <option value="Ulyanovsk"> Ulyanovsk </option>
+                <option value="Irkutsk"> Irkutsk </option>
+                <option value="Vladivostok"> Vladivostok </option>
+                <option value="Yaroslavl"> Yaroslavl </option>
+                <option value="Khabarovsk"> Khabarovsk </option>
+                <option value="Orenburg"> Orenburg </option>
             </select>
             <div>
-              <button class="choose-btn btn btn-outline-secondary" id="chs-btn">
-                Choose
-              </button>
+                <button class="choose-btn btn btn-outline-secondary" id="chs-btn">
+                    Choose
+                </button>
             </div>
             <div>
-              <div><p class="suggested-city"></p></div>
-              <button class="detect-cd btn btn-outline-secondary" id="get-btn"> Yes </button>
+                <div>
+                    <p class="suggested-city"></p>
+                </div>
+                <button class="detect-cd btn btn-outline-secondary" id="get-btn"> Yes </button>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
+</div>
 
 <div class="container">
     <main role="main" class="pb-3">
+        <!-- Основное тело контента -->
         @RenderBody()
     </main>
 </div>
@@ -126,20 +159,16 @@
 
             <!-- Какие-то ссылки -->
             <p class="footer-links">
-                <a href="#">Home</a>
+                <a asp-controller="Home" asp-action="Index">Home</a>
                 ·
-                <a href="#">Blog</a>
+                <a asp-controller="Catalog" asp-action="Index">Catalog</a>
                 ·
-                <a href="#">Pricing</a>
+                <a href="#">Account</a>
                 ·
-                <a href="#">About</a>
-                ·
-                <a href="#">Faq</a>
-                ·
-                <a href="#">Contact</a>
+                <a href="#">Cart</a>
             </p>
 
-            <p class="footer-company-name">Ascension © 2021</p>
+            <p class="footer-company-name">Ascension © @DateTime.Now.Year</p>
         </div>
 
         <div class="footer-center">
@@ -151,7 +180,9 @@
 
             <div>
                 <i class="fa fa-phone"></i>
-                <p>+7 777 123-45-67</p>
+                <p>
+                    <a href="tel:87771234567" style="color: white">+7 777 123-45-67</a>
+                </p>
             </div>
 
             <div>
@@ -175,9 +206,32 @@
     </div>
 </footer>
 
+<!--jQuery--><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--Bootstrap JS 4.6--><script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<!--Bootstrap JS 5.0--><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<script type="text/javascript" src="~/js/IP.js" async></script>
 <script src="~/js/site.js"></script>
 <script src="~/js/nav.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="~/js/baguetteBox.min.js"></script>
+<script>
+let queryParams = window
+    .location
+    .search
+    .replace('?','')
+    .split('&')
+    .reduce(
+        function(p, e){
+            let a = e.split('=');
+            p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+            return p;
+        },
+        {}
+    );
+
+if (queryParams["searchString"] != null)
+    document.getElementById("searchInput").setAttribute("value", queryParams["searchString"]); 
+</script>
 <!-- Используйте для подключения своих скриптов -->
 @await RenderSectionAsync("Scripts", required: false)
 </body>

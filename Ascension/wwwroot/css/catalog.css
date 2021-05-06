@@ -1,3 +1,21 @@
+@media (max-width: 992px){
+    .container{
+        max-width: 992px;
+    }
+}
+
+@media (max-width: 768px){
+    .container{
+        max-width: 768px;
+    }
+}
+
+@media (max-width: 576px){
+    .container{
+        max-width: 576px;
+    }
+}
+
 .filters-block,
 .content-block {
     height: 100%;
@@ -23,7 +41,7 @@
 
 .sort-btn,
 .sort-btn:hover {
-    width: 150px;
+    width: 100%;
     color: white;
     background-color: black !important;
     border-color: black !important;
@@ -47,15 +65,6 @@
     background-color: black !important;
     border-color: black !important;
     box-shadow: none !important;
-}
-
-.search-btn {
-    width: 90px;
-    margin-left: 20px;
-}
-
-.search-input {
-    width: 200px;
 }
 
 .buy-btn {
@@ -97,7 +106,13 @@
     color: white;
 }
 
-.specifications,
+.product-btn:disabled,
+.product-btn[disabled]{
+    color: #3d3d3d;
+    border-color: #3d3d3d;
+}
+
+.description,
 .reviews {
     display: none;
 }
@@ -108,6 +123,7 @@
     cursor: pointer;
     -webkit-box-shadow: 0 0 5px #000;
     box-shadow: 0 0 5px #000;
+    margin-bottom: 20px;
 }
 .overlay {
     width: 100%;
@@ -235,10 +251,11 @@
     margin-left: 1rem;
     transition: 0.2s;
 }
-.card__btn:hover, .card__btn:active {
+.card__btn:hover:enabled, 
+.card__btn:active:enabled {
     background-color: black;
 }
-.card__btn:hover span, .card__btn:active span {
+.card__btn:hover:enabled span, .card__btn:active span {
     margin-left: 1.5rem;
 }
 
@@ -253,4 +270,17 @@
 .load-img {
     width: 37px;
     height: 37px;
+}
+
+.buy-with-it {
+    margin-top: 45px;
+}
+
+.scroll-x {
+    overflow-x: auto;
+}
+
+.product-price{
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

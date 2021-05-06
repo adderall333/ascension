@@ -7,14 +7,19 @@
 
 <div class="row">
     <div class="col-4">
-        <div class="row">
+        <div>
             <p class="fs-4">
                 @Model.Name
             </p>
         </div>
-        <div class="row">
-            <div class="main-image">
-                <img id="main" src="@Model.Images.First().Path"/>
+        <div>
+            <div class="main-image gallery">
+                @foreach (var image in Model.Images)
+                {
+                    <a class="gallery-image" href="@image.Path">
+                        <img src="@image.Path"/>
+                    </a>
+                }
             </div>
             <div class="row images">
                 @foreach (var image in Model.Images)
@@ -23,18 +28,6 @@
                         <img class="image" id="@image.Id" src="@image.Path"/>
                     </div>
                 }
-            </div>
-        </div>
-    </div>
-    <div id="description" class="col-8 product-info description">
-        <div class="row">
-            <p class="fs-4">
-                Description
-            </p>
-        </div>
-        <div class="row">
-            <div class="col fs-5">
-                @Model.Description
             </div>
         </div>
     </div>
@@ -56,6 +49,18 @@
             }
         </div>
     </div>
+    <div id="description" class="col-8 product-info description">
+        <div class="row">
+            <p class="fs-4">
+                Description
+            </p>
+        </div>
+        <div class="row">
+            <div class="col fs-5">
+                @Model.Description
+            </div>
+        </div>
+    </div>
     <div id="reviews" class="col-8 product-info reviews">
         <div class="row">
             <p class="fs-4">
@@ -70,25 +75,48 @@
 </div>
 <div class="row product-btns">
     <div class="col-9">
-        <button id="description-btn" class="btn btn-outline-light product-btn">Description</button>
         <button id="specifications-btn" class="btn btn-outline-light product-btn">Specifications</button>
+        <button id="description-btn" class="btn btn-outline-light product-btn">Description</button>
         <button id="reviews-btn" class="btn btn-outline-light product-btn">Reviews</button>
     </div>
-    <div class="col-3">
-        <button class="btn btn-outline-light product-btn">Buy now</button>
-        <button class="btn btn-outline-light product-btn">To the cart</button>
+    <div class="col-1 fs-5 product-price">
+        @Model.Cost$
+    </div>
+    <div class="col-2">
+        @if (Model.IsInCart)
+        {
+            <button id="add-to-cart" class="btn btn-outline-light product-btn" disabled>Already in cart</button>
+        }
+        else
+        {
+            <button id="add-to-cart" class="btn btn-outline-light product-btn">Add to cart</button>
+        }
+    </div>
+</div>
+
+<div class="buy-with-it">
+    <p class="fs-4">
+        Usually buy with it
+    </p>
+    <div class="row flex-nowrap scroll-x">
+        @foreach (var product in Model.Purchases.Select(p => p.SecondProduct))
+        {
+            @await Html.PartialAsync("ProductPreviewPartial", product)
+        }
     </div>
 </div>
 
 <script>
 window.onload = function () {
-    let current = document.getElementById('description');
+    baguetteBox.run('.gallery');
+    
+    let currentElement = document.getElementById('specifications');
     
     let changeElement = function (newElement) {
-        if (current !== newElement) {
-            current.style.display = 'none';
+        if (currentElement !== newElement) {
+            currentElement.style.display = 'none';
             newElement.style.display = 'block';
-            current = newElement;
+            currentElement = newElement;
         }
     }
     
@@ -102,13 +130,55 @@ window.onload = function () {
         changeElement(document.getElementById('reviews'));
     });
     
+    //пример
+    document.getElementById('add-to-cart').addEventListener('click', async function() {
+       let response = await fetch("/Cart/AddProductLine?productId=@Model.Id", { method: "POST"});
+       document.getElementById('add-to-cart').disabled = true;
+       document.getElementById('add-to-cart').innerText = "Already in cart";
+    });
+    
+    let galleryImages = document.getElementsByClassName("gallery-image");
+    let currentImage = galleryImages[0];
+    
+    let changeImage = function (newImage) {
+        if (currentImage !== newImage) {
+            currentImage.style.display = 'none';
+            newImage.style.display = 'block';
+            currentImage = newImage;
+        }
+    }
+    
+    for (let i = 0; i < galleryImages.length; i++) {
+        if (i !== 0)
+            galleryImages[i].style.display = 'none';
+    } 
+    
     let images = document.getElementsByClassName("image");
-    let main = document.getElementById("main");
     
     for (let i = 0; i < images.length; i++) {
         images[i].addEventListener("click", function () {
-           main.setAttribute("src", images[i].getAttribute("src")); 
+           changeImage(galleryImages[i]);
         });
     }
+    
+    let buttons = document.getElementsByClassName("open-product");
+    for (let i = 0; i < buttons.length; i++ ) {
+        buttons[i].addEventListener("click", async function(e) {
+              if (e.target.id !== "add-to-cart" && e.target.parentElement.id !== "add-to-cart")
+                  window.location.href = "/Catalog/Product?id=" + buttons[i].id
+              else
+              {
+                  let response = await fetch("/Cart/AddProductLine?productId=" + buttons[i].id, { method: "POST"});
+                  if (e.target.id === "add-to-cart") {
+                        e.target.disabled = true;
+                        e.target.innerHTML = "Already in cart";
+                  }
+                  else {
+                        e.target.parentElement.disabled = true;
+                        e.target.parentElement.innerHTML = "Already in cart";
+                  } 
+              }
+        });
+    } 
 }
 </script>
