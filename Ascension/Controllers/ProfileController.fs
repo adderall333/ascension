@@ -13,12 +13,8 @@ type ProfileController() =
     inherit Controller()
 
 
-    member this.Personal () =
-        this.View()
-        
-    member this.Order () =
-        this.View()
-        
-    member this.Cart () =
-        this.View()
+    member this.Personal() = this.View()
 
+    member this.Order() = this.View()
+
+    member this.Cart() = this.View()
