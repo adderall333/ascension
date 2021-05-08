@@ -38,49 +38,48 @@ function changeStars(n, star1, star2) {
     }
 }
 
-
-
 let add_review_button = document.getElementById('add-review-btn');
+if (add_review_button != null) {
+    add_review_button.addEventListener('click', () => {
+        let textArea = document.getElementById('add-comment');
+        let text = textArea.value;
+        let arrow = document.getElementById('stars_arrow');
 
-add_review_button.addEventListener('click', () => {
-    let textArea = document.getElementById('add-comment');
-    let text = textArea.value;
-    let arrow = document.getElementById('stars_arrow');
-    
-    textArea.classList.remove('textarea_error');
-    arrow.classList.remove('arrow_error');
-    
-    function checkInputs() {
-        let check = true;
-        if (text.length < 1) {
-            check = false;
-            textArea.classList.add('textarea_error');
-        }
-        if (starsCount < 1) {
-            check = false;
-            arrow.classList.add('arrow_error');
-        }
-        return check;
-    }
-    
-    let check = checkInputs();
-    if (!check)
-        return;
-    
-    let fD = new FormData()
-    fD.append('text', text);
-    fD.append('rating', starsCount);
-    let prodId = document.getElementById('prod_id').value;
-    fD.append('prodId', prodId);
+        textArea.classList.remove('textarea_error');
+        arrow.classList.remove('arrow_error');
 
-    $.ajax({
-        type: 'POST',
-        url: '/Catalog/AddReview',
-        data: fD,
-        processData: false,
-        contentType: false,
-        success: function(res, status, xhr) {
-            alert('Nice!');
+        function checkInputs() {
+            let check = true;
+            if (text.length < 1) {
+                check = false;
+                textArea.classList.add('textarea_error');
+            }
+            if (starsCount < 1) {
+                check = false;
+                arrow.classList.add('arrow_error');
+            }
+            return check;
         }
-    })
-});
+
+        let check = checkInputs();
+        if (!check)
+            return;
+
+        let fD = new FormData()
+        fD.append('text', text);
+        fD.append('rating', starsCount);
+        let prodId = document.getElementById('prod_id').value;
+        fD.append('prodId', prodId);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Catalog/AddReview',
+            data: fD,
+            processData: false,
+            contentType: false,
+            success: function(res, status, xhr) {
+                alert('Nice!');
+            }
+        })
+    });
+}

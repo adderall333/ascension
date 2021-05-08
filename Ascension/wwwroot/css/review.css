@@ -76,3 +76,18 @@
 .arrow_error {
     color: #990000;
 }
+
+.signin-link {
+    color: #3d3d3d;
+    text-decoration: underline!important;
+    transition-duration: 0.5s;
+}
+
+.signin-link:hover {
+    color: black;
+    transition-duration: 0.5s;
+}
+
+.please-signin {
+    margin-bottom: 1rem;
+}

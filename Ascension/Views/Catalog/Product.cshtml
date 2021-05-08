@@ -1,4 +1,5 @@
 ﻿@using System.Text
+@using Microsoft.AspNetCore.Http
 @model Models.Product
 
 @{
@@ -83,24 +84,35 @@
         </div>
         <div class="row">
             <div class="col fs-5">
-                <form method="POST" class="review_form" onsubmit="return false;">
-                    <textarea class="review_add_comment" name="" id="add-comment" placeholder="Add comment..."></textarea>
-                    <div class="under_textarea">
-                        <div class="add_stars">
-                            <div id="star1" class="star_btn">☆</div>
-                            <div id="star2" class="star_btn">☆</div>
-                            <div id="star3" class="star_btn">☆</div>
-                            <div id="star4" class="star_btn">☆</div>
-                            <div id="star5" class="star_btn">☆</div>
+                @if (Context.Session.Keys.Contains("isAuth"))
+                {
+                    <form method="POST" class="review_form" onsubmit="return false;">
+                        <textarea class="review_add_comment" name="" id="add-comment" placeholder="Add comment..."></textarea>
+                        <div class="under_textarea">
+                            <div class="add_stars">
+                                <div id="star1" class="star_btn">☆</div>
+                                <div id="star2" class="star_btn">☆</div>
+                                <div id="star3" class="star_btn">☆</div>
+                                <div id="star4" class="star_btn">☆</div>
+                                <div id="star5" class="star_btn">☆</div>
+                            </div>
+                            <div id="stars_message">
+                                <div id="stars_arrow">❮❮</div>
+                                Rait this product from 1 to 5
+                            </div>
                         </div>
-                        <div id="stars_message">
-                            <div id="stars_arrow">❮❮</div>
-                            Rait this product from 1 to 5
-                        </div>
-                    </div>
-                    <input id="prod_id" style="display: none;" type="number" value="@Model.Id">
-                    <button type="submit" id="add-review-btn" class="btn btn-outline-light product-btn">Add review</button>
-                </form>
+                        <input id="prod_id" style="display: none;" type="number" value="@Model.Id">
+                        <button type="submit" id="add-review-btn" class="btn btn-outline-light product-btn">Add review</button>
+                    </form>
+                }
+                else
+                {
+                    //var routeUrl = Url.RouteUrl(ViewContext.RouteData.Values);
+                    //var qsPath = ViewContext.HttpContext.Request.QueryString.Value;
+                    //var redirectUrl = $"{routeUrl}{qsPath}";
+                    //Context.Session.SetString("redirect_url", redirectUrl);
+                    <div class="please-signin">Please <a asp-controller="Authentication" asp-action="Signin" id="redirect-url" class="signin-link">sign in</a> to add review</div>
+                }
             </div>
         </div>
         <div class="row">
@@ -145,7 +157,7 @@
                         }
                         else
                         {
-                            <div>No reviews</div>
+                            <div>No reviews yet</div>
                         }
                     }
                 </div>
