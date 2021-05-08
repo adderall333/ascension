@@ -35,9 +35,15 @@
                         </div>
                         <input id="prod_id" style="display: none;" type="number" value="@Model.Id">
                         <input id="edit_review" style="display: none;" type="checkbox" checked>
-                        <button type="submit" id="add-review-btn" class="btn btn-outline-light product-btn">Edit</button>
-                        <button class="btn btn-outline-light product-btn">Delete</button>
-                        <button id="cancel-toggle" class="btn btn-outline-light product-btn">Cancel</button>
+                        <div class="edit-buttons">
+                            <button type="submit" id="add-review-btn" class="btn btn-outline-light product-btn">Edit</button>
+                            <button id="cancel-toggle" class="btn btn-outline-light product-btn">Cancel</button>
+                        </div>
+                    </form>
+                    <form asp-controller="Catalog" asp-action="DeleteReview" method="post">
+                        <input style="display: none;" type="number" name="productId" value="@Model.Id">
+                        <input style="display: none;" type="number" name="reviewId" value="@Model.Reviews.First(r => r.User.Id == Context.Session.GetInt32("id")).Id">
+                        <button type="submit" class="btn btn-outline-light product-btn">Delete</button>
                     </form>
                 </div>
             }

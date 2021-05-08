@@ -3,6 +3,7 @@
 open System
 open System.Collections.Generic
 open Microsoft.AspNetCore.Http
+open Microsoft.AspNetCore.Routing
 open ProductFilter
 open System.Diagnostics
 open System.Linq
@@ -152,6 +153,7 @@ type CatalogController() =
            
         context.SaveChanges() 
     
+    [<HttpPost>]    
     member this.EditReview(review : ReviewToAdd) =
         use context = new ApplicationContext()
         
@@ -175,4 +177,26 @@ type CatalogController() =
                                    .FirstOrDefault()
         prodRatingToEdit.Sum <- prodRatingToEdit.Sum - prevRating + review.Rating
         
-        context.SaveChanges() 
+        context.SaveChanges()
+       
+    [<HttpPost>]    
+    member this.DeleteReview(productId : int, reviewId : int) =
+        use context = new ApplicationContext()
+       
+        let reviewToDelete = context
+                                 .Review
+                                 .Where(fun r -> r.Id = reviewId)
+                                 .FirstOrDefault()
+        let prevRating = reviewToDelete.Rating
+        context.Review.Remove(reviewToDelete) |> ignore
+        
+        let prodRatingToEdit = context
+                                   .ProductRating
+                                   .Where(fun p -> p.ProductId = productId)
+                                   .FirstOrDefault()
+        prodRatingToEdit.Sum <- prodRatingToEdit.Sum - prevRating
+        prodRatingToEdit.Count <- prodRatingToEdit.Count - 1
+                                   
+        context.SaveChanges() |> ignore
+        
+        this.Redirect($"/Catalog/Product/{productId}")

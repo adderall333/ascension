@@ -59,7 +59,8 @@ if (add_review_button != null) {
         fD.append('prodId', prodId);
         
         let ajaxUrl = '/Catalog/AddReview';
-        if (document.getElementById('edit_review').checked)
+        let editCheckBox = document.getElementById('edit_review');
+        if (editCheckBox != null && editCheckBox.checked)
             ajaxUrl = '/Catalog/EditReview';
             
         $.ajax({

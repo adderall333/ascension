@@ -107,3 +107,7 @@
 .haveReviewMessage {
     margin-bottom: 0.5rem;
 }
+
+.edit-buttons {
+    display: flex;
+}
