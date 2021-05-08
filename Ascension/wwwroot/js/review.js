@@ -17,7 +17,7 @@ function clickHandler(e) {
 }
 
 function changeStars(n, star1, star2) {
-    for (let i = 0; i < allStarts.length; i++) {
+    for (let i = 0; i < 5; i++) {
         if (i < n)
             allStarts[i].innerHTML = star1;
         else
