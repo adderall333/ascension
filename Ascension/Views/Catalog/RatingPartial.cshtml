@@ -10,6 +10,6 @@
                 rating = Math.Round((double) Model.Rating.Sum / Model.Rating.Count, 1);
             }
         }
-        Rating: @rating.ToString("0.0")
+        Rating: @rating.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)
     </p>
 </div>
