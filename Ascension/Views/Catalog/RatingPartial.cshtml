@@ -1,0 +1,15 @@
+﻿@model Models.Product
+
+<div class="row">
+    <p class="fs-4">
+        @{
+            var rating = 0.0;
+            var prodRating = Model.Rating;
+            if (prodRating != null)
+            {
+                rating = Math.Round((double) Model.Rating.Sum / Model.Rating.Count, 1);
+            }
+        }
+        Rating: @rating.ToString("0.0")
+    </p>
+</div>
