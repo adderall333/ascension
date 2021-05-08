@@ -57,15 +57,19 @@ if (add_review_button != null) {
         fD.append('rating', starsCount);
         let prodId = document.getElementById('prod_id').value;
         fD.append('prodId', prodId);
-
+        
+        let ajaxUrl = '/Catalog/AddReview';
+        if (document.getElementById('edit_review').checked)
+            ajaxUrl = '/Catalog/EditReview';
+            
         $.ajax({
             type: 'POST',
-            url: '/Catalog/AddReview',
+            url: ajaxUrl,
             data: fD,
             processData: false,
             contentType: false,
             success: function(res, status, xhr) {
-                alert('Nice!');
+                location.reload();
             }
         })
     });

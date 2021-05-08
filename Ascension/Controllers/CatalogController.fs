@@ -151,4 +151,28 @@ type CatalogController() =
             prodRating.Count <- prodRating.Count + 1 
            
         context.SaveChanges() 
+    
+    member this.EditReview(review : ReviewToAdd) =
+        use context = new ApplicationContext()
         
+        let userId = this.HttpContext.Session.GetInt32("id")
+        let mutable userIdValue = 0
+        if userId.HasValue then userIdValue <- userId.Value
+        
+        let reviewToEdit = context
+                               .Review
+                               .Where(fun r -> r.Product.Id = review.ProdId)
+                               .Where(fun r -> r.User.Id = userIdValue)
+                               .FirstOrDefault()
+        let prevRating = reviewToEdit.Rating
+        reviewToEdit.Comment <- review.Text
+        reviewToEdit.Rating <- review.Rating
+        reviewToEdit.PublicationDate <- DateTime.Now
+        
+        let prodRatingToEdit = context
+                                   .ProductRating
+                                   .Where(fun p -> p.ProductId = review.ProdId)
+                                   .FirstOrDefault()
+        prodRatingToEdit.Sum <- prodRatingToEdit.Sum - prevRating + review.Rating
+        
+        context.SaveChanges() 
