@@ -1,6 +1,5 @@
 let starsCount = 0;
 let unfilledStar = '☆';
-//let pointedStar = '✭';
 let filledStar = '★';
 
 let allStarts = document.querySelectorAll('.star_btn');
@@ -8,8 +7,6 @@ let allStarts = document.querySelectorAll('.star_btn');
 for (let i = 0; i < allStarts.length; i++) {
     let star = allStarts[i];
     star.addEventListener('click', clickHandler);
-    //star.addEventListener('mouseover', mouseOverHandler);
-    //star.addEventListener('mouseout', mouseOutHandler)
 }
 
 function clickHandler(e) {
@@ -18,17 +15,7 @@ function clickHandler(e) {
     starsCount = n;
     changeStars(n, filledStar, unfilledStar);
 }
-/*
-function mouseOverHandler(e) {
-    let starId = e.target.id;
-    let n = parseInt(starId[starId.length-1]);
-    changeStars(n, filledStar, pointedStar, unfilledStar);
-}
 
-function mouseOutHandler(e) {
-    changeStars(starsCount, filledStar, '', unfilledStar);
-}
-*/
 function changeStars(n, star1, star2) {
     for (let i = 0; i < allStarts.length; i++) {
         if (i < n)
