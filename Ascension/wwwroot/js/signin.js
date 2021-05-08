@@ -52,8 +52,15 @@ signin_button.addEventListener("click", () => {
         success: function(res, status, xhr) {
             $('#loading').removeClass('processing');
             let result = xhr.getResponseHeader("login_result")
-            if (result === "ok")
-                window.location.href = "/Account"
+            if (result === "ok") {
+                let redirectUrl = localStorage.getItem('redirectUrl');
+                if (typeof redirectUrl !== 'undefined') {
+                    window.location.href = redirectUrl;
+                    localStorage.removeItem('redirectUrl');
+                }
+                else
+                    window.location.href = "/Account";
+            }
             else {
                 createErrorMessage('Invalid email or password');
                 form.email.classList.add('error');
