@@ -12,7 +12,7 @@
                     <button id="edit-toggle" class="btn btn-outline-light product-btn">Edit my review</button>
                 </div>
                 <div id="editReview" style="display: none;">
-                    <form method="POST" class="review_form" onsubmit="return false;">
+                    <form method="POST" onsubmit="return false;">
                         @{
                             var comment = Model
                                 .Reviews
@@ -40,10 +40,10 @@
                             <button id="cancel-toggle" class="btn btn-outline-light product-btn">Cancel</button>
                         </div>
                     </form>
-                    <form asp-controller="Catalog" asp-action="DeleteReview" method="post">
+                    <form class="delete_review" asp-controller="Catalog" asp-action="DeleteReview" method="post">
                         <input style="display: none;" type="number" name="productId" value="@Model.Id">
                         <input style="display: none;" type="number" name="reviewId" value="@Model.Reviews.First(r => r.User.Id == Context.Session.GetInt32("id")).Id">
-                        <button type="submit" class="btn btn-outline-light product-btn">Delete</button>
+                        <button type="submit" class="btn btn-outline-light product-btn delete-review-btn">Delete</button>
                     </form>
                 </div>
             }

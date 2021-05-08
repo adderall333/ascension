@@ -110,4 +110,14 @@
 
 .edit-buttons {
     display: flex;
+    float: left;
+}
+
+.delete_review {
+    margin-bottom: 1rem;
+}
+
+.delete-review-btn {
+    border-color: #990000;
+    color: #990000;
 }
