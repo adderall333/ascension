@@ -1,13 +1,49 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<div class="text-center">
-	<h1 class="display-4">Welcome</h1>
-    <html>
-    <body>
-      
-    </body>
-    </html> 
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="text-center main-header">
+        <h1 class="display-3">Ascension</h1>
+    </div>
+    <div class="main-desc row">
+        <div class="col-7">
+            <div class="main-catalog-text">
+                Ascension is a unique, great online-store. Here you can buy everything you need for your own spectacular workplace, which is very important and relevant in our time - a time when everyone is switching to remote work and studying. We have everything you may need, no matter what do you do: programming, blogging, modeling, design, and of course - computer games. If you love computers and everything related to them, then rather go to the catalog!
+            </div>
+            <div class="main-catalog-btn text-center">
+                <a asp-controller="Catalog" asp-action="Index" class="btn btn-outline-light main-btn">Go to the catalog</a>
+            </div>
+        </div>
+        <div class="main-catalog-img col-5">
+            <img src="img/main-catalog.jpg" alt="">
+        </div>
+    </div>
+    <div class="main-carousel">
+        <div class="carousel">
+            <div class="carousel__face"><span>Ascension</span></div>
+            <div class="carousel__face"><span>will</span></div>
+            <div class="carousel__face"><span>help</span></div>
+            <div class="carousel__face"><span>you</span></div>
+            <div class="carousel__face"><span>make</span></div>
+            <div class="carousel__face"><span>your</span></div>
+            <div class="carousel__face"><span>own</span></div>
+            <div class="carousel__face"><span>home</span></div>
+            <div class="carousel__face"><span>setup</span></div>
+          </div>
+    </div>
+    <div class="main-reviews row">
+        <div class="main-reviews-img col">
+            <img src="/img/main-reviews.jpg" alt="">
+        </div>
+        <div class="main-reviews-desc col align-middle">
+            <div class="main-reviews-text">
+                You can make an account. This will allow you to make an order in two clicks without entering all the information. You can also edit your personal information in account, manage your orders and view a list of your reviews.
+            </div>
+            <div class="main-reviews-btn text-center">
+                <a asp-controller="Authentication" asp-action="Signin" class="btn btn-outline-light main-btn">Sign In</a>
+                <a asp-controller="Authentication" asp-action="Signup" class="btn btn-outline-light main-btn">Sign Up</a>
+            </div>
+        </div>
+    </div>
 </div>  
 

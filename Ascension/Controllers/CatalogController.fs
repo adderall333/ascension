@@ -10,6 +10,7 @@ open System.Linq
 open Microsoft.AspNetCore.Mvc
 open Microsoft.EntityFrameworkCore
 open Models
+open CartService
 
 type CatalogController() =
     inherit Controller()
@@ -85,6 +86,7 @@ type CatalogController() =
                            |> filter context ids
                            |> sortProducts sortOption
                            |> loadImages context
+                           |> loadIsInCart context this.HttpContext
             this.PartialView("ProductsPartial", products)
             
     member this.Product(id : int) =
@@ -115,8 +117,14 @@ type CatalogController() =
                                     .OrderByDescending(fun p -> p.Count)
                                     .Take(5)
                                     .ToList()
-            this.View(product)
+                                    
+            product.IsInCart <- isInCart product this.HttpContext context
             
+            for secondProduct in product.Purchases.Select(fun p -> p.SecondProduct) do
+                secondProduct.IsInCart <- isInCart secondProduct this.HttpContext context
+            
+            this.View(product)
+
     [<HttpPost>]        
     member this.AddReview(review : ReviewToAdd) =
         use context = new ApplicationContext()
