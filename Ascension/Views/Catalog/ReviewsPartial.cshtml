@@ -1,4 +1,5 @@
 ﻿@using System.Text
+@using Microsoft.AspNetCore.Http
 @model Models.Product
 
 <div class="row">
@@ -19,9 +20,19 @@
                     {
                         <div class="review">
                             <div class="review_info">
-                                <div class="review_username">
-                                    @review.User.Name
-                                </div>
+                                @{ var userName = $"{review.User.Name} {review.User.Surname.First()}.";}
+                                @if (review.User.Id == Context.Session.GetInt32("id"))
+                                {
+                                    <div class="review_username my_name">
+                                        @userName
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="review_username">
+                                        @userName
+                                    </div>
+                                }
                                 <div class="review_rating">
                                     @{
                                         var sB = new StringBuilder();
