@@ -1,4 +1,6 @@
-﻿namespace Models
+﻿using System.Collections.Generic;
+
+namespace Models
 {
     public class User
     {
@@ -8,5 +10,7 @@
         public string Email { get; set; }
         public string HashedPassword { get; set; }
         public bool IsAdmin { get; set; }
+        
+        public IEnumerable<Review> Reviews { get; set; }
     }
 }
