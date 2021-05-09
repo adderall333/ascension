@@ -12,7 +12,18 @@
                       @Model.Name
                   </p>
                   <p class="card__text fs-6">
-                      4.8/5 (5 reviews)
+                      @{
+                          var rating = 0.0;
+                          var reviewsCount = 0;
+                          var prodRating = Model.Rating;
+                          if (prodRating != null)
+                          {
+                              rating = Math.Round((double) Model.Rating.Sum / Model.Rating.Count, 1);
+                              reviewsCount = Model.Rating.Count;
+                          }
+                          var ratingStr = rating.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture);
+                      }
+                      @ratingStr/5 (@reviewsCount reviews)
                   </p>
                   <p class="card__price fs-6">
                       Price: @Model.Cost$

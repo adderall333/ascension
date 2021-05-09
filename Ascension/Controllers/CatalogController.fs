@@ -85,6 +85,7 @@ type CatalogController() =
                            |> filter context ids
                            |> sortProducts sortOption
                            |> loadImages context
+                           |> loadRating context
             this.PartialView("ProductsPartial", products)
             
     member this.Product(id : int) =

@@ -102,3 +102,12 @@ module ProductFilter =
                              .ToList()
             product.Images <- images
         products
+        
+    let loadRating (context : ApplicationContext) (products : List<Product>) =
+        for product in products do
+            let rating = context
+                             .ProductRating
+                             .Where(fun r -> r.ProductId = product.Id)
+                             .FirstOrDefault()
+            product.Rating <- rating
+        products
