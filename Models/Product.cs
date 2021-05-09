@@ -68,6 +68,22 @@ namespace Models
                 Images = context?.Image.Where(i => images.Contains(i.Id));
         }
 
+        public void Update(string name, int cost, string description, int category, List<int> specificationOptions, List<int> images, ApplicationContext context = null)
+        {
+            Name = name;
+            Cost = cost;
+            Description = description;
+            
+            if (category > 0)
+                Category = context?.Category.First(c => c.Id == category);
+            
+            if (specificationOptions.Any())
+                SpecificationOptions = context?.SpecificationOption.Where(sOp => specificationOptions.Contains(sOp.Id));
+            
+            if (images.Any())
+                Images = context?.Image.Where(i => images.Contains(i.Id));
+        }
+        
         public Product()
         {
         }

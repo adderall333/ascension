@@ -47,6 +47,17 @@ namespace Models
             if (products.Any())
                 Products = context?.Product.Where(product => products.Contains(product.Id));
         }
+        
+        public void Update(string name, int specification, List<int> products, ApplicationContext context = null)
+        {
+            Name = name;
+            
+            if (specification > 0)
+                Specification = context?.Specification.First(s => s.Id == specification);
+            
+            if (products.Any())
+                Products = context?.Product.Where(product => products.Contains(product.Id));
+        }
 
         public SpecificationOption()
         {

@@ -53,6 +53,20 @@ namespace Models
             if (specifications.Any())
                 Specifications = context?.Specification.Where(specification => specifications.Contains(specification.Id));
         }
+        
+        public void Update(string name, int superCategory, List<int> products, List<int> specifications, ApplicationContext context = null)
+        {
+            Name = name;
+            
+            if (superCategory > 0)
+                SuperCategory = context?.SuperCategory.First(sc => sc.Id == superCategory);
+            
+            if (products.Any())
+                Products = context?.Product.Where(product => products.Contains(product.Id)).ToList();
+            
+            if (specifications.Any())
+                Specifications = context?.Specification.Where(specification => specifications.Contains(specification.Id));
+        }
 
         public Category()
         {

@@ -40,6 +40,15 @@ namespace Models
             if (product > 0)
                 Product = context.Product.First(p => p.Id == product);
         }
+        
+        public void Update(string path, int product)
+        {
+            var context = new ApplicationContext();
+            Path = path; 
+            
+            if (product > 0)
+                Product = context.Product.First(p => p.Id == product);
+        }
 
         public Image()
         {

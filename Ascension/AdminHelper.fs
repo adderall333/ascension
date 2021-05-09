@@ -191,7 +191,10 @@ module Checks =
                     |> check emptyDescriptionCheck "Product description was empty"
                     |> check substantialCostCheck "Product cost was less than 0 or bigger than 1000000"
                     
-    //todo image
+    let checkImage (model : ImageModel) =
+        use context = new ApplicationContext()
+        let emptyPathCheck (image : ImageModel) = not (String.IsNullOrEmpty(image.Path))
+        (Ok(model)) |> check emptyPathCheck "Image path was empty"
     
     //todo user
         

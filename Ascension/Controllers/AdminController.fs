@@ -206,17 +206,110 @@ type AdminController() =
         else
             this.StatusCode(403) :> ActionResult
             
-    //todo Category
+    [<HttpPost>]
+    member this.UpdateCategory(formModel : CategoryModel) =
+        if isAdmin this.HttpContext
+        then
+            let checkResult = checkCategory formModel
+            let updateCategory (model : CategoryModel) =
+                use context = new ApplicationContext()
+                context
+                    .Category
+                    .First(fun c -> c.Id = model.Id)
+                    .Update(model.Name, model.SuperCategory, model.Products, model.Specifications)
+                context.SaveChanges() |> ignore
+                this.Response.StatusCode = 200 |> ignore
+                this.Redirect($"/admin/read?name=Category&id={model.Id}") :> ActionResult
+            
+            match checkResult with
+            | Ok(checkedModel) -> updateCategory checkedModel
+            | Bad(message) -> this.BadRequest(message) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
     
-    //todo Specification
+    [<HttpPost>]
+    member this.UpdateSpecification(formModel : SpecificationModel) =
+        if isAdmin this.HttpContext
+        then
+            let checkResult = checkSpecification formModel
+            let updateSpecification (model : SpecificationModel) =
+                use context = new ApplicationContext()
+                context
+                    .Specification
+                    .First(fun s -> s.Id = model.Id)
+                    .Update(model.Name, model.Category, model.SpecificationOptions)
+                context.SaveChanges() |> ignore
+                this.Response.StatusCode = 200 |> ignore
+                this.Redirect($"/admin/read?name=Specification&id={model.Id}") :> ActionResult
+            
+            match checkResult with
+            | Ok(checkedModel) -> updateSpecification checkedModel
+            | Bad(message) -> this.BadRequest(message) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
     
-    //todo Specification option
+    [<HttpPost>]
+    member this.UpdateSpecificationOption(formModel : SpecificationOptionModel) =
+        if isAdmin this.HttpContext
+        then
+            let checkResult = checkSpecificationOption formModel
+            let updateSpecificationOption (model : SpecificationOptionModel) =
+                use context = new ApplicationContext()
+                context
+                    .SpecificationOption
+                    .First(fun sOp -> sOp.Id = model.Id)
+                    .Update(model.Name, model.Specification, model.Products)
+                context.SaveChanges() |> ignore
+                this.Response.StatusCode = 200 |> ignore
+                this.Redirect($"/admin/read?name=SpecificationOption&id={model.Id}") :> ActionResult
+            
+            match checkResult with
+            | Ok(checkedModel) -> updateSpecificationOption checkedModel
+            | Bad(message) -> this.BadRequest(message) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
     
-    //todo Product
-    
-    //todo Image
-    
-    //todo User
+    [<HttpPost>]
+    member this.UpdateProduct(formModel : ProductModel) =
+        if isAdmin this.HttpContext
+        then
+            let checkResult = checkProduct formModel
+            let updateProduct (model : ProductModel) =
+                use context = new ApplicationContext()
+                context
+                    .Product
+                    .First(fun p -> p.Id = model.Id)
+                    .Update(model.Name, model.Cost, model.Description, model.Category, model.SpecificationOptions, model.Images)
+                context.SaveChanges() |> ignore
+                this.Response.StatusCode = 200 |> ignore
+                this.Redirect($"/admin/read?name=Product&id={model.Id}") :> ActionResult
+                
+            match checkResult with
+            | Ok(checkedModel) -> updateProduct checkedModel
+            | Bad(message) -> this.BadRequest(message) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
+        
+    [<HttpPost>]
+    member this.UpdateImage(formModel : ImageModel) =
+        if isAdmin this.HttpContext
+        then
+            let checkResult = checkImage formModel
+            let updateImage (model : ImageModel) =
+                use context = new ApplicationContext()
+                context
+                    .Image
+                    .First(fun i -> i.Id = formModel.Id)
+                    .Update(model.Path, model.Product)
+                context.SaveChanges() |> ignore
+                this.Response.StatusCode = 200 |> ignore
+                this.Redirect($"/admin/read?name=image&id={model.Id}") :> ActionResult
+            
+            match checkResult with
+            | Ok(checkedModel) -> updateImage checkedModel
+            | Bad(message) -> this.BadRequest(message) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
     
     
     //Delete
@@ -228,15 +321,86 @@ type AdminController() =
             let modelToDelete = SuperCategory.GetModel(id) :?> SuperCategory
             context.SuperCategory.Remove(modelToDelete) |> ignore
             context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect("/admin/models?name=SuperCategory") :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
             
-    //todo Category
+    [<HttpPost>]
+    member this.DeleteCategory(id : int) =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            let modelToDelete = Category.GetModel(id) :?> Category
+            context.Category.Remove(modelToDelete) |> ignore
+            context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect("/admin/models?name=Category") :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
+            
         
-    //todo Specification
+    [<HttpPost>]
+    member this.DeleteSpecification(id : int) =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            let modelToDelete = Specification.GetModel(id) :?> Specification
+            context.Specification.Remove(modelToDelete) |> ignore
+            context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect("/admin/models?name=Specification") :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
     
-    //todo Specification option
+    [<HttpPost>]
+    member this.DeleteSpecificationOption(id : int) =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            let modelToDelete = SpecificationOption.GetModel(id) :?> SpecificationOption
+            context.SpecificationOption.Remove(modelToDelete) |> ignore
+            context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect("/admin/models?name=SpecificationOption") :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
     
-    //todo Product
+    [<HttpPost>]
+    member this.DeleteProduct(id : int) =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            let modelToDelete = Product.GetModel(id) :?> Product
+            context.Product.Remove(modelToDelete) |> ignore
+            context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect("/admin/models?name=Product") :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
     
-    //todo Image
+    [<HttpPost>]
+    member this.DeleteImage(id : int) =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            let modelToDelete = Image.GetModel(id) :?> Image
+            context.Image.Remove(modelToDelete) |> ignore
+            context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect("/admin/models?name=Image") :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
     
-    //todo User
+    [<HttpPost>]
+    member this.DeleteUser(id : int) =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            let modelToDelete = User.GetModel(id) :?> User
+            context.User.Remove(modelToDelete) |> ignore
+            context.SaveChanges() |> ignore
+            this.Response.StatusCode = 200 |> ignore
+            this.Redirect("/admin/models?name=User") :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
