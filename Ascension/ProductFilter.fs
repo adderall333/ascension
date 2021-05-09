@@ -1,9 +1,11 @@
 namespace Ascension
 
+open Microsoft.AspNetCore.Http
 open Models
 open System.Linq
 open System.Collections.Generic
 open Microsoft.EntityFrameworkCore
+open CartService
 
 module ProductFilter =
     
@@ -103,6 +105,7 @@ module ProductFilter =
             product.Images <- images
         products
         
+
     let loadRating (context : ApplicationContext) (products : List<Product>) =
         for product in products do
             let rating = context
@@ -110,4 +113,9 @@ module ProductFilter =
                              .Where(fun r -> r.ProductId = product.Id)
                              .FirstOrDefault()
             product.Rating <- rating
+        products
+        
+    let loadIsInCart (context : ApplicationContext) (httpContext : HttpContext) (products : List<Product>) =
+        for product in products do               
+            product.IsInCart <- isInCart product httpContext context
         products

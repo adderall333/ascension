@@ -81,6 +81,26 @@ async function getProducts() {
                                                );
     document.getElementById("products").innerHTML = await response.text();
     document.getElementById("load").style.display = "none";
+    
+    let buttons = document.getElementsByClassName("open-product");
+    for (let i = 0; i < buttons.length; i++ ) {
+        buttons[i].addEventListener("click", async function(e) {
+              if (e.target.id !== "add-to-cart" && e.target.parentElement.id !== "add-to-cart")
+                  window.location.href = "/Catalog/Product?id=" + buttons[i].id
+              else
+              {
+                  let response = await fetch("/Cart/AddProductLine?productId=" + buttons[i].id, { method: "POST"});
+                  if (e.target.id === "add-to-cart") {
+                        e.target.disabled = true;
+                        e.target.innerHTML = "Already in cart";
+                  }
+                  else {
+                        e.target.parentElement.disabled = true;
+                        e.target.parentElement.innerHTML = "Already in cart";
+                  } 
+              }
+        });
+    } 
 }
 
 window.onload = async function () {

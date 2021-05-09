@@ -5,16 +5,19 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="CartService.fs" />
         <Compile Include="Crypto.fs" />
         <Compile Include="UserToRegister.fs" />
         <Compile Include="UserToLogin.fs" />
         <Compile Include="ReviewToAdd.fs" />
         <Compile Include="AuthorizationByCookiesMiddleware.fs" />
         <Compile Include="ProductFilter.fs" />
+        <Compile Include="Controllers\CartController.fs" />
         <Compile Include="Controllers/HomeController.fs" />
         <Compile Include="Controllers\CatalogController.fs" />
         <Compile Include="Controllers\AuthenticationController.fs" />
         <Compile Include="Controllers\GeoApiController.fs" />
+        <Compile Include="Controllers\ProfileController.fs" />
         <Compile Include="Startup.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
