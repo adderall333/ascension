@@ -150,10 +150,6 @@
     padding-top: 100px;
 }
 
-span {
-    color: dimgray;
-}
-
 .pop-up {
     position: fixed;
     margin: 5% auto;
@@ -165,9 +161,9 @@ span {
 .box1 {
     background-color: whitesmoke;
     text-align: center;
-    margin-left: 600px;
-    margin-right: 15px;
-    margin-top: -50px;
+    margin-left: 453px;
+    margin-right: -215px;
+    margin-top: 10px;
     position: fixed;
     width: 300px;
     max-width: 100%;
@@ -202,7 +198,7 @@ option:active, option:hover, option:focus {
 
 
 .main-txt{
-    font-family: 'Abril Fatface', cursive; 
+    font-family: 'Abril Fatface', cursive;
     color: black;
     margin-right: 90px;
     margin-top: 0px;
@@ -224,10 +220,10 @@ option:active, option:hover, option:focus {
 }
 
 .detect-cd{
-    margin-left: 195px; 
-    margin-top: -80px;
+    margin-left: 195px;
+    margin-top: -75px;
 }
-    
+
 .form-select{
     background: transparent;
     outline: none;
@@ -238,7 +234,7 @@ option:active, option:hover, option:focus {
 
 .choose-btn {
     margin-top: 10px;
-    margin-left: -190px;
+    margin-left: -170px;
 }
 
 .close {
@@ -276,7 +272,10 @@ option:active, option:hover, option:focus {
 }
 
 .suggested-city{
-    margin-top: -33px;
-    margin-left: 45px;
+    margin-top: -35px;
+    margin-left: 70px;
+    margin-right: 40px;
+    /* font-weight: bold; */
+    font-size: initial;
 }
 

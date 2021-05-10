@@ -62,6 +62,13 @@ type AuthenticationController() =
             newUser.HashedPassword <- hashedPassword
             context.User.Add(newUser) |> ignore
             context.SaveChanges() |> ignore
+            
+            if this.HttpContext.Session.Keys.Contains("cartId")
+            then
+                let cartId = this.HttpContext.Session.GetInt32("cartId") |> int
+                context.Cart.First(fun c -> c.Id = cartId).AuthorizedUserId <- newUser.Id
+            context.SaveChanges() |> ignore
+            
             this.Response.Headers.Add("registration_result", StringValues("ok"))
        
     [<HttpPost>]
@@ -70,6 +77,15 @@ type AuthenticationController() =
         let dbUser = context
                          .User
                          .FirstOrDefault(fun e -> e.Email = user.Email)
+        
+        if this.HttpContext.Session.Keys.Contains("cartId")
+            then
+                let cartId = this.HttpContext.Session.GetInt32("cartId") |> int
+                let oldCart = context.Cart.FirstOrDefault(fun c -> c.AuthorizedUserId = dbUser.Id)
+                context.Cart.Remove(oldCart) |> ignore
+                context.Cart.First(fun c -> c.Id = cartId).AuthorizedUserId <- dbUser.Id
+        context.SaveChanges() |> ignore
+        
         if dbUser = null || not <| Crypto.VerifyHashedPassword user.Pass dbUser.HashedPassword
         then
             this.Response.Headers.Add("registration_result", StringValues("failed"))
@@ -82,3 +98,14 @@ type AuthenticationController() =
             then
                 this.HttpContext.Response.Cookies.Append("email", dbUser.Email)
                 this.HttpContext.Response.Cookies.Append("hashedPass", dbUser.HashedPassword)
+    
+    [<HttpPost>]            
+    member this.Logout =
+        this.HttpContext.Session.Remove("isAuth")
+        this.HttpContext.Session.Remove("id")
+        this.HttpContext.Session.Remove("email")
+        if this.HttpContext.Request.Cookies.ContainsKey("email")
+        then this.HttpContext.Response.Cookies.Delete("email")
+        if this.HttpContext.Request.Cookies.ContainsKey("hashedPass")
+        then this.HttpContext.Response.Cookies.Delete("hashedPass")
+        this.Redirect("/Authentication/Signin")

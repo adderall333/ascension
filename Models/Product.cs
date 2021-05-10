@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
@@ -32,9 +33,14 @@ namespace Models
         
         [OneToMany]
         public IEnumerable<Image> Images { get; set; }
+        public IEnumerable<Purchase> Purchases { get; set; }
         
         [NotAdministered]
         public NpgsqlTsVector SearchVector { get; set; }
+        
+        [NotMapped]
+        [NotAdministered]
+        public bool IsInCart { get; set; }
         
         public override string ToString()
         {

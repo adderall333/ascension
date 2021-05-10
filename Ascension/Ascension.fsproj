@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="CartService.fs" />
         <Compile Include="FormModels.fs" />
         <Compile Include="ProductFilter.fs" />
         <Compile Include="Selector.fs" />
@@ -13,6 +14,7 @@
         <Compile Include="UserToRegister.fs" />
         <Compile Include="UserToLogin.fs" />
         <Compile Include="AuthorizationByCookiesMiddleware.fs" />
+        <Compile Include="Controllers\CartController.fs" />
         <Compile Include="Controllers/HomeController.fs" />
         <Compile Include="Controllers\CatalogController.fs" />
         <Compile Include="Controllers\AuthenticationController.fs" />

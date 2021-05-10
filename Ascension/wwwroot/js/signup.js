@@ -95,7 +95,8 @@ signup_button.addEventListener("click", () => {
     fD.append('surname', surname);
     fD.append('email', email);
     fD.append('pass', pass);
-    
+
+    $('#loading').addClass('processing');
     $.ajax({
         type: 'POST',
         url: '/Authentication/TryRegister',
@@ -103,6 +104,7 @@ signup_button.addEventListener("click", () => {
         processData: false,
         contentType: false,
         success: function(res, status, xhr) {
+            $('#loading').removeClass('processing');
             let result = xhr.getResponseHeader("registration_result")
             if (result === "ok") {
                 createMessage('zmdi-check','You have successfully registered in our site');
@@ -126,23 +128,4 @@ signup_button.addEventListener("click", () => {
         }
         setTimeout(() => Timer(), 1000);
     }
-    
-    /*
-    let count = 1;
-    let dot = '• ';
-    function Waiting() {
-        document.getElementById("timer").innerHTML = dot.repeat(count);
-        count++;
-        if (count > 3)
-            count = 1;
-        setTimeout(() => Waiting(), 500);
-    }
-
-    $(document).ajaxStart(function(){
-        Waiting();
-    });
-
-    $(document).ajaxStop(function(){
-        document.getElementById("timer").innerHTML = "";
-    });*/
 });

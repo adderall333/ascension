@@ -63,7 +63,7 @@ type AdminController() =
             let checkResult = checkSuperCategory formModel
             let createSuperCategory (model : SuperCategoryModel) =
                 use context = new ApplicationContext()
-                context.SuperCategory.Add(SuperCategory(model.Name, model.Categories, context)) |> ignore
+                context.SuperCategory.Add(SuperCategory(model.Name, model.Image, model.Categories, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect("/admin/models?name=SuperCategory") :> ActionResult
@@ -195,7 +195,7 @@ type AdminController() =
                 context
                     .SuperCategory
                     .First(fun sc -> sc.Id = model.Id)
-                    .Update(model.Name, model.Categories, context)
+                    .Update(model.Name, model.Image, model.Categories, context)
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=SuperCategory&id={model.Id}") :> ActionResult
