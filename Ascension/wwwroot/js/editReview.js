@@ -5,7 +5,7 @@ if(editToggleBtn != null) {
         document.getElementById('editReview').style.display = "block";
         
         let starsDiv = document.getElementsByClassName('add_stars')[0];
-        let starsCount = document.getElementById('review_rating').value;
+        starsCount = document.getElementById('review_rating').value;
         for (let i=1; i<6; i++) {
             let div = document.createElement('div');
             div.id = 'star' + i.toString();
