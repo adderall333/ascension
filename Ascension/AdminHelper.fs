@@ -211,8 +211,10 @@ module Checks =
     let checkImage (model : ImageModel) =
         use context = new ApplicationContext()
         let emptyPathCheck (image : ImageModel) = not (String.IsNullOrEmpty(image.Path))
+        let notImageCheck (image : ImageModel) = ["jpg"; "png"].Contains(image.Path.Split(".").Last())
         let noProductCheck (image : ImageModel) = image.Product > 0
         (Ok(model)) |> check emptyPathCheck "Image path was empty"
+                    |> check notImageCheck "File type is not supported"
                     |> check noProductCheck "Product was not specified"
     
     //todo user
