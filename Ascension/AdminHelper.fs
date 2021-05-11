@@ -151,8 +151,10 @@ module Checks =
                                                                             .SuperCategory
                                                                             .Where(fun sc -> sc.Name = superCategory.Name)
                                                                             .Any())
+        let noImageCheck (superCategory : SuperCategoryModel) = not (String.IsNullOrEmpty(superCategory.ImagePath))
         (Ok(model)) |> check emptyNameCheck "Super category name was empty"
                     |> check nonUniqueNameCheck "Super category with same name already exists"
+                    |> check noImageCheck "Image was not specified"
                     
     let checkCategory (model : CategoryModel) =
         use context = new ApplicationContext()

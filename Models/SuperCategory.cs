@@ -6,7 +6,7 @@ using Models.Attributes;
 
 namespace Models
 {
-    public class SuperCategory : IModel
+    public class SuperCategory : IModel, ICategory
     {
         [PrimaryKey]
         public int Id { get; set; }
@@ -14,8 +14,8 @@ namespace Models
         [SimpleProperty]
         public string Name { get; set; }
                 
-        //[ImageProperty]
-        //public string Path { get; set; }
+        [ImageProperty]
+        public string ImagePath { get; set; }
         
         [OneToMany]
         public IEnumerable<Category> Categories { get; set; }
@@ -34,17 +34,19 @@ namespace Models
                 .First(superCategory => superCategory.Id == id);
         }
 
-        public SuperCategory(string name, List<int> categories, ApplicationContext context = null)
+        public SuperCategory(string name, string imagePath, List<int> categories, ApplicationContext context = null)
         {
             Name = name;
+            ImagePath = imagePath;
             
             if (categories.Any())
                 Categories = context?.Category.Where(category => categories.Contains(category.Id)).ToList();
         }
 
-        public void Update(string name, List<int> categories, ApplicationContext context = null)
+        public void Update(string name, string imagePath, List<int> categories, ApplicationContext context = null)
         {
             Name = name;
+            ImagePath = imagePath;
             
             if (categories.Any())
                 Categories = context?.Category.Where(category => categories.Contains(category.Id)).ToList();

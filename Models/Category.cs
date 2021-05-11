@@ -5,7 +5,7 @@ using Models.Attributes;
 
 namespace Models
 {
-    public class Category : IModel
+    public class Category : IModel, ICategory
     {
         [PrimaryKey]
         public int Id { get; set; }
@@ -13,7 +13,8 @@ namespace Models
         [SimpleProperty]
         public string Name { get; set; }
         
-        //todo add image
+        [ImageProperty]
+        public string ImagePath { get; set; }
         
         [ManyToOne]
         public SuperCategory SuperCategory { get; set; }
@@ -40,9 +41,10 @@ namespace Models
                 .First(category => category.Id == id);
         }
 
-        public Category(string name, int superCategory, List<int> products, List<int> specifications, ApplicationContext context = null)
+        public Category(string name, string imagePath, int superCategory, List<int> products, List<int> specifications, ApplicationContext context = null)
         {
             Name = name;
+            ImagePath = imagePath;
             
             if (superCategory > 0)
                 SuperCategory = context?.SuperCategory.First(sc => sc.Id == superCategory);
@@ -54,9 +56,10 @@ namespace Models
                 Specifications = context?.Specification.Where(specification => specifications.Contains(specification.Id));
         }
         
-        public void Update(string name, int superCategory, List<int> products, List<int> specifications, ApplicationContext context = null)
+        public void Update(string name, string imagePath, int superCategory, List<int> products, List<int> specifications, ApplicationContext context = null)
         {
             Name = name;
+            ImagePath = imagePath;
             
             if (superCategory > 0)
                 SuperCategory = context?.SuperCategory.First(sc => sc.Id == superCategory);

@@ -5,38 +5,46 @@ open System.Collections.Generic
 type SuperCategoryModel() =
     let mutable id = 0 : int
     let mutable name = null : string
+    let mutable imagePath = null : string
     let mutable categories = List<int>() : List<int>
     member this.Id
         with get() = id
-        and set(value) = id <- value
+        and set value = id <- value
     member this.Name
         with get() = name
-        and set(value) = name <- value
+        and set value = name <- value
+    member this.ImagePath
+        with get() = imagePath
+        and set value = imagePath <- value
     member this.Categories
         with get() = categories
-        and set(value) = categories <- value
+        and set value = categories <- value
         
 type CategoryModel() =
     let mutable id = 0 : int
     let mutable name = null : string
+    let mutable imagePath = null : string
     let mutable superCategory = 0 : int
     let mutable products = List<int>() : List<int>
     let mutable specifications = List<int>() : List<int>
     member this.Id
         with get() = id
-        and set(value) = id <- value
+        and set value = id <- value
     member this.Name
         with get() = name
-        and set(value) = name <- value
+        and set value = name <- value
+    member this.ImagePath
+        with get() = imagePath
+        and set value = imagePath <- value
     member this.SuperCategory
         with get() = superCategory
-        and set(value) = superCategory <- value
+        and set value = superCategory <- value
     member this.Products
         with get() = products
-        and set(value) = products <- value
+        and set value = products <- value
     member this.Specifications
         with get() = specifications
-        and set(value) = specifications <- value
+        and set value = specifications <- value
         
 type SpecificationModel() =
     let mutable id = 0 : int
@@ -45,16 +53,16 @@ type SpecificationModel() =
     let mutable specificationOptions = List<int>() : List<int>
     member this.Id
         with get() = id
-        and set(value) = id <- value
+        and set value = id <- value
     member this.Name
         with get() = name
-        and set(value) = name <- value
+        and set value = name <- value
     member this.Category
         with get() = category
-        and set(value) = category <- value
+        and set value = category <- value
     member this.SpecificationOptions
         with get() = specificationOptions
-        and set(value) = specificationOptions <- value
+        and set value = specificationOptions <- value
         
 type SpecificationOptionModel() =
     let mutable id = 0 : int
@@ -63,16 +71,16 @@ type SpecificationOptionModel() =
     let mutable products = List<int>() : List<int>
     member this.Id
         with get() = id
-        and set(value) = id <- value
+        and set value = id <- value
     member this.Name
         with get() = name
-        and set(value) = name <- value
+        and set value = name <- value
     member this.Specification
         with get() = specification
-        and set(value) = specification <- value
+        and set value = specification <- value
     member this.Products
         with get() = products
-        and set(value) = products <- value
+        and set value = products <- value
         
 type ProductModel() =
     let mutable id = 0 : int
@@ -84,25 +92,25 @@ type ProductModel() =
     let mutable images = List<int>() : List<int>
     member this.Id
         with get() = id
-        and set(value) = id <- value
+        and set value = id <- value
     member this.Name
         with get() = name
-        and set(value) = name <- value
+        and set value = name <- value
     member this.Cost
         with get() = cost
-        and set(value) = cost <- value
+        and set value = cost <- value
     member this.Description
         with get() = description
-        and set(value) = description <- value
+        and set value = description <- value
     member this.Category
         with get() = category
-        and set(value) = category <- value
+        and set value = category <- value
     member this.SpecificationOptions
         with get() = specificationOptions
-        and set(value) = specificationOptions <- value
+        and set value = specificationOptions <- value
     member this.Images
         with get() = images
-        and set(value) = images <- value
+        and set value = images <- value
         
 type ImageModel() =
     let mutable id = 0 : int
@@ -110,10 +118,10 @@ type ImageModel() =
     let mutable product = 0 : int
     member this.Id
         with get() = id
-        and set(value) = id <- value
+        and set value = id <- value
     member this.Path
         with get() = path
-        and set(value) = path <- value
+        and set value = path <- value
     member this.Product
         with get() = product
-        and set(value) = product <- value
+        and set value = product <- value

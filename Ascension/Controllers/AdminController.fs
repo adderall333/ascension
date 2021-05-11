@@ -3,6 +3,9 @@ namespace Ascension.Controller
 open System.IO
 open Ascension
 open Microsoft.AspNetCore.Http
+open Microsoft.AspNetCore.Http
+open Microsoft.AspNetCore.Http
+open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc
 open Models
 open System.Linq
@@ -22,6 +25,13 @@ type AdminController() =
                 user.IsAdmin
             else
                 false
+                
+    let getPath (file : IFormFile) = "/img/" + file.FileName            
+    
+    let createFile (file : IFormFile) =
+        let path = "wwwroot" + getPath file 
+        use fileStream = new FileStream(path, FileMode.Create)
+        file.CopyTo(fileStream)
     
     [<HttpGet>]
     member this.Index() =
@@ -57,13 +67,15 @@ type AdminController() =
             this.StatusCode(403) :> ActionResult
         
     [<HttpPost>]
-    member this.CreateSuperCategory(formModel : SuperCategoryModel) =
+    member this.CreateSuperCategory(formModel : SuperCategoryModel, file : IFormFile) =
         if isAdmin this.HttpContext
         then
+            formModel.ImagePath <- getPath file
             let checkResult = checkSuperCategory formModel
             let createSuperCategory (model : SuperCategoryModel) =
                 use context = new ApplicationContext()
-                context.SuperCategory.Add(SuperCategory(model.Name, model.Categories, context)) |> ignore
+                createFile file
+                context.SuperCategory.Add(SuperCategory(model.Name, model.ImagePath, model.Categories, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect("/admin/models?name=SuperCategory") :> ActionResult
@@ -75,13 +87,15 @@ type AdminController() =
             this.StatusCode(403) :> ActionResult
         
     [<HttpPost>]
-    member this.CreateCategory(formModel : CategoryModel) =
+    member this.CreateCategory(formModel : CategoryModel, file : IFormFile) =
         if isAdmin this.HttpContext
         then
+            formModel.ImagePath <- getPath file
             let checkResult = checkCategory formModel
             let createCategory (model : CategoryModel) =
                 use context = new ApplicationContext()
-                context.Category.Add(Category(model.Name, model.SuperCategory, model.Products, model.Specifications, context)) |> ignore
+                createFile file
+                context.Category.Add(Category(model.Name, model.ImagePath, model.SuperCategory, model.Products, model.Specifications, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect("/admin/models?name=Category") :> ActionResult
@@ -150,15 +164,11 @@ type AdminController() =
     member this.CreateImage(formModel : ImageModel, file : IFormFile) =
         if isAdmin this.HttpContext
         then
-            let path = "/img/" + file.FileName
-            formModel.Path <- path
+            formModel.Path <- getPath file
             let checkResult = checkImage formModel
             let createImage (model : ImageModel) =
                 use context = new ApplicationContext()
-                
-                use fileStream = new FileStream(model.Path, FileMode.Create)
-                file.CopyTo(fileStream)
-                            
+                createFile file
                 context.Image.Add(Image(file.FileName, model.Product, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
@@ -193,16 +203,18 @@ type AdminController() =
             this.StatusCode(403) :> ActionResult
         
     [<HttpPost>]    
-    member this.UpdateSuperCategory(formModel : SuperCategoryModel) =
+    member this.UpdateSuperCategory(formModel : SuperCategoryModel, file : IFormFile) =
         if isAdmin this.HttpContext
         then
+            formModel.ImagePath <- getPath file
             let checkResult = checkSuperCategory formModel
             let updateSuperCategory (model : SuperCategoryModel) = 
                 use context = new ApplicationContext()
+                createFile file
                 context
                     .SuperCategory
                     .First(fun sc -> sc.Id = model.Id)
-                    .Update(model.Name, model.Categories, context)
+                    .Update(model.Name, model.ImagePath, model.Categories, context)
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=SuperCategory&id={model.Id}") :> ActionResult
@@ -214,16 +226,18 @@ type AdminController() =
             this.StatusCode(403) :> ActionResult
             
     [<HttpPost>]
-    member this.UpdateCategory(formModel : CategoryModel) =
+    member this.UpdateCategory(formModel : CategoryModel, file : IFormFile) =
         if isAdmin this.HttpContext
         then
+            formModel.ImagePath <- getPath file
             let checkResult = checkCategory formModel
             let updateCategory (model : CategoryModel) =
                 use context = new ApplicationContext()
+                createFile file
                 context
                     .Category
                     .First(fun c -> c.Id = model.Id)
-                    .Update(model.Name, model.SuperCategory, model.Products, model.Specifications)
+                    .Update(model.Name, model.ImagePath, model.SuperCategory, model.Products, model.Specifications)
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=Category&id={model.Id}") :> ActionResult
