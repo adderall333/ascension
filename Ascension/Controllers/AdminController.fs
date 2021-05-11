@@ -156,7 +156,7 @@ type AdminController() =
             use fileStream = new FileStream(path, FileMode.Create)
             file.CopyTo(fileStream)
                         
-            context.Image.Add(Image(file.FileName, formModel.Product)) |> ignore
+            context.Image.Add(Image(file.FileName, formModel.Product, context)) |> ignore
             context.SaveChanges() |> ignore
             this.Response.StatusCode = 200 |> ignore
             this.Redirect("/admin/models?name=Image") :> ActionResult
@@ -300,7 +300,7 @@ type AdminController() =
                 context
                     .Image
                     .First(fun i -> i.Id = formModel.Id)
-                    .Update(model.Path, model.Product)
+                    .Update(model.Path, model.Product, context)
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=image&id={model.Id}") :> ActionResult

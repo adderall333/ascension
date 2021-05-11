@@ -13,10 +13,10 @@ namespace Models
         
         [SimpleProperty]
         public string Name { get; set; }
-        
-        [OneToOne]
-        public Image Image { get; set; }
                 
+        //[ImageProperty]
+        //public string Path { get; set; }
+        
         [OneToMany]
         public IEnumerable<Category> Categories { get; set; }
         
@@ -31,16 +31,12 @@ namespace Models
             return context
                 .SuperCategory
                 .Include(superCategory => superCategory.Categories)
-                .Include(superCategory => superCategory.Image)
                 .First(superCategory => superCategory.Id == id);
         }
 
         public SuperCategory(string name, int image, List<int> categories, ApplicationContext context = null)
         {
             Name = name;
-            
-            if (image > 0)
-                Image = context?.Image.First(i => i.Id == image);
             
             if (categories.Any())
                 Categories = context?.Category.Where(category => categories.Contains(category.Id)).ToList();
@@ -49,9 +45,6 @@ namespace Models
         public void Update(string name, int image, List<int> categories, ApplicationContext context = null)
         {
             Name = name;
-            
-            if (image > 0)
-                Image = context?.Image.First(i => i.Id == image);
             
             if (categories.Any())
                 Categories = context?.Category.Where(category => categories.Contains(category.Id)).ToList();

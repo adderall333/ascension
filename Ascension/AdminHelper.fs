@@ -16,7 +16,9 @@ module Tools =
         | t when t = typeof<bool> -> "checkbox"
         | _ -> failwith "There is no such input type"
 
-module ReadHelper = 
+module ReadHelper =
+    //todo image
+    
     let processSingleProperty propertyName value =
         "<p>" + propertyName + "  :  " + value + "</p>"
         
@@ -81,6 +83,8 @@ module CreateHelper =
         sb.ToString()
         
 module UpdateHelper =
+    //todo image
+    
     let getHtmlAttribute propertyType (propertyValue : Object) propertyName =
         if propertyType <> typedefof<bool>
         then

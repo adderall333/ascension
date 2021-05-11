@@ -32,18 +32,16 @@ namespace Models
                 .First(image => image.Id == id);
         }
 
-        public Image(string path, int product)
+        public Image(string path, int product, ApplicationContext context)
         {
-            var context = new ApplicationContext();
             Path = path; 
             
             if (product > 0)
                 Product = context.Product.First(p => p.Id == product);
         }
         
-        public void Update(string path, int product)
+        public void Update(string path, int product, ApplicationContext context)
         {
-            var context = new ApplicationContext();
             Path = path; 
             
             if (product > 0)
