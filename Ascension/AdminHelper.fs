@@ -17,7 +17,7 @@ module Tools =
         | _ -> failwith "There is no such input type"
 
 module ReadHelper =
-    //todo image
+    let processImageProperty value = $"<img src=\"{value}\" style=\"width: 300px; height: 300px;\">"
     
     let processSingleProperty propertyName value =
         "<p>" + propertyName + "  :  " + value + "</p>"
@@ -42,6 +42,9 @@ module ReadHelper =
                  property.GetCustomAttributes(typedefof<SimplePropertyAttribute>, false).Any()
             then
                 sb.Append(processSingleProperty property.Name (property.GetValue(model).ToString())) |> ignore
+            elif property.GetCustomAttributes(typedefof<ImagePropertyAttribute>, false).Any()
+            then
+                sb.Append(processImageProperty (property.GetValue(model))) |> ignore
         sb.ToString()
         
 module CreateHelper =
@@ -158,8 +161,10 @@ module Checks =
                                                                     .Category
                                                                     .Where(fun c -> c.Name = category.Name)
                                                                     .Any())
+        let noSuperCategoryCheck (category : CategoryModel) = category.SuperCategory > 0
         (Ok(model)) |> check emptyNameCheck "Category name was empty"
                     |> check nonUniqueNameCheck "Category with same name already exists"
+                    |> check noSuperCategoryCheck "Super category was not specified"
                     
     let checkSpecification (model : SpecificationModel) =
         use context = new ApplicationContext()
@@ -168,8 +173,10 @@ module Checks =
                                                                             .Specification
                                                                             .Where(fun s -> s.Name = specification.Name)
                                                                             .Any())
+        let noCategoryCheck (specification : SpecificationModel) = specification.Category > 0
         (Ok(model)) |> check emptyNameCheck "Specification name was empty"
                     |> check nonUniqueNameCheck "Specification with same name already exists"
+                    |> check noCategoryCheck "Category was not specified"
     
     let checkSpecificationOption (model : SpecificationOptionModel) =
         use context = new ApplicationContext()
@@ -178,8 +185,10 @@ module Checks =
                                                                                         .SpecificationOption
                                                                                         .Where(fun sOp -> sOp.Name = specificationOption.Name)
                                                                                         .Any())
+        let noSpecificationCheck (specificationOption : SpecificationOptionModel) = specificationOption.Specification > 0
         (Ok(model)) |> check emptyNameCheck "Specification option name was empty"
                     |> check nonUniqueNameCheck "Specification option with same name already exists"
+                    |> check noSpecificationCheck "Specification was not specified"
         
     let checkProduct (model : ProductModel) =
         use context = new ApplicationContext()
@@ -190,15 +199,19 @@ module Checks =
                                                                     .Any())
         let emptyDescriptionCheck (product : ProductModel) = not (String.IsNullOrEmpty(product.Description))
         let substantialCostCheck (product : ProductModel) = product.Cost > 0 && product.Cost < 1000000
+        let noCategoryCheck (product : ProductModel) = product.Category > 0
         (Ok(model)) |> check emptyNameCheck "Product name was empty"
                     |> check nonUniqueNameCheck "Product with same name already exists"
                     |> check emptyDescriptionCheck "Product description was empty"
                     |> check substantialCostCheck "Product cost was less than 0 or bigger than 1000000"
+                    |> check noCategoryCheck "Category was not specified"
                     
     let checkImage (model : ImageModel) =
         use context = new ApplicationContext()
         let emptyPathCheck (image : ImageModel) = not (String.IsNullOrEmpty(image.Path))
+        let noProductCheck (image : ImageModel) = image.Product > 0
         (Ok(model)) |> check emptyPathCheck "Image path was empty"
+                    |> check noProductCheck "Product was not specified"
     
     //todo user
         

@@ -5,7 +5,6 @@ open System.Collections.Generic
 type SuperCategoryModel() =
     let mutable id = 0 : int
     let mutable name = null : string
-    let mutable image = 0 : int
     let mutable categories = List<int>() : List<int>
     member this.Id
         with get() = id
@@ -13,9 +12,6 @@ type SuperCategoryModel() =
     member this.Name
         with get() = name
         and set(value) = name <- value
-    member this.Image
-        with get() = image
-        and set(value) = image <- value
     member this.Categories
         with get() = categories
         and set(value) = categories <- value

@@ -34,7 +34,7 @@ namespace Models
                 .First(superCategory => superCategory.Id == id);
         }
 
-        public SuperCategory(string name, int image, List<int> categories, ApplicationContext context = null)
+        public SuperCategory(string name, List<int> categories, ApplicationContext context = null)
         {
             Name = name;
             
@@ -42,7 +42,7 @@ namespace Models
                 Categories = context?.Category.Where(category => categories.Contains(category.Id)).ToList();
         }
 
-        public void Update(string name, int image, List<int> categories, ApplicationContext context = null)
+        public void Update(string name, List<int> categories, ApplicationContext context = null)
         {
             Name = name;
             

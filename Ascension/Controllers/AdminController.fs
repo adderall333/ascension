@@ -63,7 +63,7 @@ type AdminController() =
             let checkResult = checkSuperCategory formModel
             let createSuperCategory (model : SuperCategoryModel) =
                 use context = new ApplicationContext()
-                context.SuperCategory.Add(SuperCategory(model.Name, model.Image, model.Categories, context)) |> ignore
+                context.SuperCategory.Add(SuperCategory(model.Name, model.Categories, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect("/admin/models?name=SuperCategory") :> ActionResult
@@ -150,16 +150,23 @@ type AdminController() =
     member this.CreateImage(formModel : ImageModel, file : IFormFile) =
         if isAdmin this.HttpContext
         then
-            use context = new ApplicationContext()
-            
-            let path = "wwwroot/img/" + file.FileName
-            use fileStream = new FileStream(path, FileMode.Create)
-            file.CopyTo(fileStream)
-                        
-            context.Image.Add(Image(file.FileName, formModel.Product, context)) |> ignore
-            context.SaveChanges() |> ignore
-            this.Response.StatusCode = 200 |> ignore
-            this.Redirect("/admin/models?name=Image") :> ActionResult
+            let path = "/img/" + file.FileName
+            formModel.Path <- path
+            let checkResult = checkImage formModel
+            let createImage (model : ImageModel) =
+                use context = new ApplicationContext()
+                
+                use fileStream = new FileStream(model.Path, FileMode.Create)
+                file.CopyTo(fileStream)
+                            
+                context.Image.Add(Image(file.FileName, model.Product, context)) |> ignore
+                context.SaveChanges() |> ignore
+                this.Response.StatusCode = 200 |> ignore
+                this.Redirect("/admin/models?name=Image") :> ActionResult
+                
+            match checkResult with
+            | Ok(checkedModel) -> createImage checkedModel
+            | Bad(message) -> this.BadRequest(message) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
     
@@ -195,7 +202,7 @@ type AdminController() =
                 context
                     .SuperCategory
                     .First(fun sc -> sc.Id = model.Id)
-                    .Update(model.Name, model.Image, model.Categories, context)
+                    .Update(model.Name, model.Categories, context)
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=SuperCategory&id={model.Id}") :> ActionResult
