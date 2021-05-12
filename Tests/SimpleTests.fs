@@ -24,8 +24,8 @@ let client = ref (factory.CreateClient())
 [<TestCase("/authentication/signin", TestName = "AuthSignin")>]
 [<TestCase("/authentication/signup", TestName = "AuthSignup")>]
 
-//todo cart
-//todo geo
+//cart
+[<TestCase("/cart", TestName = "Cart")>]
 
 let statusCode200 (page : string) =
     let response = client.Value.GetAsync(page) |> Async.AwaitTask |> Async.RunSynchronously

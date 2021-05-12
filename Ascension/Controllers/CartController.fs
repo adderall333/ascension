@@ -12,7 +12,7 @@ type CartController() =
     inherit Controller()
 
     [<HttpGet>]
-    member this.Cart() =
+    member this.Index() =
         use context = new ApplicationContext()
         let cartId = getCartId this.HttpContext
         let productLines = context.ProductLine.Where(fun p -> p.CartId = cartId).ToList()
