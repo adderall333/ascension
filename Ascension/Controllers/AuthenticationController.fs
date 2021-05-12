@@ -102,7 +102,7 @@ type AuthenticationController() =
                 this.HttpContext.Response.Cookies.Append("hashedPass", dbUser.HashedPassword)
     
     [<HttpGet>]            
-    member this.Logout =
+    member this.Logout() =
         this.HttpContext.Session.Remove("isAuth")
         this.HttpContext.Session.Remove("id")
         this.HttpContext.Session.Remove("email")

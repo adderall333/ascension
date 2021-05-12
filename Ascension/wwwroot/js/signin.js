@@ -54,7 +54,7 @@ signin_button.addEventListener("click", () => {
             let result = xhr.getResponseHeader("login_result")
             if (result === "ok") {
                 let redirectUrl = localStorage.getItem('redirectUrl');
-                if (typeof redirectUrl !== 'undefined') {
+                if (typeof redirectUrl !== 'undefined' && redirectUrl != null) {
                     window.location.href = redirectUrl;
                     localStorage.removeItem('redirectUrl');
                 }
@@ -66,6 +66,10 @@ signin_button.addEventListener("click", () => {
                 form.email.classList.add('error');
                 form.pass.classList.add('error');
             }
+        },
+        error: function(res, status, xhr) {
+            $('#loading').removeClass('processing');
+            createErrorMessage('Something went wrong. Please try again later.');
         }
     })
 
