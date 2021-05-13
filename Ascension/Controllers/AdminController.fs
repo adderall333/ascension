@@ -26,12 +26,19 @@ type AdminController() =
             else
                 false
                 
-    let getPath (file : IFormFile) = "/img/" + file.FileName            
+    let getPath (file : IFormFile) =
+        if file <> null
+        then
+            "/img/" + file.FileName
+        else
+            ""
     
     let createFile (file : IFormFile) =
-        let path = "wwwroot" + getPath file 
-        use fileStream = new FileStream(path, FileMode.Create)
-        file.CopyTo(fileStream)
+        if file <> null
+        then
+            let path = "wwwroot" + getPath file 
+            use fileStream = new FileStream(path, FileMode.Create)
+            file.CopyTo(fileStream)
     
     [<HttpGet>]
     member this.Index() =
@@ -75,7 +82,7 @@ type AdminController() =
             let createSuperCategory (model : SuperCategoryModel) =
                 use context = new ApplicationContext()
                 createFile file
-                context.SuperCategory.Add(SuperCategory(model.Name, model.ImagePath, model.Categories, context)) |> ignore
+                context.SuperCategory.Add(SuperCategory().Update(model.Name, model.ImagePath, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect("/admin/models?name=SuperCategory") :> ActionResult
@@ -95,7 +102,7 @@ type AdminController() =
             let createCategory (model : CategoryModel) =
                 use context = new ApplicationContext()
                 createFile file
-                context.Category.Add(Category(model.Name, model.ImagePath, model.SuperCategory, model.Products, model.Specifications, context)) |> ignore
+                context.Category.Add(Category().Update(model.Name, model.ImagePath, model.SuperCategory, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect("/admin/models?name=Category") :> ActionResult
@@ -113,7 +120,7 @@ type AdminController() =
             let checkResult = checkSpecification formModel
             let createSpecification (model : SpecificationModel) =
                 use context = new ApplicationContext()
-                context.Specification.Add(Specification(model.Name, model.Category, model.SpecificationOptions, context)) |> ignore
+                context.Specification.Add(Specification().Update(model.Name, model.Category, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect("/admin/models?name=Specification") :> ActionResult
@@ -131,7 +138,7 @@ type AdminController() =
             let checkResult = checkSpecificationOption formModel
             let createSpecificationOption (model : SpecificationOptionModel) =
                 use context = new ApplicationContext()
-                context.SpecificationOption.Add(SpecificationOption(model.Name, model.Specification, model.Products, context)) |> ignore
+                context.SpecificationOption.Add(SpecificationOption().Update(model.Name, model.Specification, model.Products, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect("/admin/models?name=SpecificationOption") :> ActionResult
@@ -149,7 +156,7 @@ type AdminController() =
             let checkResult = checkProduct formModel
             let createProduct (model : ProductModel) =
                 use context = new ApplicationContext()
-                context.Product.Add(Product(model.Name, model.Cost, model.Description, model.Category, model.SpecificationOptions, model.Images)) |> ignore
+                context.Product.Add(Product().Update(model.Name, model.Cost, model.Description, model.Category, model.SpecificationOptions, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect("/admin/models?name=Product") :> ActionResult
@@ -169,7 +176,7 @@ type AdminController() =
             let createImage (model : ImageModel) =
                 use context = new ApplicationContext()
                 createFile file
-                context.Image.Add(Image(file.FileName, model.Product, context)) |> ignore
+                context.Image.Add(Image().Update(formModel.Path, model.Product, context)) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect("/admin/models?name=Image") :> ActionResult
@@ -214,7 +221,7 @@ type AdminController() =
                 context
                     .SuperCategory
                     .First(fun sc -> sc.Id = model.Id)
-                    .Update(model.Name, model.ImagePath, model.Categories, context)
+                    .Update(model.Name, model.ImagePath, context) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=SuperCategory&id={model.Id}") :> ActionResult
@@ -237,7 +244,7 @@ type AdminController() =
                 context
                     .Category
                     .First(fun c -> c.Id = model.Id)
-                    .Update(model.Name, model.ImagePath, model.SuperCategory, model.Products, model.Specifications)
+                    .Update(model.Name, model.ImagePath, model.SuperCategory, context) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=Category&id={model.Id}") :> ActionResult
@@ -258,7 +265,7 @@ type AdminController() =
                 context
                     .Specification
                     .First(fun s -> s.Id = model.Id)
-                    .Update(model.Name, model.Category, model.SpecificationOptions)
+                    .Update(model.Name, model.Category, context) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=Specification&id={model.Id}") :> ActionResult
@@ -279,7 +286,7 @@ type AdminController() =
                 context
                     .SpecificationOption
                     .First(fun sOp -> sOp.Id = model.Id)
-                    .Update(model.Name, model.Specification, model.Products)
+                    .Update(model.Name, model.Specification, model.Products, context) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=SpecificationOption&id={model.Id}") :> ActionResult
@@ -300,7 +307,7 @@ type AdminController() =
                 context
                     .Product
                     .First(fun p -> p.Id = model.Id)
-                    .Update(model.Name, model.Cost, model.Description, model.Category, model.SpecificationOptions, model.Images)
+                    .Update(model.Name, model.Cost, model.Description, model.Category, model.SpecificationOptions, context) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=Product&id={model.Id}") :> ActionResult
@@ -321,7 +328,7 @@ type AdminController() =
                 context
                     .Image
                     .First(fun i -> i.Id = formModel.Id)
-                    .Update(model.Path, model.Product, context)
+                    .Update(model.Path, model.Product, context) |> ignore
                 context.SaveChanges() |> ignore
                 this.Response.StatusCode = 200 |> ignore
                 this.Redirect($"/admin/read?name=image&id={model.Id}") :> ActionResult

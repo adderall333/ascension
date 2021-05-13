@@ -31,21 +31,15 @@ namespace Models
                 .Include(image => image.Product)
                 .First(image => image.Id == id);
         }
-
-        public Image(string path, int product, ApplicationContext context)
-        {
-            Path = path; 
-            
-            if (product > 0)
-                Product = context.Product.First(p => p.Id == product);
-        }
         
-        public void Update(string path, int product, ApplicationContext context)
+        public Image Update(string path, int product, ApplicationContext context)
         {
-            Path = path; 
+            Path = string.IsNullOrEmpty(path) ? Path : path; 
             
             if (product > 0)
                 Product = context.Product.First(p => p.Id == product);
+
+            return this;
         }
 
         public Image()

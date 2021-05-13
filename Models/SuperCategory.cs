@@ -18,7 +18,7 @@ namespace Models
         public string ImagePath { get; set; }
         
         [OneToMany]
-        public IEnumerable<Category> Categories { get; set; }
+        public List<Category> Categories { get; set; }
         
         public override string ToString()
         {
@@ -34,22 +34,12 @@ namespace Models
                 .First(superCategory => superCategory.Id == id);
         }
 
-        public SuperCategory(string name, string imagePath, List<int> categories, ApplicationContext context = null)
+        public SuperCategory Update(string name, string imagePath, ApplicationContext context)
         {
             Name = name;
-            ImagePath = imagePath;
+            ImagePath = string.IsNullOrEmpty(imagePath) ? ImagePath : imagePath;
             
-            if (categories.Any())
-                Categories = context?.Category.Where(category => categories.Contains(category.Id)).ToList();
-        }
-
-        public void Update(string name, string imagePath, List<int> categories, ApplicationContext context = null)
-        {
-            Name = name;
-            ImagePath = imagePath;
-            
-            if (categories.Any())
-                Categories = context?.Category.Where(category => categories.Contains(category.Id)).ToList();
+            return this;
         }
 
         public SuperCategory()

@@ -49,6 +49,7 @@ module ProductFilter =
                                                 .SpecificationOption
                                                 .Where(fun s -> s.Products.Contains(product))
                                                 .AsSplitQuery()
+                                                .ToList()
         products
             .Where(fun p -> p
                                 .SpecificationOptions

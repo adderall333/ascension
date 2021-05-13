@@ -20,10 +20,10 @@ namespace Models
         public SuperCategory SuperCategory { get; set; }
         
         [OneToMany]
-        public IEnumerable<Product> Products { get; set; }
+        public List<Product> Products { get; set; }
         
         [OneToMany]
-        public IEnumerable<Specification> Specifications { get; set; }
+        public List<Specification> Specifications { get; set; }
         
         public override string ToString()
         {
@@ -40,35 +40,16 @@ namespace Models
                 .Include(category => category.Specifications)
                 .First(category => category.Id == id);
         }
-
-        public Category(string name, string imagePath, int superCategory, List<int> products, List<int> specifications, ApplicationContext context = null)
-        {
-            Name = name;
-            ImagePath = imagePath;
-            
-            if (superCategory > 0)
-                SuperCategory = context?.SuperCategory.First(sc => sc.Id == superCategory);
-            
-            if (products.Any())
-                Products = context?.Product.Where(product => products.Contains(product.Id)).ToList();
-            
-            if (specifications.Any())
-                Specifications = context?.Specification.Where(specification => specifications.Contains(specification.Id));
-        }
         
-        public void Update(string name, string imagePath, int superCategory, List<int> products, List<int> specifications, ApplicationContext context = null)
+        public Category Update(string name, string imagePath, int superCategory, ApplicationContext context)
         {
             Name = name;
-            ImagePath = imagePath;
+            ImagePath = string.IsNullOrEmpty(imagePath) ? ImagePath : imagePath;
             
             if (superCategory > 0)
-                SuperCategory = context?.SuperCategory.First(sc => sc.Id == superCategory);
-            
-            if (products.Any())
-                Products = context?.Product.Where(product => products.Contains(product.Id)).ToList();
-            
-            if (specifications.Any())
-                Specifications = context?.Specification.Where(specification => specifications.Contains(specification.Id));
+                SuperCategory = context.SuperCategory.First(sc => sc.Id == superCategory);
+
+            return this;
         }
 
         public Category()

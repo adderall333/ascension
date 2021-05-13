@@ -20,11 +20,11 @@ namespace Models
         public Specification Specification { get; set; }
         
         [ManyToMany]
-        public IEnumerable<Product> Products { get; set; }
+        public List<Product> Products { get; set; }
         
         public override string ToString()
         {
-            return $"{Id}.{Name}";
+            return $"{Id}.{Name} (Specification Id: {SpecificationId})";
         }
         
         public static IModel GetModel(int id)
@@ -36,27 +36,31 @@ namespace Models
                 .Include(specificationOption => specificationOption.Products)
                 .First(specificationOption => specificationOption.Id == id);
         }
-
-        public SpecificationOption(string name, int specification, List<int> products, ApplicationContext context = null)
-        {
-            Name = name;
-            
-            if (specification > 0)
-                Specification = context?.Specification.First(s => s.Id == specification);
-            
-            if (products.Any())
-                Products = context?.Product.Where(product => products.Contains(product.Id));
-        }
         
-        public void Update(string name, int specification, List<int> products, ApplicationContext context = null)
+        public SpecificationOption Update(string name, int specification, List<int> products, ApplicationContext context)
         {
             Name = name;
             
             if (specification > 0)
-                Specification = context?.Specification.First(s => s.Id == specification);
-            
+                Specification = context.Specification.First(s => s.Id == specification);
+
             if (products.Any())
-                Products = context?.Product.Where(product => products.Contains(product.Id));
+            {
+                Products = context
+                    .Product
+                    .Where(p => p
+                        .SpecificationOptions
+                        .Select(sOp => sOp.Id)
+                        .Contains(Id))
+                    .ToList();
+                
+                Products.RemoveAll(p => true);
+                Products.AddRange(context
+                    .Product
+                    .Where(product => products.Contains(product.Id)));
+            }
+            
+            return this;
         }
 
         public SpecificationOption()

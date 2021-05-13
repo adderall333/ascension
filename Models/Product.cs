@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
@@ -29,11 +31,13 @@ namespace Models
         public Category Category { get; set; }
         
         [ManyToMany]
-        public IEnumerable<SpecificationOption> SpecificationOptions { get; set; }
+        public List<SpecificationOption> SpecificationOptions { get; set; }
         
         [OneToMany]
-        public IEnumerable<Image> Images { get; set; }
-        public IEnumerable<Purchase> Purchases { get; set; }
+        public List<Image> Images { get; set; }
+        
+        [NotAdministered]
+        public List<Purchase> Purchases { get; set; }
         
         [NotAdministered]
         public NpgsqlTsVector SearchVector { get; set; }
@@ -58,36 +62,32 @@ namespace Models
                 .First(product => product.Id == id);
         }
 
-        public Product(string name, int cost, string description, int category, List<int> specificationOptions, List<int> images, ApplicationContext context = null)
+        public Product Update(string name, int cost, string description, int category, List<int> specificationOptions, ApplicationContext context)
         {
             Name = name;
             Cost = cost;
             Description = description;
             
             if (category > 0)
-                Category = context?.Category.First(c => c.Id == category);
-            
-            if (specificationOptions.Any())
-                SpecificationOptions = context?.SpecificationOption.Where(sOp => specificationOptions.Contains(sOp.Id));
-            
-            if (images.Any())
-                Images = context?.Image.Where(i => images.Contains(i.Id));
-        }
+                Category = context.Category.First(c => c.Id == category);
 
-        public void Update(string name, int cost, string description, int category, List<int> specificationOptions, List<int> images, ApplicationContext context = null)
-        {
-            Name = name;
-            Cost = cost;
-            Description = description;
-            
-            if (category > 0)
-                Category = context?.Category.First(c => c.Id == category);
-            
             if (specificationOptions.Any())
-                SpecificationOptions = context?.SpecificationOption.Where(sOp => specificationOptions.Contains(sOp.Id));
-            
-            if (images.Any())
-                Images = context?.Image.Where(i => images.Contains(i.Id));
+            {
+                SpecificationOptions = context
+                    .SpecificationOption
+                    .Where(sOp => sOp
+                        .Products
+                        .Select(p => p.Id)
+                        .Contains(Id))
+                    .ToList();
+                
+                SpecificationOptions.RemoveAll(sOp => true);
+                SpecificationOptions.AddRange(context
+                    .SpecificationOption
+                    .Where(sOp => specificationOptions.Contains(sOp.Id)));
+            }
+
+            return this;
         }
         
         public Product()

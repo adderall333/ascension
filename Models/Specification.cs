@@ -20,7 +20,7 @@ namespace Models
         public Category Category { get; set; }
         
         [OneToMany]
-        public IEnumerable<SpecificationOption> SpecificationOptions { get; set; }
+        public List<SpecificationOption> SpecificationOptions { get; set; }
         
         public override string ToString()
         {
@@ -36,27 +36,15 @@ namespace Models
                 .Include(specification => specification.SpecificationOptions)
                 .First(specification => specification.Id == id);
         }
-
-        public Specification(string name, int category, List<int> specificationOptions, ApplicationContext context = null)
-        {
-            Name = name;
-            
-            if (category > 0)
-                Category = context?.Category.First(c => c.Id == category);
-                
-            if (specificationOptions.Any())
-                SpecificationOptions = context?.SpecificationOption.Where(sOp => specificationOptions.Contains(sOp.Id));
-        }
         
-        public void Update(string name, int category, List<int> specificationOptions, ApplicationContext context = null)
+        public Specification Update(string name, int category, ApplicationContext context)
         {
             Name = name;
             
             if (category > 0)
-                Category = context?.Category.First(c => c.Id == category);
-                
-            if (specificationOptions.Any())
-                SpecificationOptions = context?.SpecificationOption.Where(sOp => specificationOptions.Contains(sOp.Id));
+                Category = context.Category.First(c => c.Id == category);
+            
+            return this;
         }
 
         public Specification()

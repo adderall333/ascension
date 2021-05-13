@@ -54,7 +54,7 @@ module CreateHelper =
         sb.Append("<input type=\"" + Tools.getInputType propertyType + "\" name=\"" + propertyName + "\"></p>") |> ignore
         sb.ToString()
         
-    let processImageProperty = "<p><label>Image<lebel><input type=\"file\" name=\"file\"></p>"
+    let processImageProperty = "<p><label>Image<lebel><input type=\"file\" name=\"file\" accept=\"image/jpeg,image/png\"></p>"
         
     let processComplexProperty (options : IEnumerable<IModel>) propertyName isEnumerable =
         let sb = StringBuilder()
@@ -73,12 +73,12 @@ module CreateHelper =
             elif property.GetCustomAttributes(typedefof<ImagePropertyAttribute>, false).Any()
             then
                 sb.Append(processImageProperty) |> ignore
-            elif property.GetCustomAttributes(typedefof<OneToManyAttribute>, false).Any() ||
+            elif (*property.GetCustomAttributes(typedefof<OneToManyAttribute>, false).Any() ||*)
                  property.GetCustomAttributes(typedefof<ManyToManyAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations (property.PropertyType.GetGenericArguments().First()).Name
                 sb.Append(processComplexProperty options property.Name true) |> ignore
-            elif property.GetCustomAttributes(typedefof<OneToOneAttribute>, false).Any() ||
+            elif (*property.GetCustomAttributes(typedefof<OneToOneAttribute>, false).Any() ||*)
                  property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations property.Name
@@ -86,7 +86,7 @@ module CreateHelper =
         sb.ToString()
         
 module UpdateHelper =
-    //todo image
+    let processImageProperty = "<p><label>Image<lebel><input type=\"file\" name=\"file\" accept=\"image/jpeg,image/png\"></p>"
     
     let getHtmlAttribute propertyType (propertyValue : Object) propertyName =
         if propertyType <> typedefof<bool>
@@ -120,18 +120,21 @@ module UpdateHelper =
             if property.GetCustomAttributes(typedefof<SimplePropertyAttribute>, false).Any()
             then
                 sb.Append(processSimpleProperty property.PropertyType (property.GetValue(model)) property.Name) |> ignore
-            elif property.GetCustomAttributes(typedefof<OneToManyAttribute>, false).Any() ||
+            elif property.GetCustomAttributes(typedefof<ImagePropertyAttribute>, false).Any()
+            then
+                sb.Append(processImageProperty) |> ignore
+            elif (*property.GetCustomAttributes(typedefof<OneToManyAttribute>, false).Any() ||*)
                  property.GetCustomAttributes(typedefof<ManyToManyAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations (property.PropertyType.GetGenericArguments().First()).Name
                 let checkedIds = (property.GetValue(model) :?> IEnumerable<IModel>).Select(fun e -> e.Id)
                 sb.Append(processComplexProperty options property.Name checkedIds true) |> ignore
-            elif property.GetCustomAttributes(typedefof<OneToOneAttribute>, false).Any() ||
+            elif (*property.GetCustomAttributes(typedefof<OneToOneAttribute>, false).Any() ||*)
                  property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations property.Name
                 let checkedIds = [(property.GetValue(model) :?> IModel).Id]
-                sb.Append(processComplexProperty options property.Name checkedIds true) |> ignore
+                sb.Append(processComplexProperty options property.Name checkedIds false) |> ignore
         sb.ToString()
         
 module Checks =
@@ -149,47 +152,41 @@ module Checks =
         let emptyNameCheck (superCategory : SuperCategoryModel) = not (String.IsNullOrEmpty(superCategory.Name))
         let nonUniqueNameCheck (superCategory : SuperCategoryModel) = not (context
                                                                             .SuperCategory
-                                                                            .Where(fun sc -> sc.Name = superCategory.Name)
+                                                                            .Where(fun sc -> sc.Name = superCategory.Name && sc.Id <> superCategory.Id)
                                                                             .Any())
         let noImageCheck (superCategory : SuperCategoryModel) = not (String.IsNullOrEmpty(superCategory.ImagePath))
+        let notImageCheck (superCategory : SuperCategoryModel) = ["jpg"; "png"].Contains(superCategory.ImagePath.Split(".").Last())
         (Ok(model)) |> check emptyNameCheck "Super category name was empty"
                     |> check nonUniqueNameCheck "Super category with same name already exists"
                     |> check noImageCheck "Image was not specified"
+                    |> check notImageCheck "File type is not supported"
                     
     let checkCategory (model : CategoryModel) =
         use context = new ApplicationContext()
         let emptyNameCheck (category : CategoryModel) = not (String.IsNullOrEmpty(category.Name))
         let nonUniqueNameCheck (category : CategoryModel) = not (context
                                                                     .Category
-                                                                    .Where(fun c -> c.Name = category.Name)
+                                                                    .Where(fun c -> c.Name = category.Name && c.Id <> category.Id)
                                                                     .Any())
         let noSuperCategoryCheck (category : CategoryModel) = category.SuperCategory > 0
+        let notImageCheck (category : CategoryModel) = ["jpg"; "png"].Contains(category.ImagePath.Split(".").Last())
         (Ok(model)) |> check emptyNameCheck "Category name was empty"
                     |> check nonUniqueNameCheck "Category with same name already exists"
                     |> check noSuperCategoryCheck "Super category was not specified"
+                    |> check notImageCheck "File type is not supported"
                     
     let checkSpecification (model : SpecificationModel) =
         use context = new ApplicationContext()
         let emptyNameCheck (specification : SpecificationModel) = not (String.IsNullOrEmpty(specification.Name))
-        let nonUniqueNameCheck (specification : SpecificationModel) = not (context
-                                                                            .Specification
-                                                                            .Where(fun s -> s.Name = specification.Name)
-                                                                            .Any())
         let noCategoryCheck (specification : SpecificationModel) = specification.Category > 0
         (Ok(model)) |> check emptyNameCheck "Specification name was empty"
-                    |> check nonUniqueNameCheck "Specification with same name already exists"
                     |> check noCategoryCheck "Category was not specified"
     
     let checkSpecificationOption (model : SpecificationOptionModel) =
         use context = new ApplicationContext()
         let emptyNameCheck (specificationOption : SpecificationOptionModel) = not (String.IsNullOrEmpty(specificationOption.Name))
-        let nonUniqueNameCheck (specificationOption : SpecificationOptionModel) = not (context
-                                                                                        .SpecificationOption
-                                                                                        .Where(fun sOp -> sOp.Name = specificationOption.Name)
-                                                                                        .Any())
         let noSpecificationCheck (specificationOption : SpecificationOptionModel) = specificationOption.Specification > 0
         (Ok(model)) |> check emptyNameCheck "Specification option name was empty"
-                    |> check nonUniqueNameCheck "Specification option with same name already exists"
                     |> check noSpecificationCheck "Specification was not specified"
         
     let checkProduct (model : ProductModel) =
@@ -197,7 +194,7 @@ module Checks =
         let emptyNameCheck (product : ProductModel) = not (String.IsNullOrEmpty(product.Name))
         let nonUniqueNameCheck (product : ProductModel) = not (context
                                                                     .Product
-                                                                    .Where(fun p -> p.Name = product.Name)
+                                                                    .Where(fun p -> p.Name = product.Name && p.Id <> product.Id)
                                                                     .Any())
         let emptyDescriptionCheck (product : ProductModel) = not (String.IsNullOrEmpty(product.Description))
         let substantialCostCheck (product : ProductModel) = product.Cost > 0 && product.Cost < 1000000
