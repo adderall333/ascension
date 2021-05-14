@@ -21,7 +21,7 @@ namespace Models
         public DbSet<Purchase> Purchase { get; set; }
         public DbSet<Cart> Cart { get; set; }
         public DbSet<ProductLine> ProductLine { get; set; }
-        
+        public DbSet<Order> Order { get; set; }
         public ApplicationContext()
         {
         }
