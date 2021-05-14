@@ -13,7 +13,7 @@ namespace Models
 
         public double Amount { get; set; }
         
-        public string Status { get; set; }
+        public string Status { get; set; } // NotPaid ,Paid ,Packing, Delivering, Delivered.
         
         public string PaymentMethod { get; set; } // Cash, Online
         
