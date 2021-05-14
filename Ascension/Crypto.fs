@@ -3,6 +3,7 @@
 open System
 open System.Text
 open System.Security.Cryptography
+open BCrypt.Net
 
 module Crypto =
         
@@ -11,15 +12,11 @@ module Crypto =
         then
             null
         else
-            let shaM = new SHA512Managed()
-            password
-            |> Encoding.ASCII.GetBytes
-            |> shaM.ComputeHash
-            |> Convert.ToBase64String
+            BCrypt.HashPassword(password)
         
     let VerifyHashedPassword inputPas hashedPas =
         if inputPas = null || hashedPas = null
         then
             false
         else
-            GetHashPassword inputPas = hashedPas
+            BCrypt.Verify(inputPas, hashedPas)
