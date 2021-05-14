@@ -13,6 +13,8 @@ namespace Models
 
         public double Amount { get; set; }
         
+        public string Status { get; set; }
+        
         public string PaymentMethod { get; set; } // Cash, Online
         
         public string DeliveryType { get; set; } // Delivery, SelfTake
