@@ -36,12 +36,14 @@ namespace Models
                 .First(u => u.Id == id);
         }
 
-        public User(string name, string surname, string email, bool isAdmin)
+        public User Update(string name, string surname, string email, string isAdmin)
         {
             Name = name;
             Surname = surname;
             Email = email;
-            IsAdmin = isAdmin;
+            IsAdmin = isAdmin == "IsAdmin";
+
+            return this;
         }
 
         public User()

@@ -125,3 +125,25 @@ type ImageModel() =
     member this.Product
         with get() = product
         and set value = product <- value
+        
+type UserModel() =
+    let mutable id = 0 : int
+    let mutable name = null : string
+    let mutable surname = null : string
+    let mutable email = null : string
+    let mutable isAdmin = null : string
+    member this.Id
+        with get() = id
+        and set value = id <- value
+    member this.Name
+        with get() = name
+        and set value = name <- value
+    member this.Surname
+        with get() = surname
+        and set value = surname <- value
+    member this.Email
+        with get() = email
+        and set value = email <- value
+    member this.IsAdmin
+        with get() = isAdmin
+        and set value = isAdmin <- value

@@ -214,5 +214,13 @@ module Checks =
                     |> check notImageCheck "File type is not supported"
                     |> check noProductCheck "Product was not specified"
     
-    //todo user
+    let checkUser (model : UserModel) =
+        use context = new ApplicationContext()
+        let emptyNameCheck (user : UserModel) = not (String.IsNullOrEmpty(user.Name))
+        let emptySurnameCheck (user : UserModel) = not (String.IsNullOrEmpty(user.Surname))
+        let emptyEmailCheck (user : UserModel) = not (String.IsNullOrEmpty(user.Email))
+        (Ok(model)) |> check emptyNameCheck "User name was empty"
+                    |> check emptySurnameCheck "User surname was empty"
+                    |> check emptyEmailCheck "User email was Empty"
+        
         

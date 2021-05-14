@@ -187,6 +187,14 @@ type AdminController() =
         else
             this.StatusCode(403) :> ActionResult
     
+    [<HttpPost>]
+    member this.CreateUser(formModel : UserModel) =
+        if isAdmin this.HttpContext
+        then
+            this.BadRequest("Now we do not support user creation") :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
+        
         
     //Read    
     [<HttpGet>]
@@ -338,7 +346,28 @@ type AdminController() =
             | Bad(message) -> this.BadRequest(message) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
-    
+            
+    [<HttpPost>]
+    member this.UpdateUser(formModel : UserModel) =
+        if isAdmin this.HttpContext
+        then
+            let checkResult = checkUser formModel
+            let updateUser (model : UserModel) =
+                use context = new ApplicationContext()
+                context
+                    .User
+                    .First(fun p -> p.Id = model.Id)
+                    .Update(model.Name, model.Surname, model.Email, model.IsAdmin) |> ignore
+                context.SaveChanges() |> ignore
+                this.Response.StatusCode = 200 |> ignore
+                this.Redirect($"/admin/read?name=User&id={model.Id}") :> ActionResult
+                
+            match checkResult with
+            | Ok(checkedModel) -> updateUser checkedModel
+            | Bad(message) -> this.BadRequest(message) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
+        
     
     //Delete
     [<HttpPost>]    
