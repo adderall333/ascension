@@ -4,18 +4,27 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - Ascension</title>
+    <link href="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <script type="text/javascript" src="~/js/IP.js" async></script>
+    <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <!--Google Fonts--><link rel="preconnect" href="https://fonts.gstatic.com">
     <!--Abril Fatface Font--><link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
     <!--FontAwesome--><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--Bootstrap CSS 4.6--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <!--Bootstrap CSS 5.0--><link href="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <!--Favicon--><link href="/favicon.ico" rel="icon" type="image/x-icon">
-
     <link rel="stylesheet" href="~/css/site.css"/>
     <link rel="stylesheet" href="~/css/nav.css">
     <link rel="stylesheet" href="~/css/footer.css">
     <link rel="stylesheet" href="~/css/catalog.css">
     <link rel="stylesheet" href="~/css/citytriggerwindow.css">
+    <link rel="stylesheet" href="~/css/profile.css">
     <link rel="stylesheet" href="~/css/baguetteBox.min.css">
     <link rel="stylesheet" href="~/css/main.css">
     <link href="/favicon.ico" rel="icon" type="image/x-icon">
@@ -29,7 +38,6 @@
             <a class="store-name" asp-controller="Home" asp-action="Index">Ascension</a>
         </div>
     </div>
-
     <nav class="navbar-flex navbar navbar-expand-custom navbar-mainbg">
         <div id="nav-search-hidden" class="nav-search">
             <form class="row" asp-controller="Catalog" asp-action="Index" method="get">
@@ -64,7 +72,7 @@
                 @if (Context.Session.Keys.Contains("isAuth"))
                 {
                     <li class="nav-item">
-                        <a class="nav-link" href="/Account"><i class="fa fa-user"></i>Account</a>
+                        <a class="nav-link" asp-controller="Profile" asp-action="Personal"><i class="fa fa-user"></i>Account</a>
                     </li>
                 }
                 else
@@ -204,6 +212,7 @@
 <script type="text/javascript" src="~/js/IP.js" async></script>
 <script src="~/js/site.js"></script>
 <script src="~/js/nav.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script type="text/javascript" src="~/js/baguetteBox.min.js"></script>
 <script>
 let queryParams = window
@@ -223,7 +232,6 @@ let queryParams = window
 if (queryParams["searchString"] != null)
     document.getElementById("searchInput").setAttribute("value", queryParams["searchString"]); 
 </script>
-
 <!-- Используйте для подключения своих скриптов -->
 @await RenderSectionAsync("Scripts", required: false)
 </body>

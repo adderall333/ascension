@@ -5,6 +5,10 @@
     Layout = "_Layout";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/review.css">
+}
+
 <div class="row">
     <div class="col-4">
         <div>
@@ -62,17 +66,12 @@
         </div>
     </div>
     <div id="reviews" class="col-8 product-info reviews">
-        <div class="row">
-            <p class="fs-4">
-                Reviews
-            </p>
-        </div>
-        <div class="row">
-            <div class="col fs-5">Empty part</div>
-        </div>
+        <partial name="RatingPartial"/>
+        <partial name="AddReviewPartial"/>
+        <partial name="ReviewsPartial"/>
     </div>
-    
 </div>
+
 <div class="row product-btns">
     <div class="col-9">
         <button id="specifications-btn" class="btn btn-outline-light product-btn">Specifications</button>
@@ -182,3 +181,10 @@ window.onload = function () {
     } 
 }
 </script>
+
+@section Scripts
+{
+    <script src="~/js/review.js"></script>
+    <script src="~/js/redirectUrl.js"></script>
+    <script src="~/js/editReview.js"></script>
+}

@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Http
+@model Models.Product
+
+<div class="row">
+    <div class="col fs-5">
+        @if (Context.Session.Keys.Contains("isAuth"))
+        {
+            var userId = Context.Session.GetInt32("id");
+            @if (Model.Reviews.Any(r => r.User.Id == userId))
+            {
+                <div id="haveReview">
+                    <div class="haveReviewMessage">You have already added a review</div>
+                    <button id="edit-toggle" class="btn btn-outline-light product-btn">Edit my review</button>
+                </div>
+                <div id="editReview" style="display: none;">
+                    <form method="POST" onsubmit="return false;">
+                        @{
+                            var review = Model
+                                .Reviews
+                                .First(r => r.User.Id == userId);
+                        }
+                        <textarea class="review_add_comment" name="" id="add-comment">@review.Comment</textarea>
+                        <div class="under_textarea">
+                            <input id="review_rating" style="display: none;" type="number" value="@review.Rating">
+                            <div class="add_stars">
+                            </div>
+                            <div id="stars_message">
+                                <div id="stars_arrow">❮❮</div>
+                                Rait this product from 1 to 5
+                            </div>
+                        </div>
+                        <input id="prod_id" style="display: none;" type="number" value="@Model.Id">
+                        <input id="edit_review" style="display: none;" type="checkbox" checked>
+                        <div class="edit-buttons">
+                            <button type="submit" id="add-review-btn" class="btn btn-outline-light product-btn">Edit</button>
+                            <button id="cancel-toggle" class="btn btn-outline-light product-btn">Cancel</button>
+                        </div>
+                    </form>
+                    <form class="delete_review" asp-controller="Catalog" asp-action="DeleteReview" method="post">
+                        <input style="display: none;" type="number" name="productId" value="@Model.Id">
+                        <input style="display: none;" type="number" name="reviewId" value="@Model.Reviews.First(r => r.User.Id == userId).Id">
+                        <button type="submit" class="btn btn-outline-light product-btn delete-review-btn">Delete</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <form method="POST" class="review_form" onsubmit="return false;">
+                    <textarea class="review_add_comment" name="" id="add-comment" placeholder="Add comment..."></textarea>
+                    <div class="under_textarea">
+                        <div class="add_stars">
+                            <div id="star1" class="star_btn">☆</div>
+                            <div id="star2" class="star_btn">☆</div>
+                            <div id="star3" class="star_btn">☆</div>
+                            <div id="star4" class="star_btn">☆</div>
+                            <div id="star5" class="star_btn">☆</div>
+                        </div>
+                        <div id="stars_message">
+                            <div id="stars_arrow">❮❮</div>
+                            Rait this product from 1 to 5
+                        </div>
+                    </div>
+                    <input id="prod_id" style="display: none;" type="number" value="@Model.Id">
+                    <button type="submit" id="add-review-btn" class="btn btn-outline-light product-btn">Add review</button>
+                </form>
+            }
+        }
+        else
+        {
+            <div class="please-signin">Please <a asp-controller="Authentication" asp-action="Signin" id="redirect-url" class="signin-link">sign in</a> to add review</div>
+        }
+    </div>
+</div>

@@ -1,5 +1,6 @@
-﻿using System.Linq;
+using System.Linq;
 using Models.Attributes;
+using System.Collections.Generic;
 
 namespace Models
 {
@@ -22,6 +23,9 @@ namespace Models
         
         [SimpleProperty]
         public bool IsAdmin { get; set; }
+        
+        [NotAdministered]
+        public IEnumerable<Review> Reviews { get; set; }
 
         public override string ToString()
         {

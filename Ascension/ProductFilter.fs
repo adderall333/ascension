@@ -106,6 +106,16 @@ module ProductFilter =
             product.Images <- images
         products
         
+
+    let loadRating (context : ApplicationContext) (products : List<Product>) =
+        for product in products do
+            let rating = context
+                             .ProductRating
+                             .Where(fun r -> r.ProductId = product.Id)
+                             .FirstOrDefault()
+            product.Rating <- rating
+        products
+        
     let loadIsInCart (context : ApplicationContext) (httpContext : HttpContext) (products : List<Product>) =
         for product in products do               
             product.IsInCart <- isInCart product httpContext context

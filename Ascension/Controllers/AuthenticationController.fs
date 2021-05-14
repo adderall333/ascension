@@ -82,7 +82,9 @@ type AuthenticationController() =
             then
                 let cartId = this.HttpContext.Session.GetInt32("cartId") |> int
                 let oldCart = context.Cart.FirstOrDefault(fun c -> c.AuthorizedUserId = dbUser.Id)
-                context.Cart.Remove(oldCart) |> ignore
+                if oldCart <> null
+                then
+                    context.Cart.Remove(oldCart) |> ignore
                 context.Cart.First(fun c -> c.Id = cartId).AuthorizedUserId <- dbUser.Id
         context.SaveChanges() |> ignore
         
@@ -99,8 +101,8 @@ type AuthenticationController() =
                 this.HttpContext.Response.Cookies.Append("email", dbUser.Email)
                 this.HttpContext.Response.Cookies.Append("hashedPass", dbUser.HashedPassword)
     
-    [<HttpPost>]            
-    member this.Logout =
+    [<HttpGet>]            
+    member this.Logout() =
         this.HttpContext.Session.Remove("isAuth")
         this.HttpContext.Session.Remove("id")
         this.HttpContext.Session.Remove("email")

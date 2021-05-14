@@ -35,6 +35,10 @@ namespace Models
         
         public DbSet<Purchase> Purchase { get; set; }
         
+        public DbSet<Review> Review { get; set; }
+        
+        public DbSet<ProductRating> ProductRating { get; set; }
+        
         public DbSet<Cart> Cart { get; set; }
         
         public DbSet<ProductLine> ProductLine { get; set; }

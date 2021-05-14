@@ -1,0 +1,62 @@
+﻿@using System.Text
+@using Microsoft.AspNetCore.Http
+@model Models.Product
+
+<div class="row">
+    <p class="fs-4">
+        @{
+            var reviewsCount = 0;
+            if (Model.Reviews.Any())
+                reviewsCount = Model.Rating.Count;
+        }
+        Reviews (@reviewsCount)
+    </p>
+    <div class="col fs-5">
+        <div class="scrollable">
+            @{
+                if (Model.Reviews.Any())
+                {
+                    foreach (var review in Model.Reviews)
+                    {
+                        <div class="review">
+                            <div class="review_info">
+                                @{ var userName = $"{review.User.Name} {review.User.Surname.First()}.";}
+                                @if (review.User.Id == Context.Session.GetInt32("id"))
+                                {
+                                    <div class="review_username my_name">
+                                        @userName
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="review_username">
+                                        @userName
+                                    </div>
+                                }
+                                <div class="review_rating">
+                                    @{
+                                        var sB = new StringBuilder();
+                                        sB.Append(new string('★', review.Rating));
+                                        sB.Append(new string('☆', 5 - review.Rating));
+                                        var ratingStars = sB.ToString();
+                                    }
+                                    @ratingStars
+                                </div>
+                                <div class="review_date">
+                                    @review.PublicationDate.ToString("d")
+                                </div>
+                            </div>
+                            <div class="review_comment">
+                                @review.Comment
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div>No reviews yet</div>
+                }
+            }
+        </div>
+    </div>
+</div>

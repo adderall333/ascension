@@ -42,6 +42,12 @@ namespace Models
         [NotAdministered]
         public NpgsqlTsVector SearchVector { get; set; }
         
+        [NotAdministered]
+        public IEnumerable<Review> Reviews { get; set; }
+        
+        [NotAdministered]
+        public ProductRating Rating { get; set; }
+        
         [NotMapped]
         [NotAdministered]
         public bool IsInCart { get; set; }
