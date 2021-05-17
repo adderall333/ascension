@@ -3,6 +3,15 @@ using System.Collections.Generic;
 
 namespace Models
 {
+    public enum Status
+    {
+        NotPaid,
+        Paid,
+        Packing,
+        Delivering,
+        Delivered,
+        Cancelled
+    }
     public class Order
     {
         public int Id { get; set; }
@@ -13,7 +22,7 @@ namespace Models
 
         public double Amount { get; set; }
         
-        public string Status { get; set; } // NotPaid ,Paid ,Packing, Delivering, Delivered.
+        public Status Status { get; set; } // NotPaid ,Paid ,Packing, Delivering, Delivered.
         
         public string PaymentMethod { get; set; } // Cash, Online
         
