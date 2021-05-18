@@ -1,0 +1,13 @@
+@model IEnumerable<string>
+
+@{
+    ViewBag.Title = "Admin page";
+    Layout = "_Layout";
+}
+
+@foreach (var name in Model)
+{
+    <p>
+        <a asp-controller="Admin" asp-action="Models" asp-route-name="@name">@name</a>
+    </p>
+}

@@ -52,13 +52,24 @@ signin_button.addEventListener("click", () => {
         success: function(res, status, xhr) {
             $('#loading').removeClass('processing');
             let result = xhr.getResponseHeader("login_result")
-            if (result === "ok")
-                window.location.href = "/Account"
+            if (result === "ok") {
+                let redirectUrl = localStorage.getItem('redirectUrl');
+                if (typeof redirectUrl !== 'undefined' && redirectUrl != null) {
+                    window.location.href = redirectUrl;
+                    localStorage.removeItem('redirectUrl');
+                }
+                else
+                    window.location.href = "/Account";
+            }
             else {
                 createErrorMessage('Invalid email or password');
                 form.email.classList.add('error');
                 form.pass.classList.add('error');
             }
+        },
+        error: function(res, status, xhr) {
+            $('#loading').removeClass('processing');
+            createErrorMessage('Something went wrong. Please try again later.');
         }
     })
 

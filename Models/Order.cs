@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using Models.Attributes;
 
 namespace Models
 {
@@ -12,6 +13,7 @@ namespace Models
         Delivered,
         Cancelled
     }
+
     public class Order
     {
         public int Id { get; set; }
@@ -31,6 +33,11 @@ namespace Models
         public string DeliveryAddress { get; set; } // If DeliveryType == "Delivery"
 
         public List<ProductLine> ProductLines { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, UserId {UserId}";
+        }
 
         public Order()
         {
