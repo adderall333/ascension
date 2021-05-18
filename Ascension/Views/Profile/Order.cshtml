@@ -63,84 +63,11 @@
             <div class="form_main col-md-4 col-sm-5 col-xs-7">
                 <h4 class="heading"><strong>Your </strong> Orders <span></span></h4>
             </div>
-            @{
-                if (Model.Count == 0)
-                {
-                    <div class="main-catalog-text">
-                        <h5>
-                            Your cart is empty.<br>
-                            <br>
-                            Promotions, special offers and reviews of the most interesting products on the catalog page will help you make the right choice!<br>
-                            <br>
-                            Did you fill the basket on your last visit? Log in and the selected products will appear in it automatically.<br>
-                        </h5>
-                    </div>
-                }
-                else
-                {
-                    <div class="basket">
-                        <div class="basket-labels">
-                            <ul>
-                                <li class="item item-heading">Item</li>
-                                <li class="price">Price</li>
-                                <li class="quantity">Quantity</li>
-                                <li class="subtotal">Subtotal</li>
-                            </ul>
-                        </div>
-                    
-                    @foreach (var productLine in Model)
-                    {
-                        <div class="basket-product">
-                            <div class="item">
-                                <div class="product-image">
-                                    <img src="@productLine.Product.Images.First().Path" alt="Placholder Image 2" class="product-frame">
-                                </div>
-                                <div class="product-details">
-                                    <p>
-                                        <a asp-controller="Catalog" asp-action="Product" asp-route-id="@productLine.ProductId">
-                                            <strong>@productLine.Product.Name</strong>
-                                        </a>
-                                    </p>
-                                    <p>Product Code - @productLine.ProductId</p>
-                                </div>
-                            </div>
-                            <div class="price">@productLine.Product.Cost</div>
-            
-                            <div class="quantity">
-                                <input type="number" value="@productLine.ProductCount" min="1" id="@productLine.Id" class="quantity-field">
-                            </div>
-            
-                            <div class="subtotal">
-                                <input class="cost"  value="@productLine.Product.Cost">
-                            </div>
-                            <div class="remove">
-                                <button id="@productLine.Id" class="delete-from-cart">Remove</button>
-                            </div>
-                        </div>
-                    }
-                    
-                    </div>
-                    <aside>
-                        <div class="summary">
-                            <div class="summary-total-items"><span class="total-items"></span> Items in your Bag</div>
-                            <div class="summary-total">
-                                <div class="total-title">Total</div>
-                                <div class="total-value final-value" id="basket-total">
-                                    @if (Model.Count == 0)
-                                    {
-                                        <text>0</text>
-                                    }
-                                </div>
-                            </div>
-            
-                            <div class="summary-checkout">
-                                <a asp-controller="Checkout" asp-action="Checkout">
-                                <button class="checkout-cta">Go to Checkout</button>
-                                </a>
-                            </div>
-                        </div>
-                    </aside>
-                }
+            @foreach (var order in Model)
+            {
+                <div>
+                    <a asp-controller="Checkout" asp-action="Orders" asp-route-id="@order.Id">Номер заказа - @order.Id     status: @order.Status </a>
+                </div>
             }
         </div>
     </div>

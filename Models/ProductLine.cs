@@ -12,7 +12,6 @@ namespace Models
         
         public int ProductCount { get; set; }
         
-        [NotMapped]
         public Product Product { get; set; }
 
 

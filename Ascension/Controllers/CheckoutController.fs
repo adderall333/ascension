@@ -2,11 +2,11 @@
 
 open System
 open System.Collections.Generic
-open Models.Migrations
 open ProductFilter
 open System.Diagnostics
 open System.Linq
 open Microsoft.AspNetCore.Mvc
+open Microsoft.EntityFrameworkCore
 open Microsoft.EntityFrameworkCore
 open Models
 open System
@@ -32,7 +32,11 @@ type CheckoutController() =
         use context = new ApplicationContext()
         let userId = this.HttpContext.Session.GetInt32("id") |> int
         let cartId = context.Cart.First(fun c -> c.AuthorizedUserId = userId).Id
-        let productLines = context.ProductLine.Where(fun p -> p.CartId = cartId).ToList()
+        let productLines = context
+                               .ProductLine
+                               .Where(fun p -> p.CartId = cartId)
+                               .Include(fun p -> p.Product)
+                               .ToList()
         
         let order = Order()
         order.Status <- Status.NotPaid
@@ -53,6 +57,11 @@ type CheckoutController() =
         context.SaveChanges() |> ignore
         
         this.View(order)
+    
+    member this.Orders(id : int) =
+        let context = new ApplicationContext()
+        this.View(context.Order.First(fun o -> o.Id = id))
+    
         
     member this.UpdateStatus(orderId : int, newStatus : Status) =
         use context = new ApplicationContext()
