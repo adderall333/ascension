@@ -100,4 +100,8 @@
       <Folder Include="wwwroot\img\static" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="Views\Checkout\Checkout.html" />
+    </ItemGroup>
+
 </Project>
