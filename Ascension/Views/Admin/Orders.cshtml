@@ -69,7 +69,7 @@
                         <option value="@Status.Cancelled">@Status.Cancelled.ToString()</option>
                     }
                 </select>
-                <button id="@order.Id" class="status-update" style="display:none;">Update</button>
+                <button id="@order.Id" status="@order.Status" class="status-update" style="display:none;">Update</button>
             </form>
         </div>
     </div>
@@ -78,7 +78,7 @@
 @section Scripts
 {
     <script>
-    window.onload = function () {
+    window.onload = async function () {
         let selects = document.getElementsByClassName("status-select");
         let updates = document.getElementsByClassName("status-update");
         
@@ -86,6 +86,15 @@
             selects[i].addEventListener("change", function () {
                 updates[i].style.display = "inline-block";
             });
+        }
+        
+        for (let i = 0; i < selects.length; i++) {
+            updates[i].addEventListener("click", async function () {
+                let id = updates[i].id;
+                let status = updates[i].getAttribute("status");
+                let response = await fetch("/Checkout/UpdateStatus?orderId=" + id + "&newStatus=" + status)
+                updates[i].style.display = "none";
+            });    
         }
     }
     </script>
