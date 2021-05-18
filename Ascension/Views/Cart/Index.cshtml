@@ -1,5 +1,3 @@
-@using System.Collections.Specialized
-@using Models
 @model List<Models.ProductLine>
 
 @section Styles
@@ -114,7 +112,7 @@ window.onload = async function () {
     {
          f_delete[i].addEventListener('click', async function ()
          { 
-             let response = await fetch("/Cart/RemoveProductLine?productLineId=" + f_delete[i].id,
+             await fetch("/Cart/RemoveProductLine?productLineId=" + f_delete[i].id,
              {
                 method: "POST"
              });
@@ -133,7 +131,7 @@ window.onload = async function () {
              updateQuantity(countInputs[k]);
              countInputs[k].addEventListener('change', async function ()
              { 
-                 let response = await fetch("/Cart/ChangeCount?productLineId=" + countInputs[k].id
+                 await fetch("/Cart/ChangeCount?productLineId=" + countInputs[k].id
                  + "&count=" + countInputs[k].value,
                  {
                     method: "POST"
