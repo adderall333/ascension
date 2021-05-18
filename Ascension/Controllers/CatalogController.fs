@@ -125,6 +125,16 @@ type CatalogController() =
                                     .Take(5)
                                     .ToList()
                                     
+            product.Reviews <- context
+                                   .Review
+                                   .Where(fun r -> r.Product.Id = id)
+                                   .Include(fun r -> r.User)
+                                   .ToList()
+                                   
+            product.Rating <- context
+                                  .ProductRating
+                                  .FirstOrDefault(fun r -> r.ProductId = id)
+                                    
             product.IsInCart <- isInCart product this.HttpContext context
             
             for secondProduct in product.Purchases.Select(fun p -> p.SecondProduct) do
