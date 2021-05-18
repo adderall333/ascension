@@ -59,7 +59,7 @@ signin_button.addEventListener("click", () => {
                     localStorage.removeItem('redirectUrl');
                 }
                 else
-                    window.location.href = "/Account";
+                    window.location.href = "/Profile/Personal";
             }
             else {
                 createErrorMessage('Invalid email or password');
