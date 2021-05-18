@@ -1,5 +1,8 @@
-﻿namespace Ascension
+﻿namespace Ascension.Controllers
 
+open System.Collections
+open Ascension
+open Ascension.ProductFilter
 open System
 open System.Collections.Generic
 open Microsoft.AspNetCore.Http
