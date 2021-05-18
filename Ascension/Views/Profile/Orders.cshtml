@@ -1,6 +1,6 @@
 ﻿@using System.Collections.Specialized
 @using Models
-@model List<Models.Order>
+@model Models.Order
 @{
     Layout = "_Layout";
 }
@@ -73,7 +73,7 @@
                     </ul>
                 </div>
 
-                @foreach (var productLine in Model)
+                @foreach (var productLine in Model.ProductLines)
                 {
                     <div class="basket-product">
                         <div class="item">
