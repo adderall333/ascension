@@ -49,6 +49,7 @@ module ProductFilter =
                                                 .SpecificationOption
                                                 .Where(fun s -> s.Products.Contains(product))
                                                 .AsSplitQuery()
+                                                .ToList()
         products
             .Where(fun p -> p
                                 .SpecificationOptions
@@ -103,6 +104,16 @@ module ProductFilter =
                              .Take(1)
                              .ToList()
             product.Images <- images
+        products
+        
+
+    let loadRating (context : ApplicationContext) (products : List<Product>) =
+        for product in products do
+            let rating = context
+                             .ProductRating
+                             .Where(fun r -> r.ProductId = product.Id)
+                             .FirstOrDefault()
+            product.Rating <- rating
         products
         
     let loadIsInCart (context : ApplicationContext) (httpContext : HttpContext) (products : List<Product>) =

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Models.Attributes;
 
 namespace Models
 {
@@ -11,17 +12,39 @@ namespace Models
         private const string LocalConnectionString =
             "Host=localhost;Database=ascension_db;Username=postgres;Password=qweasd123";
         
+        [DisplayedInAdminPanel]
         public DbSet<Product> Product { get; set; }
+        
+        [DisplayedInAdminPanel]
         public DbSet<SpecificationOption> SpecificationOption { get; set; }
+        
+        [DisplayedInAdminPanel]
         public DbSet<Specification> Specification { get; set; }
+        
+        [DisplayedInAdminPanel]
         public DbSet<Category> Category { get; set; }
+        
+        [DisplayedInAdminPanel]
         public DbSet<SuperCategory> SuperCategory { get; set; }
+        
+        [DisplayedInAdminPanel]
         public DbSet<Image> Image { get; set; }
+        
+        [DisplayedInAdminPanel]
         public DbSet<User> User { get; set; }
+        
         public DbSet<Purchase> Purchase { get; set; }
+        
+        public DbSet<Review> Review { get; set; }
+        
+        public DbSet<ProductRating> ProductRating { get; set; }
+        
         public DbSet<Cart> Cart { get; set; }
+        
         public DbSet<ProductLine> ProductLine { get; set; }
+
         public DbSet<Order> Order { get; set; }
+
         public ApplicationContext()
         {
         }

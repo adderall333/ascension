@@ -1,5 +1,12 @@
-﻿namespace Ascension
+﻿namespace Ascension.Controllers
 
+open System.Collections
+open Ascension
+open Ascension.ProductFilter
+open System
+open System.Collections.Generic
+open Microsoft.AspNetCore.Http
+open Microsoft.AspNetCore.Routing
 open ProductFilter
 open System.Diagnostics
 open System.Linq
@@ -82,26 +89,33 @@ type CatalogController() =
                            |> filter context ids
                            |> sortProducts sortOption
                            |> loadImages context
+                           |> loadRating context
                            |> loadIsInCart context this.HttpContext
             this.PartialView("ProductsPartial", products)
             
     member this.Product(id : int) =
         use context = new ApplicationContext()
-        let products = context
-                           .Product
-                           .Where(fun p -> p.Id = id)
-                           .Include(fun p -> p.Images)
-                           .Include(fun p -> p.SpecificationOptions)
-                           .ThenInclude(fun (sOp:SpecificationOption) -> sOp.Specification)
-                           .Include(fun p -> p.Category)
-                           .AsSplitQuery()
-                           .ToList()               
-                           
-        if products.Count = 0
+        let product = context.Product.FirstOrDefault(fun p -> p.Id = id)
+        
+        if product = null
         then
             errorHandling this
         else
-            let product = products.First()
+            product.Images <- context
+                                  .Image
+                                  .Where(fun i -> i.ProductId = product.Id)
+                                  .ToList()
+            product.SpecificationOptions <- context
+                                                .SpecificationOption
+                                                .Where(fun sOp -> sOp
+                                                                      .Products
+                                                                      .Select(fun p -> p.Id)
+                                                                      .Contains(product.Id))
+                                                .Include(fun sOp -> sOp.Specification)
+                                                .ToList()
+            product.Category <- context
+                                    .Category
+                                    .First(fun c -> c.Id = product.CategoryId)
             product.Purchases <- context
                                     .Purchase
                                     .Where(fun p -> p.FirstProductId = id)
@@ -111,10 +125,103 @@ type CatalogController() =
                                     .Take(5)
                                     .ToList()
                                     
+            product.Reviews <- context
+                                   .Review
+                                   .Where(fun r -> r.Product.Id = id)
+                                   .Include(fun r -> r.User)
+                                   .ToList()
+                                   
+            product.Rating <- context
+                                  .ProductRating
+                                  .FirstOrDefault(fun r -> r.ProductId = id)
+                                    
             product.IsInCart <- isInCart product this.HttpContext context
             
             for secondProduct in product.Purchases.Select(fun p -> p.SecondProduct) do
                 secondProduct.IsInCart <- isInCart secondProduct this.HttpContext context
             
             this.View(product)
-            
+
+    [<HttpPost>]        
+    member this.AddReview(review : ReviewToAdd) =
+        use context = new ApplicationContext()
+        
+        let userId = this.HttpContext.Session.GetInt32("id")
+        let mutable userIdValue = 0
+        if userId.HasValue then userIdValue <- userId.Value 
+        
+        let newReview = new Review()
+        newReview.Comment <- review.Text
+        newReview.Rating <- review.Rating
+        newReview.PublicationDate <- DateTime.Now
+        newReview.User <- context
+                              .User
+                              .Where(fun u -> u.Id = userIdValue)
+                              .First()
+        newReview.Product <- context
+                                 .Product
+                                 .Where(fun p -> p.Id = review.ProdId)
+                                 .First()                   
+        context.Review.Add(newReview) |> ignore
+        
+        let prodRating = context.ProductRating.Where(fun p -> p.ProductId = review.ProdId).FirstOrDefault()
+        if isNull prodRating
+        then
+            let newProdRating = new ProductRating()
+            newProdRating.Sum <- review.Rating
+            newProdRating.Count <- 1
+            newProdRating.ProductId <- review.ProdId
+            context.ProductRating.Add(newProdRating) |> ignore
+        else
+            prodRating.Sum <- prodRating.Sum + review.Rating
+            prodRating.Count <- prodRating.Count + 1 
+           
+        context.SaveChanges() 
+    
+    [<HttpPost>]    
+    member this.EditReview(review : ReviewToAdd) =
+        use context = new ApplicationContext()
+        
+        let userId = this.HttpContext.Session.GetInt32("id")
+        let mutable userIdValue = 0
+        if userId.HasValue then userIdValue <- userId.Value
+        
+        let reviewToEdit = context
+                               .Review
+                               .Where(fun r -> r.Product.Id = review.ProdId)
+                               .Where(fun r -> r.User.Id = userIdValue)
+                               .FirstOrDefault()
+        let prevRating = reviewToEdit.Rating
+        reviewToEdit.Comment <- review.Text
+        reviewToEdit.Rating <- review.Rating
+        reviewToEdit.PublicationDate <- DateTime.Now
+        
+        let prodRatingToEdit = context
+                                   .ProductRating
+                                   .Where(fun p -> p.ProductId = review.ProdId)
+                                   .FirstOrDefault()
+        prodRatingToEdit.Sum <- prodRatingToEdit.Sum - prevRating + review.Rating
+        
+        context.SaveChanges()
+       
+    [<HttpPost>]    
+    member this.DeleteReview(productId : int, reviewId : int) =
+        use context = new ApplicationContext()
+       
+        let reviewToDelete = context
+                                 .Review
+                                 .Where(fun r -> r.Id = reviewId)
+                                 .FirstOrDefault()
+        let prevRating = reviewToDelete.Rating
+        context.Review.Remove(reviewToDelete) |> ignore
+        
+        let prodRatingToEdit = context
+                                   .ProductRating
+                                   .Where(fun p -> p.ProductId = productId)
+                                   .FirstOrDefault()
+        prodRatingToEdit.Sum <- prodRatingToEdit.Sum - prevRating
+        prodRatingToEdit.Count <- prodRatingToEdit.Count - 1
+                                   
+        context.SaveChanges() |> ignore
+        
+        this.Redirect($"/Catalog/Product/{productId}")

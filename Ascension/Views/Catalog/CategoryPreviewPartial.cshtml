@@ -1,13 +1,10 @@
-@model string
-@{
-    var imagePath = "/img/static/" + Model + ".jpg";
-}
+@model Models.ICategory
 
-<div class="category-container" style="background: black url('@imagePath'); background-size: cover;">
+<div class="category-container" style="background: black url('@Model.ImagePath'); background-size: cover;">
     <div class="overlay">
         <div class = "items"></div>
         <div class = "items head">
-            <p>@Model</p>
+            <p>@Model.Name</p>
         </div>
     </div>
 </div>
