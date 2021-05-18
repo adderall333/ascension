@@ -18,6 +18,7 @@
         <Compile Include="Controllers\AuthenticationController.fs" />
         <Compile Include="Controllers\GeoApiController.fs" />
         <Compile Include="Controllers\ProfileController.fs" />
+        <Compile Include="Controllers\CheckoutController.fs" />
         <Compile Include="Startup.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>

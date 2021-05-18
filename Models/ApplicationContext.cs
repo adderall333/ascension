@@ -23,6 +23,7 @@ namespace Models
         public DbSet<ProductRating> ProductRating { get; set; }
         public DbSet<Cart> Cart { get; set; }
         public DbSet<ProductLine> ProductLine { get; set; }
+        public DbSet<Order> Order { get; set; }
         
         public ApplicationContext()
         {
