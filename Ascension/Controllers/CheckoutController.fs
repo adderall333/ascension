@@ -2,6 +2,7 @@
 
 open System
 open System.Collections.Generic
+open Models.Migrations
 open ProductFilter
 open System.Diagnostics
 open System.Linq
@@ -52,3 +53,9 @@ type CheckoutController() =
         context.SaveChanges() |> ignore
         
         this.View(order)
+        
+    member this.UpdateStatus(orderId : int, newStatus : Status) =
+        use context = new ApplicationContext()
+        let order = context.Order.First(fun o -> o.Id = orderId)
+        order.Status <- newStatus
+        context.SaveChanges() |> ignore
