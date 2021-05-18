@@ -3,13 +3,11 @@ namespace Ascension.Controller
 open System.IO
 open Ascension
 open Microsoft.AspNetCore.Http
-open Microsoft.AspNetCore.Http
-open Microsoft.AspNetCore.Http
-open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc
 open Models
 open System.Linq
 open Models.Attributes
+open System.Collections.Generic
 open Selector
 open Checks
 
@@ -60,6 +58,39 @@ type AdminController() =
         then
             use context = new ApplicationContext()
             this.View(getModelsWithoutRelations name) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
+            
+    [<HttpGet>]
+    member this.Orders() =
+        if isAdmin this.HttpContext
+        then
+            let order1 = Order()
+            order1.UserId <- 1
+            order1.Status <- Status.Paid
+            let order2 = Order()
+            order2.UserId <- 2
+            order2.Status <- Status.Delivered
+            let list = List<Order>()
+            list.Add order1
+            list.Add order2
+            this.View(list) :> ActionResult
+        else
+            this.StatusCode(403) :> ActionResult
+            
+    [<HttpPost>]
+    member this.Orders(id : int, status : Status) =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            let order = context.Order.FirstOrDefault(fun o -> o.Id = id)
+            if order = null
+            then
+                this.NotFound() :> ActionResult
+            else
+                order.Status <- status
+                context.SaveChanges() |> ignore
+                this.Ok() :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
     

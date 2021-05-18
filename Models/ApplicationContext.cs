@@ -43,6 +43,8 @@ namespace Models
         
         public DbSet<ProductLine> ProductLine { get; set; }
         
+        public DbSet<Order> Order { get; set; }
+        
         public ApplicationContext()
         {
         }
