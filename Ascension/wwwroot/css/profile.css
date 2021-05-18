@@ -107,3 +107,7 @@
     position: absolute;
     width: 75px;
 }
+
+.logout-link {
+    margin-left: 30px;
+}
