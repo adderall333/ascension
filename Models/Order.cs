@@ -20,13 +20,12 @@ namespace Models
         
         public DateTime OrderTime { get; set; }
         
+        public User User { get; set; }
         public int UserId { get; set; }
         
-        public double Amount { get; set; }
+        public int Amount { get; set; }
         
         public Status Status { get; set; } // NotPaid ,Paid ,Packing, Delivering, Delivered.
-        
-        public string PaymentMethod { get; set; } // Cash, Online
         
         public string DeliveryType { get; set; } // Delivery, SelfTake
         
