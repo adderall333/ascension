@@ -36,13 +36,13 @@ type ProfileController() =
         if(editUser <> null)
         then
             let hashedPassword = Crypto.GetHashPassword editUser.HashedPassword
-            if(hashedPassword <> null)
+            if(editUser.Name <> null)
             then
                 dbUser.Name <- editUser.Name
-            if(hashedPassword <> null)
+            if(editUser.Surname <> null)
             then
                 dbUser.Surname <- editUser.Surname
-            if(hashedPassword <> null)
+            if(editUser.Email <> null)
             then
                 dbUser.Email <- editUser.Email
             if(hashedPassword <> null)
@@ -50,8 +50,9 @@ type ProfileController() =
                 dbUser.HashedPassword <- hashedPassword
             this.HttpContext.Session.SetString("email", dbUser.Email)
             dbContext.SaveChanges() |> ignore
-        this.View(dbUser)
+        this.Redirect("Personal")
         //fix to redirect to personal
+        
     member this.Order() = this.View()
 
     member this.Cart() = this.View()
