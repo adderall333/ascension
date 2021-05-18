@@ -24,6 +24,7 @@
         <Compile Include="Controllers\ProfileController.fs" />
         <Compile Include="Startup.fs" />
         <Compile Include="Program.fs" />
+        <Compile Include="PurchasesStatistics.fs" />
     </ItemGroup>
 
     <ItemGroup>
