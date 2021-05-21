@@ -107,3 +107,43 @@
     position: absolute;
     width: 75px;
 }
+
+.order-links{
+    font-size: 20px;
+    padding: 10px;
+    margin-left: 5px;
+}
+.order-links a {
+    position: relative;
+    padding: 16px 0px 30px 30px;
+    color: #5D5C61;
+    font-variant: small-caps;
+    font-weight: bold;
+    cursor: pointer;
+}
+.order-links a:before {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4F5151;
+    content: "";
+    left: 0;
+    transition: .3s ease-in-out;
+    top: 27px;
+}
+.order-links a:after {
+    position: absolute;
+    border-left: 1px dotted #4F5151;
+    width: 1px;
+    bottom: -12px;
+    content: "";
+    left: 3px;
+    top: 48px;
+}
+.material-icons.md-30 {
+    font-size: 30px;
+    padding-left: 10px;
+}
+.order-links a:hover:before{box-shadow: 0 0 0 10px rgba(0,0,0,.2)}
+.order-links a:last-child:after {content: none;}

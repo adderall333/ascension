@@ -48,7 +48,7 @@ type CheckoutController() =
                 .ToList()
         //updating db
         let order = Order()
-        order.Status <- Status.NotPaid
+        order.Status <- Status.Paid
         order.OrderTime <- DateTime.Now
         order.ProductLines <- productLines
         order.UserId <- userId

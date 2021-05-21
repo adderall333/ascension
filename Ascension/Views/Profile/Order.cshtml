@@ -65,8 +65,8 @@
             </div>
             @foreach (var order in Model)
             {
-                <div>
-                    <a asp-controller="Checkout" asp-action="Orders" asp-route-id="@order.Id">Номер заказа - @order.Id     status: @order.Status </a>
+                <div class="order-links">
+                    <a asp-controller="Checkout" asp-action="Orders" asp-route-id="@order.Id">Order - @order.Id    /    Status - @order.Status    /    Amount - @order.Amount $</a>
                 </div>
             }
         </div>
