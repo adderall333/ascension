@@ -44,7 +44,7 @@ namespace Models
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Russian_Russia.1251");
+            modelBuilder.HasAnnotation("Relational:Collation", "Russian_Russia.1251");  
             modelBuilder.Entity<Product>()
                 .HasGeneratedTsVectorColumn(
                     p => p.SearchVector,
@@ -52,6 +52,6 @@ namespace Models
                     p => new { p.Name, p.Description })  // Included properties
                 .HasIndex(p => p.SearchVector)
                 .HasMethod("GIN"); // Index method on the search vector (GIN or GIST)
-        }
+        } 
     }
 }

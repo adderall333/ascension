@@ -5,9 +5,15 @@
     Layout = "_Layout";
 
 }
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/Orders.css">
+}
+
 <body>
 
-<div class="container">
+<div class="container top-fix">
     <div class="row profile">
         <div class="col-md-3">
             <div class="profile-sidebar">
@@ -62,13 +68,31 @@
         <div class="col-md-9 order-content">
 
             <div class="form_main col-md-4 col-sm-5 col-xs-7">
-                <h4 class="heading"><strong>Your </strong> Orders <span></span></h4>
+                <h4 class="heading"><strong>Your </strong> Order <span></span></h4>
+            </div>
+            <div>
+                <p>Order №@Model.Id</p>
+                <p>Time: @Model.OrderTime</p>
+                <p>Status: @Model.Status</p>
+                <p>Amount: @Model.Amount</p>
+                <p>Type of delivery: @Model.DeliveryType</p>
+                <!-- If Delivery type is not delivery, fix it !!!!!!-->
+                <p>Delivery Address: @Model.DeliveryAddress</p>
+                <p>Recipient Name: @Model.RecipientName</p>
+                <p>Recipient Surname: @Model.RecipientSurname</p>
+                <p>Recipient Email: @Model.RecipientEmail</p>
             </div>
             <div class="basket">
+                <p3 class="just-item">
+                    <b>
+                        <i>
+                            Your Items:
+                        </i>
+                    </b>
+                </p3>
                 <div class="basket-labels">
                     <ul>
                         <li class="item item-heading">Item</li>
-                        <li class="price">Price</li>
                         <li class="quantity">Quantity</li>
                         <li class="subtotal">Subtotal</li>
                     </ul>
@@ -90,37 +114,17 @@
                                 <p>Product Code - @productLine.ProductId</p>
                             </div>
                         </div>
-                        <div class="price">@productLine.Product.Cost</div>
-
                         <div class="quantity">
-                            <input type="number" value="@productLine.ProductCount" min="1" id="@productLine.Id" class="quantity-field">
+                            <text class="quantity-field">@productLine.ProductCount</text>
                         </div>
 
                         <div class="subtotal">
-                            <input class="cost" value="@productLine.Product.Cost">
-                        </div>
-                        <div class="remove">
-                            <button id="@productLine.Id" class="delete-from-cart">Remove</button>
+                            <text class="cost">@productLine.Product.Cost</text>
                         </div>
                     </div>
                 }
 
             </div>
-            <aside>
-                <div class="summary">
-                    <div class="summary-total-items"><span class="total-items"></span> Items in your Bag</div>
-                    <div class="summary-total">
-                        <div class="total-title">Total</div>
-                        <div class="total-value final-value" id="basket-total">
-                            @if (Model.ProductLines.Count == 0)
-                            {
-                                <text>0</text>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </aside>
-            }
         </div>
     </div>
 </div>

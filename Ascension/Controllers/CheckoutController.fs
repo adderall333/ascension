@@ -46,7 +46,7 @@ type CheckoutController() =
                 .Where(fun p -> p.CartId = cartId)
                 .Include(fun p -> p.Product)
                 .ToList()
-
+        //updating db
         let order = Order()
         order.Status <- Status.NotPaid
         order.OrderTime <- DateTime.Now
@@ -66,19 +66,30 @@ type CheckoutController() =
         order.Amount <- amount
 
         context.Order.Add(order) |> ignore
+        //removes product lines from db
+        for productLine in productLines do
+            productLine.CartId <- 0
+            context.ProductLine.Update(productLine) |> ignore
+            
         context.SaveChanges() |> ignore
-
+        //fixed double SaveChanges
         this.View(order)
 
     member this.Orders(id: int) =
         let context = new ApplicationContext()
 
+        //order to Order list
         let order =
             context
                 .Order
-                .Where(fun i -> i.Id = id)
-                .FirstOrDefault()
-
+                .Single(fun i -> i.Id = id)
+        context.Entry(order).Collection("ProductLines").Load()
+        for product in order.ProductLines do
+            context.Entry(product).Reference("Product").Load()
+            
+        for image in order.ProductLines.Select(fun i -> i.Product).ToList() do
+            context.Entry(image).Collection("Images").Load()
+        
         this.View(order)
 
 

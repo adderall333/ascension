@@ -42,7 +42,6 @@ namespace Models
         public DeliveryType DeliveryType { get; set; } // Delivery, SelfTake
 
         public string DeliveryAddress { get; set; } // If DeliveryType == "Delivery"
-
         public List<ProductLine> ProductLines { get; set; }
         
         [NotMapped]

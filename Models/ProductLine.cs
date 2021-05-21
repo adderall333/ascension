@@ -12,9 +12,7 @@ namespace Models
         
         public int ProductCount { get; set; }
         
-        public Product Product { get; set; }
-
-
+        public Product Product { get; set; }    
         public ProductLine(int cartId, int productId)
         {
             CartId = cartId;
