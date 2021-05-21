@@ -1,55 +1,4 @@
-﻿@charset "utf-8";
-
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,600);
-
-html,
-html a {
-    -webkit-font-smoothing: antialiased;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
-}
-
-body {
-    background-color: #fff;
-    color: #666;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 62.5%;
-    margin: 0 auto;
-}
-
-a {
-    border: 0 none;
-    outline: 0;
-    text-decoration: none;
-}
-
-strong {
-    font-weight: bold;
-}
-
-
-h1 {
-    font-size: 0.75rem;
-    font-weight: normal;
-    margin: 0;
-    padding: 0;
-}
-
-input,
-button {
-    border: 0 none;
-    outline: 0 none;
-}
-
-button {
-    background-color: #666;
-    color: #fff;
-}
-
-button:hover,
-button:focus {
-    background-color: #555;
-}
-
+﻿
 .basket-module,
 .basket-labels,
 .basket-product {
@@ -79,15 +28,6 @@ button:focus {
 
 .hide {
     display: none;
-}
-
-main {
-    clear: both;
-    font-size: 0.75rem;
-    margin: 0 auto;
-    overflow: hidden;
-    padding: 1rem 0;
-    width: 960px;
 }
 
 .basket,
@@ -137,14 +77,6 @@ label {
 
 ul {
     list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-li {
-    color: #111;
-    display: inline-block;
-    padding: 0.625rem 0;
 }
 
 li.price:before,
@@ -166,25 +98,8 @@ li.subtotal:before {
     text-align: right;
 }
 
-.remove {
-    bottom: 1.125rem;
-    float: right;
-    position: absolute;
-    right: 0;
-    text-align: right;
-    width: 45%;
-}
-
-.remove button {
-    background-color: transparent;
-    color: #777;
-    float: none;
-    text-decoration: underline;
-    text-transform: uppercase;
-}
-
 .item-heading {
-    padding-left: 4.375rem;
+    padding-left: 20px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -216,20 +131,10 @@ li.subtotal:before {
 }
 
 .quantity-field {
-    background-color: #ccc;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    font-size: 0.625rem;
-    padding: 2px;
+    font-size: 1rem;
+    padding: 40px;
     width: 3.75rem;
 }
-
-aside {
-    float: right;
-    position: relative;
-    width: 30%;
-}
-
 .summary {
     background-color: #eee;
     border: 1px solid #aaa;
@@ -284,9 +189,9 @@ aside {
 .just-item{
     font-size: 20px;
     color:black;
-    padding:150px;
+
 }
 
 .top-fix{
-    padding-top: -10px;
+    margin-top: 20px;
 }
