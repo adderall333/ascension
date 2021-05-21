@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models
 {
@@ -43,6 +44,9 @@ namespace Models
         public string DeliveryAddress { get; set; } // If DeliveryType == "Delivery"
 
         public List<ProductLine> ProductLines { get; set; }
+        
+        [NotMapped]
+        public List<int> ProductLineIds { get; set; }
 
         public override string ToString()
         {

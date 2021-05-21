@@ -26,18 +26,27 @@ type CheckoutController() =
 
 
     member this.Checkout() = this.View()
-    
 
-    member this.Card(name : string, surname : string, email : string, address : string) =
+
+    member this.Card(name: string, surname: string, email: string, address: string) =
         use context = new ApplicationContext()
-        let userId = this.HttpContext.Session.GetInt32("id") |> int
-        let cartId = context.Cart.First(fun c -> c.AuthorizedUserId = userId).Id
-        let productLines = context
-                               .ProductLine
-                               .Where(fun p -> p.CartId = cartId)
-                               .Include(fun p -> p.Product)
-                               .ToList()
-        
+
+        let userId =
+            this.HttpContext.Session.GetInt32("id") |> int
+
+        let cartId =
+            context
+                .Cart
+                .First(fun c -> c.AuthorizedUserId = userId)
+                .Id
+
+        let productLines =
+            context
+                .ProductLine
+                .Where(fun p -> p.CartId = cartId)
+                .Include(fun p -> p.Product)
+                .ToList()
+
         let order = Order()
         order.Status <- Status.NotPaid
         order.OrderTime <- DateTime.Now
@@ -48,23 +57,36 @@ type CheckoutController() =
         order.DeliveryType <- DeliveryType.Delivery
         order.RecipientEmail <- email
         order.DeliveryAddress <- address
-        
-        let amount = productLines.Select(fun p -> p.Product.Cost * p.ProductCount).Sum()
-        
+
+        let amount =
+            productLines
+                .Select(fun p -> p.Product.Cost * p.ProductCount)
+                .Sum()
+
         order.Amount <- amount
-        
+
         context.Order.Add(order) |> ignore
         context.SaveChanges() |> ignore
-        
+
         this.View(order)
-    
-    member this.Orders(id : int) =
+
+    member this.Orders(id: int) =
         let context = new ApplicationContext()
-        this.View(context.Order.First(fun o -> o.Id = id))
-    
-        
-    member this.UpdateStatus(orderId : int, newStatus : Status) =
+
+        let order =
+            context
+                .Order
+                .Where(fun i -> i.Id = id)
+                .FirstOrDefault()
+
+        this.View(order)
+
+
+    member this.UpdateStatus(orderId: int, newStatus: Status) =
         use context = new ApplicationContext()
-        let order = context.Order.First(fun o -> o.Id = orderId)
+
+        let order =
+            context.Order.First(fun o -> o.Id = orderId)
+
         order.Status <- newStatus
         context.SaveChanges() |> ignore
