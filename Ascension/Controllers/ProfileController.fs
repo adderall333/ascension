@@ -25,18 +25,26 @@ open Microsoft.EntityFrameworkCore
 type ProfileController() =
     inherit Controller()
 
-    member this.Personal()  =      
-        let id = this.HttpContext.Session.GetInt32("id") |> int
-        use dbContext = new ApplicationContext()
-        let dbUser = dbContext
-                         .User
-                         .Where(fun e -> e.Id = id)
-                         .ToList()
-                         .First()    
-        this.View(dbUser)
+    let isAuth (context : HttpContext) =
+        if context.Session.Keys.Contains("isAuth")
+            then
+                true
+            else
+                false
+    member this.Personal()  =
+        if isAuth this.HttpContext then      
+            let id = this.HttpContext.Session.GetInt32("id") |> int
+            use dbContext = new ApplicationContext()
+            let dbUser = dbContext
+                             .User
+                             .Where(fun e -> e.Id = id)
+                             .ToList()
+                             .First()    
+            this.View(dbUser) :> ActionResult
+        else
+            this.Redirect("../Authentication/Signin") :> ActionResult
         
     member this.EditPersonal(editUser :User) =
-         
         let id = this.HttpContext.Session.GetInt32("id") |> int
         use dbContext = new ApplicationContext()
         let dbUser = dbContext
@@ -63,12 +71,17 @@ type ProfileController() =
             dbContext.SaveChanges() |> ignore
         this.Redirect("Personal")
         //fix to redirect to personal
+       
         
     member this.Order() =
-        use context = new ApplicationContext()
-        let userId = this.HttpContext.Session.GetInt32("id") |> int
-        let orders = context.Order.Where(fun c -> c.UserId = userId).ToList()
-        
-        this.View(orders)
+        if isAuth this.HttpContext then    
+            use context = new ApplicationContext()
+            let userId = this.HttpContext.Session.GetInt32("id") |> int
+            let orders = context.Order.Where(fun c -> c.UserId = userId).ToList()
+            
+            this.View(orders) :> ActionResult
+        else
+            this.Redirect("../Authentication/Signin") :> ActionResult
+            
 
     member this.Cart() = this.View()

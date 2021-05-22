@@ -2,6 +2,7 @@
 
 open System
 open System.Collections.Generic
+open Microsoft.AspNetCore.Mvc
 open ProductFilter
 open System.Diagnostics
 open System.Linq
@@ -24,73 +25,113 @@ open Models
 type CheckoutController() =
     inherit Controller()
 
-
-    member this.Checkout() = this.View()
-
-
-    member this.Card(name: string, surname: string, email: string, address: string) =
+    let isAuth (context : HttpContext) =
+        if context.Session.Keys.Contains("isAuth")
+            then
+                true
+            else
+                false
+          
+    let matchIds (context : ApplicationContext, id : int, httpContext : HttpContext) =
+        let userId = httpContext.Session.GetInt32("id") |> int
+        if context.Order.Where(fun c -> c.UserId = userId).Where(fun i -> i.Id = id).Any() then
+            true 
+        else
+            false
+    member this.Checkout() =
         use context = new ApplicationContext()
+        let mutable id = 0
+        if (isAuth this.HttpContext) then
+            id <- (this.HttpContext.Session.GetInt32("id") |> int)
+        
+        if (isAuth this.HttpContext && context.Cart.Where(fun c -> c.AuthorizedUserId = id).Any() && this.HttpContext.Session.Keys.Contains("cardId")) then
+            this.View() :> ActionResult
+        elif isAuth this.HttpContext then
+            this.Redirect("../../Catalog") :> ActionResult
+        else
+            this.Redirect("../../Authentication/Signin") :> ActionResult
 
-        let userId =
-            this.HttpContext.Session.GetInt32("id") |> int
+    
+    member this.Card(name: string, surname: string, email: string, address: string) =
+        if (isAuth this.HttpContext && name <> null && surname <> null && email <> null && address <> null) then  
+            use context = new ApplicationContext()
 
-        let cartId =
-            context
-                .Cart
-                .First(fun c -> c.AuthorizedUserId = userId)
-                .Id
+            let userId =
+                this.HttpContext.Session.GetInt32("id") |> int
 
-        let productLines =
-            context
-                .ProductLine
-                .Where(fun p -> p.CartId = cartId)
-                .Include(fun p -> p.Product)
-                .ToList()
-        //updating db
-        let order = Order()
-        order.Status <- Status.Paid
-        order.OrderTime <- DateTime.Now
-        order.ProductLines <- productLines
-        order.UserId <- userId
-        order.RecipientName <- name
-        order.RecipientSurname <- surname
-        order.DeliveryType <- DeliveryType.Delivery
-        order.RecipientEmail <- email
-        order.DeliveryAddress <- address
+            let cartId =
+                context
+                    .Cart
+                    .First(fun c -> c.AuthorizedUserId = userId)
+                    .Id
 
-        let amount =
-            productLines
-                .Select(fun p -> p.Product.Cost * p.ProductCount)
-                .Sum()
+            let productLines =
+                context
+                    .ProductLine
+                    .Where(fun p -> p.CartId = cartId)
+                    .Include(fun p -> p.Product)
+                    .ToList()
+            //updating db
+            let order = Order()
+            order.Status <- Status.Paid
+            order.OrderTime <- DateTime.Now
+            order.ProductLines <- productLines
+            order.UserId <- userId
+            order.RecipientName <- name
+            order.RecipientSurname <- surname
+            order.DeliveryType <- DeliveryType.Delivery
+            order.RecipientEmail <- email
+            order.DeliveryAddress <- address
 
-        order.Amount <- amount
+            let amount =
+                productLines
+                    .Select(fun p -> p.Product.Cost * p.ProductCount)
+                    .Sum()
 
-        context.Order.Add(order) |> ignore
-        //removes product lines from db
-        for productLine in productLines do
-            productLine.CartId <- 0
-            context.ProductLine.Update(productLine) |> ignore
+            order.Amount <- amount
             
-        context.SaveChanges() |> ignore
-        //fixed double SaveChanges
-        this.View(order)
+            //removing cart   
+            let oldCart = context.Cart.FirstOrDefault(fun c -> c.AuthorizedUserId = userId)
+            context.Cart.Remove(oldCart) |> ignore
+            this.HttpContext.Session.Remove("cartId")
+            
+            context.Order.Add(order) |> ignore
+            //removes product lines from db
+            for productLine in productLines do
+                productLine.CartId <- 0
+                context.ProductLine.Update(productLine) |> ignore
+                
+            context.SaveChanges() |> ignore
+            //fixed double SaveChanges
+            this.View(order) :> ActionResult
+        elif (isAuth this.HttpContext) then
+            this.Redirect("Checkout") :> ActionResult
+        else
+            this.Redirect("../Authentication/Signin") :> ActionResult
 
     member this.Orders(id: int) =
         let context = new ApplicationContext()
-
-        //order to Order list
-        let order =
-            context
-                .Order
-                .Single(fun i -> i.Id = id)
-        context.Entry(order).Collection("ProductLines").Load()
-        for product in order.ProductLines do
-            context.Entry(product).Reference("Product").Load()
+        if isAuth this.HttpContext && matchIds(context, id, this.HttpContext) then
+            //order to Order list
+            let order =
+                context
+                    .Order
+                    .Single(fun i -> i.Id = id)
+            context.Entry(order).Collection("ProductLines").Load()
+            for product in order.ProductLines do
+                context.Entry(product).Reference("Product").Load()
+                
+            for image in order.ProductLines.Select(fun i -> i.Product).ToList() do
+                context.Entry(image).Collection("Images").Load()
             
-        for image in order.ProductLines.Select(fun i -> i.Product).ToList() do
-            context.Entry(image).Collection("Images").Load()
-        
-        this.View(order)
+            this.View(order) :> ActionResult
+        elif isAuth this.HttpContext then
+            this.Redirect("../../Profile/Order") :> ActionResult
+        else
+            this.Redirect("../../Authentication/Signin") :> ActionResult
+            
+            
+            
 
 
     member this.UpdateStatus(orderId: int, newStatus: Status) =
