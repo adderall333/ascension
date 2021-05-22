@@ -82,7 +82,7 @@ type AuthenticationController() =
             then
                 let cartId = this.HttpContext.Session.GetInt32("cartId") |> int
                 let oldCart = context.Cart.FirstOrDefault(fun c -> c.AuthorizedUserId = dbUser.Id)
-                if oldCart <> null
+                if (oldCart <> null && cartId <> oldCart.Id) //fixed empty cart on new User
                 then
                     context.Cart.Remove(oldCart) |> ignore
                 context.Cart.First(fun c -> c.Id = cartId).AuthorizedUserId <- dbUser.Id
