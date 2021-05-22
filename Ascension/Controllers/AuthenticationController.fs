@@ -106,6 +106,7 @@ type AuthenticationController() =
         this.HttpContext.Session.Remove("isAuth")
         this.HttpContext.Session.Remove("id")
         this.HttpContext.Session.Remove("email")
+        this.HttpContext.Session.Remove("cartId")
         if this.HttpContext.Request.Cookies.ContainsKey("email")
         then this.HttpContext.Response.Cookies.Delete("email")
         if this.HttpContext.Request.Cookies.ContainsKey("hashedPass")
