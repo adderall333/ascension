@@ -64,6 +64,11 @@ type ProfileController() =
         this.Redirect("Personal")
         //fix to redirect to personal
         
-    member this.Order() = this.View()
+    member this.Order() =
+        use context = new ApplicationContext()
+        let userId = this.HttpContext.Session.GetInt32("id") |> int
+        let orders = context.Order.Where(fun c -> c.UserId = userId).ToList()
+        
+        this.View(orders)
 
     member this.Cart() = this.View()
