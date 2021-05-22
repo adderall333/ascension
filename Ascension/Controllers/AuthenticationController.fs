@@ -1,11 +1,9 @@
-﻿namespace Ascension
+﻿namespace Ascension.Controller
 
-open System
-open System.Diagnostics
+open Ascension
 open System.Linq
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc
-open Microsoft.EntityFrameworkCore
 open Microsoft.Extensions.Primitives
 open System.Text.RegularExpressions;
 open Models
@@ -84,7 +82,9 @@ type AuthenticationController() =
             then
                 let cartId = this.HttpContext.Session.GetInt32("cartId") |> int
                 let oldCart = context.Cart.FirstOrDefault(fun c -> c.AuthorizedUserId = dbUser.Id)
-                context.Cart.Remove(oldCart) |> ignore
+                if oldCart <> null
+                then
+                    context.Cart.Remove(oldCart) |> ignore
                 context.Cart.First(fun c -> c.Id = cartId).AuthorizedUserId <- dbUser.Id
         context.SaveChanges() |> ignore
         
@@ -102,7 +102,7 @@ type AuthenticationController() =
                 this.HttpContext.Response.Cookies.Append("hashedPass", dbUser.HashedPassword)
     
     [<HttpGet>]            
-    member this.Logout =
+    member this.Logout() =
         this.HttpContext.Session.Remove("isAuth")
         this.HttpContext.Session.Remove("id")
         this.HttpContext.Session.Remove("email")

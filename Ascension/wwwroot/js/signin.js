@@ -54,18 +54,22 @@ signin_button.addEventListener("click", () => {
             let result = xhr.getResponseHeader("login_result")
             if (result === "ok") {
                 let redirectUrl = localStorage.getItem('redirectUrl');
-                if (typeof redirectUrl !== 'undefined') {
+                if (typeof redirectUrl !== 'undefined' && redirectUrl != null) {
                     window.location.href = redirectUrl;
                     localStorage.removeItem('redirectUrl');
                 }
                 else
-                    window.location.href = "/Account";
+                    window.location.href = "/Profile/Personal";
             }
             else {
                 createErrorMessage('Invalid email or password');
                 form.email.classList.add('error');
                 form.pass.classList.add('error');
             }
+        },
+        error: function(res, status, xhr) {
+            $('#loading').removeClass('processing');
+            createErrorMessage('Something went wrong. Please try again later.');
         }
     })
 

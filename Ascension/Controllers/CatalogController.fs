@@ -95,24 +95,27 @@ type CatalogController() =
             
     member this.Product(id : int) =
         use context = new ApplicationContext()
-        let products = context
-                           .Product
-                           .Where(fun p -> p.Id = id)
-                           .Include(fun p -> p.Images)
-                           .Include(fun p -> p.SpecificationOptions)
-                           .ThenInclude(fun (sOp:SpecificationOption) -> sOp.Specification)
-                           .Include(fun p -> p.Category)
-                           .Include(fun p -> p.Reviews)
-                           .ThenInclude(fun (r:Review) -> r.User)
-                           .Include(fun p -> p.Rating)
-                           .AsSplitQuery()
-                           .ToList()               
-                           
-        if products.Count = 0
+        let product = context.Product.FirstOrDefault(fun p -> p.Id = id)
+        
+        if product = null
         then
             errorHandling this
         else
-            let product = products.First()
+            product.Images <- context
+                                  .Image
+                                  .Where(fun i -> i.ProductId = product.Id)
+                                  .ToList()
+            product.SpecificationOptions <- context
+                                                .SpecificationOption
+                                                .Where(fun sOp -> sOp
+                                                                      .Products
+                                                                      .Select(fun p -> p.Id)
+                                                                      .Contains(product.Id))
+                                                .Include(fun sOp -> sOp.Specification)
+                                                .ToList()
+            product.Category <- context
+                                    .Category
+                                    .First(fun c -> c.Id = product.CategoryId)
             product.Purchases <- context
                                     .Purchase
                                     .Where(fun p -> p.FirstProductId = id)
@@ -121,6 +124,16 @@ type CatalogController() =
                                     .OrderByDescending(fun p -> p.Count)
                                     .Take(5)
                                     .ToList()
+                                    
+            product.Reviews <- context
+                                   .Review
+                                   .Where(fun r -> r.Product.Id = id)
+                                   .Include(fun r -> r.User)
+                                   .ToList()
+                                   
+            product.Rating <- context
+                                  .ProductRating
+                                  .FirstOrDefault(fun r -> r.ProductId = id)
                                     
             product.IsInCart <- isInCart product this.HttpContext context
             

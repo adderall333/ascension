@@ -147,3 +147,7 @@
 }
 .order-links a:hover:before{box-shadow: 0 0 0 10px rgba(0,0,0,.2)}
 .order-links a:last-child:after {content: none;}
+
+.logout-link {
+    margin-left: 30px;
+}

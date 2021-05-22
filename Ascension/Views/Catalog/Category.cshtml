@@ -32,7 +32,7 @@
                 </ul>
             </div>
             <div id="load" class="col">
-                <img class="load-img" src="/img/static/load.gif" alt=""/>
+                <img class="load-img" src="/img/load.gif" alt=""/>
             </div>
         </div>
         <div id="products" class="row"></div>
@@ -105,8 +105,6 @@ async function getProducts() {
 
 window.onload = async function () {
     getProducts();
-    
-    //let load = document.Get
     
     let sortOptions = document.getElementsByClassName('dropdown-item');
     for (let i = 0; i < sortOptions.length; i++ )
