@@ -113,6 +113,7 @@ type CatalogController() =
                                                                       .Contains(product.Id))
                                                 .Include(fun sOp -> sOp.Specification)
                                                 .ToList()
+            
             product.Category <- context
                                     .Category
                                     .First(fun c -> c.Id = product.CategoryId)
