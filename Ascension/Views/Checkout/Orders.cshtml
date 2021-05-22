@@ -1,0 +1,130 @@
+﻿@using System.Collections.Specialized
+@using Models
+@model Models.Order
+@{
+    Layout = "_Layout";
+
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/Orders.css">
+}
+
+<body>
+
+<div class="container top-fix">
+    <div class="row profile">
+        <div class="col-md-3">
+            <div class="profile-sidebar">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <!-- <img src="http://keenthemes.com/preview/metronic/theme/assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt=""> -->
+                </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
+                        <span class="hidden-xs">User Name</span>
+                    </div>
+
+                    <div class="profile-usertitle-job">
+                    </div>
+                </div>
+
+                <!-- END SIDEBAR USER TITLE -->
+                <!-- SIDEBAR MENU -->
+                <div class="navbar profile-usermenu">
+                    <ul class="navbar-nav mr-auto">
+                        <li>
+                            <a class="profile-item" asp-controller="Profile" asp-action="Personal">
+                                <span class="material-icons md-36">
+                                    account_circle
+                                </span><span class="hidden-xs"> Personal </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="profile-item current-page">
+                                <span class="material-icons md-36">
+                                    paid
+                                </span>
+                                <span class="hidden-xs">Orders </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="profile-item" asp-controller="Profile" asp-action="Cart">
+                                <span class="material-icons md-36">
+                                    shopping_cart
+                                </span>
+                                <span class="hidden-xs">Shopping Bag</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END MENU -->
+            </div>
+        </div>
+        <div class="col-md-9 order-content">
+
+            <div class="form_main col-md-4 col-sm-5 col-xs-7">
+                <h4 class="heading"><strong>Order №@Model.Id</strong></h4>
+            </div>
+            <div>
+                <p>Time: @Model.OrderTime</p>
+                <p>Status: @Model.Status</p>
+                <p>Amount: @Model.Amount</p>
+                <p>Type of delivery: @Model.DeliveryType</p>
+                <!-- If Delivery type is not delivery, fix it !!!!!!-->
+                <p>Delivery Address: @Model.DeliveryAddress</p>
+                <p>Recipient Name: @Model.RecipientName</p>
+                <p>Recipient Surname: @Model.RecipientSurname</p>
+                <p>Recipient Email: @Model.RecipientEmail</p>
+            </div>
+            <div class="basket">
+                <p3 class="just-item">
+                    <b>
+                        <i>
+                            Your Items:
+                        </i>
+                    </b>
+                </p3>
+                <div class="basket-labels">
+                    <ul>
+                        <li class="item item-heading">Item</li>
+                        <li class="quantity">Quantity</li>
+                        <li class="subtotal">Subtotal</li>
+                    </ul>
+                </div>
+
+                @foreach (var productLine in Model.ProductLines)
+                {
+                    <div class="basket-product">
+                        <div class="item">
+                            <div class="product-image">
+                                <img src="@productLine.Product.Images.First().Path" alt="Placholder Image 2" class="product-frame">
+                            </div>
+                            <div class="product-details">
+                                <p>
+                                    <a asp-controller="Catalog" asp-action="Product" asp-route-id="@productLine.ProductId">
+                                        <strong>@productLine.Product.Name</strong>
+                                    </a>
+                                </p>
+                                <p>Product Code - @productLine.ProductId</p>
+                            </div>
+                        </div>
+                        <div class="quantity">
+                            <text class="quantity-field">@productLine.ProductCount</text>
+                        </div>
+
+                        <div class="subtotal">
+                            <text class="cost">@productLine.Product.Cost</text>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>

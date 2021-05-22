@@ -7,7 +7,9 @@
         @{
             var reviewsCount = 0;
             if (Model.Reviews.Any())
+            {
                 reviewsCount = Model.Rating.Count;
+            }
         }
         Reviews (@reviewsCount)
     </p>

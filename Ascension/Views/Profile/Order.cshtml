@@ -1,4 +1,7 @@
-﻿@{
+﻿@using System.Collections.Specialized
+@using Models
+@model List<Models.Order>
+@{
     Layout = "_Layout";
 }
 <body>
@@ -60,6 +63,12 @@
             <div class="form_main col-md-4 col-sm-5 col-xs-7">
                 <h4 class="heading"><strong>Your </strong> Orders <span></span></h4>
             </div>
+            @foreach (var order in Model)
+            {
+                <div class="order-links">
+                    <a asp-controller="Checkout" asp-action="Orders" asp-route-id="@order.Id">Order - @order.Id    /    Status - @order.Status    /    Amount - @order.Amount $</a>
+                </div>
+            }
         </div>
     </div>
 </div>
