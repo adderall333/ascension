@@ -13,6 +13,7 @@
         <Compile Include="Crypto.fs" />
         <Compile Include="UserToRegister.fs" />
         <Compile Include="UserToLogin.fs" />
+        <Compile Include="UserToEdit.fs" />
         <Compile Include="ReviewToAdd.fs" />
         <Compile Include="AuthorizationByCookiesMiddleware.fs" />
         <Compile Include="Controllers\CatalogController.fs" />

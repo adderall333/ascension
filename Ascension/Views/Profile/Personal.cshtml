@@ -1,11 +1,11 @@
-﻿@using Models
+﻿@using System.ComponentModel.DataAnnotations;
+@using Models
 @model Models.User
 @{
     Layout = "_Layout";
     ViewBag.Title = "Profile";
 }
 <body>
-
 <div class="container">
     <div class="row profile">
         <div class="col-md-3">
@@ -62,8 +62,8 @@
 
             <div class="form_main col-md-4 col-sm-5 col-xs-7">
                 <h4 class="heading"><strong>Your </strong> Profile <span></span> <a class="logout-link" asp-controller="Authentication" asp-action="Logout">Logout</a></h4>
-                
-                <form asp-controller="Profile" asp-action="EditPersonal">
+                <div id="error-block"></div>
+                <form method="POST" id="edit-form" name="EditForm" onsubmit="return false">
                     <div class="form-group">
                         <input class="auth-input" type="text" maxlength="20" name="name" id="name" placeholder="Your Name" value="@Model.Name"/>
                     </div>
@@ -74,10 +74,10 @@
                         <input class="auth-input" type="text" name="email" id="email" placeholder="Your Email" value="@Model.Email"/>
                     </div>
                     <div class="form-group">
-                        <input class="auth-input" type="password" name="pass" id="pass" placeholder="New Password"/>
+                        <input class="auth-input" type="password" name="pass" id="pass" placeholder="Password"/>
                     </div>
                     <div class="form-group form-button">
-                        <input type="submit" name="save" id="save" class="auth-input form-submit" value="Save"/>
+                        <input type="submit" name="edit-personal" id="edit-personal" class="auth-input form-submit" value="Save"/>
                     </div>
                 </form>
             </div>
@@ -85,3 +85,5 @@
     </div>
 </div>
 </body>
+
+<script src="~/js/InfoEdit.js"></script>

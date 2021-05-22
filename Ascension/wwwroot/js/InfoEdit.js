@@ -1,12 +1,11 @@
-﻿let signup_button = document.getElementById('signup');
+﻿let edit_button = document.getElementById('edit-personal');
 
-signup_button.addEventListener("click", () => {
-    let form = document.getElementById('register-form');
+edit_button.addEventListener("click", () => {
+    let form = document.getElementById('edit-form');
     let name = form.name.value;
     let surname = form.surname.value;
     let email = form.email.value;
     let pass = form.pass.value;
-    let re_pass = form.re_pass.value;
 
     for(let i=0; i<form.elements.length; i++) {
         let input = form.elements[i];
@@ -17,7 +16,6 @@ signup_button.addEventListener("click", () => {
     let checkSurname = /^[A-Z][a-zA-Z]+$/.test(surname);
     let checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)
     let checkPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(pass);
-    let checkRePass = pass === re_pass;
 
     function createMessage(zmdi, message) {
         let div = document.createElement('div');
@@ -38,12 +36,14 @@ signup_button.addEventListener("click", () => {
     function checkInputs() {
         let check = true;
 
-        for(let i=0; i<form.elements.length; i++) {
+        for(let i=0; i<form.elements.length - 1; i++) {
             let input = form.elements[i];
+            if(input.type !== 'password')
             if (input.type !== 'submit' && input.value.length < 1) {
                 check = false;
                 input.classList.add('error');
             }
+            
         }
 
         if (!check) {
@@ -67,15 +67,12 @@ signup_button.addEventListener("click", () => {
             form.email.classList.add('error');
         }
         if (!checkPass) {
-            check = false;
-            createMessage('zmdi-close','Invalid password' +
-                '</br>The password must be at least 6 characters long and contain at least one number, one uppercase and one lowercase letter');
-            form.pass.classList.add('error');
-        }
-        if (!checkRePass) {
-            check = false;
-            createMessage('zmdi-close','Password mismatch');
-            form.re_pass.classList.add('error');
+            if(form.pass.value !== "") {
+                check = false;
+                createMessage('zmdi-close', 'Invalid password' +
+                    '</br>The password must be at least 6 characters long and contain at least one number, one uppercase and one lowercase letter');
+                form.pass.classList.add('error');
+            }
         }
 
         return check;
@@ -99,15 +96,15 @@ signup_button.addEventListener("click", () => {
     $('#loading').addClass('processing');
     $.ajax({
         type: 'POST',
-        url: '/Authentication/TryRegister',
+        url: '/Profile/TryEdit',
         data: fD,
         processData: false,
         contentType: false,
         success: function(res, status, xhr) {
             $('#loading').removeClass('processing');
-            let result = xhr.getResponseHeader("registration_result")
+            let result = xhr.getResponseHeader("edit_result")
             if (result === "ok") {
-                createMessage('zmdi-check','You have successfully registered in our site');
+                createMessage('zmdi-check','You have successfully edit information');
                 Timer();
             }
             else if (result === "failed") {
@@ -115,17 +112,7 @@ signup_button.addEventListener("click", () => {
                 form.email.classList.add('error');
             }
             else // "error"
-                createMessage('zmdi-close','An error occurred while registering</br>Please try again')
+                createMessage('zmdi-close','An error occurred while editing</br>Please try again')
         }
     })
-
-    let timer = 4;
-    function Timer() {
-        timer--;
-        document.getElementById("timer").innerHTML = 'Redirecting to SignIn: ' + timer;
-        if (timer === 0) {
-            location.replace('/Authentication/Signin')
-        }
-        setTimeout(() => Timer(), 1000);
-    }
 });
