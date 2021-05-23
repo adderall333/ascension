@@ -1,0 +1,45 @@
+@model Ascension.Controller.AdminsModel
+
+@{
+    ViewBag.Title = "Admin page";
+    Layout = "_Layout";
+    var users = Model.Users;
+    var message = Model.Message;
+}
+
+<div>
+    <a asp-controller="Admin" asp-action="Index">Back</a>
+</div>
+
+<div id="error-message" style="color: red">
+    @message
+</div>
+
+<div>
+    @foreach (var user in users)
+    {
+        <div class="row" style="margin-bottom: 20px">
+            <div class="col">@user.ToString()</div>
+            @if (user.IsAdmin)
+            {
+                <div class="col">Is admin</div>
+                <div class="col">
+                    <form asp-controller="Admin" asp-action="RemoveRights">
+                        <input type="hidden" name="userId" value="@user.Id">
+                        <button type="submit">Remove admin rights</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="col">Regular user</div>
+                <div class="col">
+                    <form asp-controller="Admin" asp-action="GrantRights">
+                        <input type="hidden" name="userId" value="@user.Id">
+                        <button type="submit">Grant admin rights</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+</div>

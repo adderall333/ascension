@@ -29,8 +29,6 @@ namespace Models
         
         [DisplayedInAdminPanel]
         public DbSet<Image> Image { get; set; }
-        
-        [DisplayedInAdminPanel]
         public DbSet<User> User { get; set; }
         
         public DbSet<Purchase> Purchase { get; set; }
