@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Models.User
+@{
     ViewBag.Title = "Checkout";
     Layout = "_Layout";
 }
@@ -11,29 +12,36 @@
             <div id="error-block"></div>
             <form method="POST" id="checkout-form" name="checkout-form" onsubmit="return false">
                 <div class="form-group">
-                    <input class="auth-input" type="text" maxlength="20" name="name" id="name" placeholder="Your Name"/>
+                    <input class="auth-input" type="text" maxlength="20" name="name" id="name" placeholder="Your Name" value="@Model.Name"/>
                 </div>
                 <div class="form-group">
-                    <input class="auth-input" type="text" maxlength="20" name="surname" id="surname" placeholder="Your Surname"/>
+                    <input class="auth-input" type="text" maxlength="20" name="surname" id="surname" placeholder="Your Surname" value = @Model.Surname />
                 </div>
                 <div class="form-group">
-                    <input class="auth-input" type="text" name="email" id="email" placeholder="Your Email"/>
+                    <input class="auth-input" type="text" name="email" id="email" placeholder="Your Email" value="@Model.Email"/>
                 </div>
-                @*<div class="form-group">
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-secondary active">
-                                <input type="radio" name="options" id="option1" autocomplete="off" checked> Pickup
-                            </label>
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="options" id="option2" autocomplete="off"> Delivery
-                            </label>
-                        </div>
+                <div class="form-group">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <select id="pickup-delivery">
+                            <option value="">
+                                <label class="btn btn-secondary active">
+                                    <button name="options" id="option1" autocomplete="off" checked> Choose your type of delivery</button>
+                                </label>
+                            </option>
+                            <option value="Pickup">
+                                <label class="btn btn-secondary active">
+                                    <button name="options" id="option2" autocomplete="off" checked> Pickup</button>
+                                </label>
+                            </option>
+                            <option value="Delivery">
+                                <label class="btn btn-secondary">
+                                    <button name="options" id="option3" autocomplete="off"> Delivery</button>
+                                </label>
+                            </option>
+                        </select>
                     </div>
-                    *@
-                Picking up from Kremvlevskaya 35, Kazan, Russian Federation
-                <div class="form-group">
-                    <input class="auth-input " type="text" name="address" id="address" placeholder="City, Street, House, Flat"/>
                 </div>
+                <p class="form-group" id="type-of-delivery"></p>
                 <div class="form-group form-button">
                     <input type="submit" name="checkout-button" id="checkout-button" class="auth-input form-submit" value="Pay off"/>
                 </div>
@@ -43,4 +51,37 @@
     </div>
 </div>
 </body>
+<script>
+var activities = document.getElementById("pickup-delivery");
+
+activities.addEventListener("change", function() {
+    if(activities.value == "Pickup")
+    {
+        addActivityItem(activities.value);
+    }
+    if(activities.value == "Delivery")
+    {
+        addActivityItem(activities.value);
+    }
+    console.log(activities.value);
+});
+
+function addActivityItem(option) {
+    if(option == "Pickup")
+    {
+    		document.getElementById("type-of-delivery").innerHTML = `
+    <div class="form-group">
+        <input class="auth-input " readonly type="text" name="address" id="address" value="Kremlevskaya, 35 "/>
+    </div>`;
+    }
+    else
+    if(option == "Delivery")
+    {
+        document.getElementById("type-of-delivery").innerHTML = `
+    <div class="form-group">
+        <input class="auth-input " type="text" name="address" id="address" placeholder="City, Street, House, Flat"/>
+    </div>`;
+    }
+}
+</script>
 <script src="~/js/orderForm.js"></script>

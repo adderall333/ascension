@@ -1,4 +1,66 @@
 ﻿let edit_button = document.getElementById('checkout-button');
+///
+// function AddressType()
+// {
+//     let old=document.getElementById("submitId");
+//     if(old==null)
+//     {
+//         let address=document.getElementById("insertedField");
+//         let p=document.createElement("p");
+//         var submit=address.appendChild(p);
+//         submit.id="submitId";
+//         submit.innerHTML=`<button asp-controller="Order" asp-action="PaymentInfo" class="button" value="1" name="calc_shipping" type="submit">Submit</button>`
+//     }
+// }
+// let scenario=document.getElementById("pickup-delivery").value;
+// scenario.addEventListener("change", function() {
+//     if(scenario ==="Delivery")
+//     {
+//         document.innerHTML=`
+//     <div class="form-group">
+//         <input class="auth-input " type="text" name="address" id="address" placeholder="City, Street, House, Flat"/>
+//     </div>`
+// //     }
+// //     else if(scenario === "PickUp")
+// //     {
+//         document.innerHTML=`
+//     <div class="form-group">
+//         <input class="auth-input " readonly type="text" name="address" id="address" value="Pickup from Russian Federation, Kazan, Kremlevskaya, 35 "/>
+//     </div>`
+//     }
+// });
+// function DeliveryType()
+// {
+//     // let old=document.getElementById("insertedField");
+//     // if(old!=null)
+//     // {
+//     //     old.remove()
+//     // }
+//     let scenario=document.getElementById("pickup-delivery").value;
+//    //ShowDeliveryType(scenario);
+//    // let form=document.getElementById("calcalute-shipping-wrap");
+//    //  let p=document.createElement("p");
+//    //  var address=form.appendChild(p);
+//    //  address.id="insertedField"
+//     if(scenario ==="Delivery")
+//     {
+//         document.innerHTML=`<div class="form-group"><input class="auth-input " type="text" name="address" id="address" placeholder="City, Street, House, Flat"/></div>`}
+//     else if(scenario === "PickUp")
+//     {
+//         document.innerHTML=`<div class="form-group"><input class="auth-input " readonly type="text" name="address" id="address" value="Pickup from Russian Federation, Kazan, Kremlevskaya, 35 "/></div>`
+//     }
+// }
+// function ShowDeliveryType(scenario)
+// {
+//     document.getElementById("DeliveryTypeTotal").innerText=scenario
+// }
+///
+// function addActivityPickup() {
+//     // ... Code to add item here
+// }
+// function addActivityDelivery(){
+//    
+// }
 
 edit_button.addEventListener("click", () => {
     let form = document.getElementById('checkout-form');

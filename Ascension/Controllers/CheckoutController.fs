@@ -57,9 +57,9 @@ type CheckoutController() =
         let mutable id = 0
         if (isAuth this.HttpContext) then
             id <- (this.HttpContext.Session.GetInt32("id") |> int)
-        
+        let user = context.User.Where(fun i -> i.Id = id).FirstOrDefault()
         if (isAuth this.HttpContext && context.Cart.Where(fun c -> c.AuthorizedUserId = id).Any()) then
-            this.View() :> ActionResult
+            this.View(user) :> ActionResult
         elif isAuth this.HttpContext then
             this.Redirect("../../Catalog") :> ActionResult
         else
