@@ -119,6 +119,10 @@ type CheckoutController() =
                 context.ProductLine.Update(productLine) |> ignore
                 
             context.SaveChanges() |> ignore
+            
+            //update purchases statistics
+            Purchase.UpdatePurchases(order, context)
+            
             this.Response.Headers.Add("order_result", StringValues("ok"))
         
     
