@@ -11,6 +11,7 @@
         <Compile Include="Selector.fs" />
         <Compile Include="AdminHelper.fs" />
         <Compile Include="Crypto.fs" />
+        <Compile Include="FormToOrder.fs" />
         <Compile Include="UserToRegister.fs" />
         <Compile Include="UserToLogin.fs" />
         <Compile Include="UserToEdit.fs" />

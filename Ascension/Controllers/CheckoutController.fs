@@ -2,7 +2,9 @@
 
 open System
 open System.Collections.Generic
+open System.Text.RegularExpressions
 open Microsoft.AspNetCore.Mvc
+open Microsoft.Extensions.Primitives
 open ProductFilter
 open System.Diagnostics
 open System.Linq
@@ -25,6 +27,18 @@ open Models
 type CheckoutController() =
     inherit Controller()
 
+    let ValidateForm(form : FormToOrder) =
+        let nameRegex = new Regex("^[A-Z][a-zA-Z]+$")
+        let nameCheck = nameRegex.IsMatch form.Name
+        
+        let surnameRegex = new Regex("^[A-Z][a-zA-Z]+$")
+        let surnameCheck = surnameRegex.IsMatch form.Surname
+        
+        let emailPattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                           @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$"
+        let emailCheck = Regex.IsMatch(form.Email, emailPattern, RegexOptions.IgnoreCase)
+        
+        nameCheck && surnameCheck && emailCheck
     let isAuth (context : HttpContext) =
         if context.Session.Keys.Contains("isAuth")
             then
@@ -51,9 +65,12 @@ type CheckoutController() =
         else
             this.Redirect("../../Authentication/Signin") :> ActionResult
 
-    
-    member this.Card(name: string, surname: string, email: string, address: string) =
-        if (isAuth this.HttpContext && name <> null && surname <> null && email <> null && address <> null) then  
+    [<HttpPost>]
+    member this.TrySendForm(form : FormToOrder) =
+        
+        let valid = ValidateForm form
+        if not valid then this.Response.Headers.Add("order_result", StringValues("error"))
+        else
             use context = new ApplicationContext()
 
             let userId =
@@ -77,11 +94,11 @@ type CheckoutController() =
             order.OrderTime <- DateTime.Now
             order.ProductLines <- productLines
             order.UserId <- userId
-            order.RecipientName <- name
-            order.RecipientSurname <- surname
+            order.RecipientName <- form.Name
+            order.RecipientSurname <- form.Surname
             order.DeliveryType <- DeliveryType.Delivery
-            order.RecipientEmail <- email
-            order.DeliveryAddress <- address
+            order.RecipientEmail <- form.Email
+            order.DeliveryAddress <- form.Address
 
             let amount =
                 productLines
@@ -102,12 +119,11 @@ type CheckoutController() =
                 context.ProductLine.Update(productLine) |> ignore
                 
             context.SaveChanges() |> ignore
-            //fixed double SaveChanges
-            this.View(order) :> ActionResult
-        elif (isAuth this.HttpContext) then
-            this.Redirect("Checkout") :> ActionResult
-        else
-            this.Redirect("../Authentication/Signin") :> ActionResult
+            this.Response.Headers.Add("order_result", StringValues("ok"))
+        
+    
+    member this.Card() = //name: string, surname: string, email: string, address: string
+        this.View()
 
     member this.Orders(id: int) =
         let context = new ApplicationContext()

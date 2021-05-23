@@ -1,11 +1,11 @@
-﻿let edit_button = document.getElementById('edit-personal');
+﻿let edit_button = document.getElementById('checkout-button');
 
 edit_button.addEventListener("click", () => {
-    let form = document.getElementById('edit-form');
+    let form = document.getElementById('checkout-form');
     let name = form.name.value;
     let surname = form.surname.value;
     let email = form.email.value;
-    let pass = form.pass.value;
+    let address = form.address.value
 
     for(let i=0; i<form.elements.length; i++) {
         let input = form.elements[i];
@@ -15,7 +15,6 @@ edit_button.addEventListener("click", () => {
     let checkName = /^[A-Z][a-zA-Z]+$/.test(name);
     let checkSurname = /^[A-Z][a-zA-Z]+$/.test(surname);
     let checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)
-    let checkPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(pass);
 
     function createMessage(zmdi, message) {
         let div = document.createElement('div');
@@ -36,14 +35,13 @@ edit_button.addEventListener("click", () => {
     function checkInputs() {
         let check = true;
 
-        for(let i=0; i<form.elements.length - 1; i++) {
+        for(let i=0; i<form.elements.length; i++) {
             let input = form.elements[i];
-            if(input.type !== 'password')
             if (input.type !== 'submit' && input.value.length < 1) {
                 check = false;
                 input.classList.add('error');
             }
-            
+
         }
 
         if (!check) {
@@ -66,14 +64,6 @@ edit_button.addEventListener("click", () => {
             createMessage('zmdi-close','Invalid email');
             form.email.classList.add('error');
         }
-        if (!checkPass) {
-            if(form.pass.value !== "") {
-                check = false;
-                createMessage('zmdi-close', 'Invalid password' +
-                    '</br>The password must be at least 6 characters long and contain at least one number, one uppercase and one lowercase letter');
-                form.pass.classList.add('error');
-            }
-        }
 
         return check;
     }
@@ -91,27 +81,33 @@ edit_button.addEventListener("click", () => {
     fD.append('name', name);
     fD.append('surname', surname);
     fD.append('email', email);
-    fD.append('pass', pass);
+    fD.append('address', address);
 
     $('#loading').addClass('processing');
     $.ajax({
         type: 'POST',
-        url: '/Profile/TryEdit',
+        url: '/Checkout/TrySendForm',
         data: fD,
         processData: false,
         contentType: false,
         success: function(res, status, xhr) {
             $('#loading').removeClass('processing');
-            let result = xhr.getResponseHeader("edit_result")
+            let result = xhr.getResponseHeader("order_result")
             if (result === "ok") {
-                createMessage('zmdi-check','You have successfully edit information');
-            }
-            else if (result === "failed") {
-                createMessage('zmdi-close','This email address already exists</br>Please choose a unique one');
-                form.email.classList.add('error');
+                createMessage('zmdi-check','You have successfully send form');
+                Timer();
             }
             else // "error"
-                createMessage('zmdi-close','An error occurred while editing</br>Please try again')
+                createMessage('zmdi-close','An error occurred while entering</br>Please try again')
         }
     })
+    let timer = 4;
+    function Timer() {
+        timer--;
+        document.getElementById("timer").innerHTML = 'Redirecting to Card Form: ' + timer;
+        if (timer === 0) {
+            location.replace('/Checkout/Card')
+        }
+        setTimeout(() => Timer(), 1000);
+    }
 });

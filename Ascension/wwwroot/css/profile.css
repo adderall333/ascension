@@ -218,3 +218,69 @@ input.auth-input[type=checkbox]:not(old):checked + label.auth-label > span:befor
     font-family: 'Material-Design-Iconic-Font', cursive;
     font-weight: bold;
 }
+.display-flex, .display-flex-center, .checkout-content, .signin-content, .social-login, .socials {
+    display: flex;
+}
+.checkout-content {
+    padding: 75px 0;
+}
+.checkout-form {
+    margin-left: 75px;
+    margin-right: 75px;
+    padding-left: 34px;
+}
+
+.checkout, .signup-image, .signin-form, .signin-image {
+    width: 50%;
+    overflow: hidden;
+}
+
+.signup-image {
+    margin-right: 110px;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+@media screen and (max-width: 768px) {
+    .signup-content, .signin-content {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .checkout-form {
+        margin-left: 0;
+        margin-right: 0;
+        padding: 0 30px;
+    }
+
+    .signin-image {
+        margin: 50px 55px 0;
+        order: 2;
+    }
+
+    .signup-image {
+        margin: 50px 55px 0;
+    }
+
+    .signup-form, .signup-image, .signin-form, .signin-image {
+        width: auto;
+    }
+
+    .social-login {
+        justify-content: center;
+    }
+
+    .form-button {
+        text-align: center;
+    }
+
+    .signin-form {
+        order: 1;
+        margin-right: 0;
+        margin-left: 0;
+        padding: 0 30px;
+    }
+
+    .form-title {
+        text-align: center;
+    }
+}

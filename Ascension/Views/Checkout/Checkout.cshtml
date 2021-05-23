@@ -2,69 +2,45 @@
     ViewBag.Title = "Checkout";
     Layout = "_Layout";
 }
-
-@section Styles {
-    <link rel="stylesheet" href="~/css/authentication.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-}
-
-<section class="signup">
-    <div class="container-auth">
-        <div class="signup-content">
-            <div class="signup-form">
-                <h2 class="h2-auth form-title">Your Order</h2>
-
-                <div id="error-block"></div>
-
-                <div id="loading"></div>
-                <form asp-controller="Checkout" asp-action="Card" class="register-form">
-                    <div class="form-group">
-                        <label class="auth-label" for="name">
-                            <i class="zmdi zmdi-account material-icons-name"></i>
+<body>
+<div class="container-auth">
+    <div class="checkout-content">
+        <div class="checkout-form">
+            <h2 class="h2-auth form-title">Your Order</h2>
+            <h6 id="timer"></h6>
+            <div id="error-block"></div>
+            <form method="POST" id="checkout-form" name="checkout-form" onsubmit="return false">
+                <div class="form-group">
+                    <input class="auth-input" type="text" maxlength="20" name="name" id="name" placeholder="Your Name"/>
+                </div>
+                <div class="form-group">
+                    <input class="auth-input" type="text" maxlength="20" name="surname" id="surname" placeholder="Your Surname"/>
+                </div>
+                <div class="form-group">
+                    <input class="auth-input" type="text" name="email" id="email" placeholder="Your Email"/>
+                 </div>
+                <div class="form-group">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="options" id="option1" autocomplete="off" checked> Pickup
                         </label>
-                        <input class="auth-input" type="text" maxlength="20" name="name" id="name" placeholder="Your Name"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="auth-label" for="surname">
-                            <i class="zmdi zmdi-account-o material-icons-name"></i>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="options" id="option2" autocomplete="off"> Delivery
                         </label>
-                        <input class="auth-input" type="text" maxlength="20" name="surname" id="surname" placeholder="Your Surname"/>
                     </div>
-                    <div class="form-group">
-                        <label class="auth-label" for="email">
-                            <i class="zmdi zmdi-email"></i>
-                        </label>
-                        <input class="auth-input" type="text" name="email" id="email" placeholder="Your Email"/>
-                    </div>
-                    <div class="form-group">
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-secondary active">
-                                <input type="radio" name="options" id="option1" autocomplete="off" checked> Pickup
-                            </label>
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="options" id="option2" autocomplete="off"> Delivery
-                            </label>
-                        </div>
-                    </div>
-                    Picking up from Kremvlevskaya 35, Kazan, Russian Federation
-                    <div class="form-group">
-                        <label class="auth-label" for="email">
-                            <i class="zmdi zmdi-email"></i>
-                        </label>
-                        <input class="auth-inputdotnet tool install --global dotnet-ef dotnet tool install --global dotnet-ef " type="text" name="address" id="address" placeholder="City, Street, House, Flat"/>
-                    </div>
-                    <div class="form-group form-button">
-                        <input type="submit" name="payoff" id="PayOff" class="auth-input form-submit" value="Pay off"/>
-                    </div>
+                </div>
+                    
+                Picking up from Kremvlevskaya 35, Kazan, Russian Federation
+                <div class="form-group">
+                    <input class="auth-input " type="text" name="address" id="address" placeholder="City, Street, House, Flat"/>
+                </div>
+                <div class="form-group form-button">
+                    <input type="submit" name="checkout-button" id="checkout-button" class="auth-input form-submit" value="Pay off"/>
+                </div>
+            </form>
 
-                </form>
-
-            </div>
         </div>
     </div>
-</section>
-
-@section Scripts
-{
-    <script src="~/js/signup.js"></script>
-}
+</div>
+</body>
+<script src="~/js/orderForm.js"></script>
