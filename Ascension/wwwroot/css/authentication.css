@@ -286,7 +286,7 @@ label.auth-label {
 .processing {
     width: 25px;
     height: 25px;
-    background: url("../img/static/load.gif");
+    background: url("../img/load.gif");
     background-size: cover;
     margin-bottom: 10px;
 }

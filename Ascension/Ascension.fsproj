@@ -11,8 +11,10 @@
         <Compile Include="Selector.fs" />
         <Compile Include="AdminHelper.fs" />
         <Compile Include="Crypto.fs" />
+        <Compile Include="FormToOrder.fs" />
         <Compile Include="UserToRegister.fs" />
         <Compile Include="UserToLogin.fs" />
+        <Compile Include="UserToEdit.fs" />
         <Compile Include="ReviewToAdd.fs" />
         <Compile Include="AuthorizationByCookiesMiddleware.fs" />
         <Compile Include="Controllers\CatalogController.fs" />
@@ -22,6 +24,7 @@
         <Compile Include="Controllers\GeoApiController.fs" />
         <Compile Include="Controllers\AdminController.fs" />
         <Compile Include="Controllers\ProfileController.fs" />
+        <Compile Include="Controllers\CheckoutController.fs" />
         <Compile Include="Startup.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>

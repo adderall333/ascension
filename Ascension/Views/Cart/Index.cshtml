@@ -10,9 +10,9 @@
     Layout = "_Layout";
 }
 
-              
 
-    
+
+
 @{
     if (Model.Count == 0)
     {
@@ -37,38 +37,38 @@
                     <li class="subtotal">Subtotal</li>
                 </ul>
             </div>
-        
-        @foreach (var productLine in Model)
-        {
-            <div class="basket-product">
-                <div class="item">
-                    <div class="product-image">
-                        <img src="@productLine.Product.Images.First().Path" alt="Placholder Image 2" class="product-frame">
-                    </div>
-                    <div class="product-details">
-                        <p>
-                            <a asp-controller="Catalog" asp-action="Product" asp-route-id="@productLine.ProductId">
-                                <strong>@productLine.Product.Name</strong>
-                            </a>
-                        </p>
-                        <p>Product Code - @productLine.ProductId</p>
-                    </div>
-                </div>
-                <div class="price">@productLine.Product.Cost</div>
 
-                <div class="quantity">
-                    <input type="number" value="@productLine.ProductCount" min="1" id="@productLine.Id" class="quantity-field">
-                </div>
+            @foreach (var productLine in Model)
+            {
+                <div class="basket-product">
+                    <div class="item">
+                        <div class="product-image">
+                            <img src="@productLine.Product.Images.First().Path" alt="Placholder Image 2" class="product-frame">
+                        </div>
+                        <div class="product-details">
+                            <p>
+                                <a asp-controller="Catalog" asp-action="Product" asp-route-id="@productLine.ProductId">
+                                    <strong>@productLine.Product.Name</strong>
+                                </a>
+                            </p>
+                            <p>Product Code - @productLine.ProductId</p>
+                        </div>
+                    </div>
+                    <div class="price">@productLine.Product.Cost</div>
 
-                <div class="subtotal">
-                    <input class="cost"  value="@productLine.Product.Cost">
+                    <div class="quantity">
+                        <input type="number" value="@productLine.ProductCount" min="1" id="@productLine.Id" class="quantity-field">
+                    </div>
+
+                    <div class="subtotal">
+                        <input class="cost" value="@productLine.Product.Cost">
+                    </div>
+                    <div class="remove">
+                        <button id="@productLine.Id" class="delete-from-cart">Remove</button>
+                    </div>
                 </div>
-                <div class="remove">
-                    <button id="@productLine.Id" class="delete-from-cart">Remove</button>
-                </div>
-            </div>
-        }
-        
+            }
+
         </div>
         <aside>
             <div class="summary">
@@ -83,17 +83,28 @@
                     </div>
                 </div>
 
-                <div class="summary-checkout">
-                    <button class="checkout-cta">Go to Checkout</button>
-                </div>
+                @if (Context.Session.Keys.Contains("isAuth"))
+                {
+                    <div class="summary-checkout">
+                        <a asp-controller="Checkout" asp-action="Checkout">
+                            <button class="checkout-cta">Go to Checkout</button>
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <a asp-controller="Authentication" asp-action="Signin">Authorize to checkout</a>
+                    </div>
+                }
             </div>
         </aside>
     }
 }
-   
 
 
-    
+
+
 
 
 
