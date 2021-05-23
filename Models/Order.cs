@@ -27,6 +27,7 @@ namespace Models
         public DateTime OrderTime { get; set; }
 
         
+        public User User { get; set; }
         public int UserId { get; set; }
         
         public string RecipientName { get; set; }

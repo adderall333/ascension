@@ -42,7 +42,6 @@ namespace Models
                 purchase.Count++;
                 context.SaveChanges();
             }
-
         }
     }
 }

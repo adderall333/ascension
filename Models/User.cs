@@ -26,6 +26,9 @@ namespace Models
         
         [NotAdministered]
         public IEnumerable<Review> Reviews { get; set; }
+        
+        [NotAdministered]
+        public IEnumerable<Order> Orders { get; set; }
 
         public override string ToString()
         {
