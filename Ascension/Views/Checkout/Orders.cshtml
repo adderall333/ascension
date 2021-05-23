@@ -52,14 +52,6 @@
                                 <span class="hidden-xs">Orders </span>
                             </a>
                         </li>
-                        <li>
-                            <a class="profile-item" asp-controller="Profile" asp-action="Cart">
-                                <span class="material-icons md-36">
-                                    shopping_cart
-                                </span>
-                                <span class="hidden-xs">Shopping Bag</span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
                 <!-- END MENU -->
@@ -73,8 +65,7 @@
             <div>
                 <p>Time: @Model.OrderTime</p>
                 <p>Status: @Model.Status</p>
-                <p>Amount: @Model.Amount</p>
-                <p>Type of delivery: @Model.DeliveryType</p>
+                <p>Amount: @Model.Amount $</p>
                 <!-- If Delivery type is not delivery, fix it !!!!!!-->
                 <p>Delivery Address: @Model.DeliveryAddress</p>
                 <p>Recipient Name: @Model.RecipientName</p>

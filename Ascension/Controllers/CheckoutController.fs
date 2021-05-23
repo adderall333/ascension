@@ -2,6 +2,9 @@
 
 open System
 open System.Collections.Generic
+open System.Text.RegularExpressions
+open Microsoft.AspNetCore.Mvc
+open Microsoft.Extensions.Primitives
 open ProductFilter
 open System.Diagnostics
 open System.Linq
@@ -24,73 +27,131 @@ open Models
 type CheckoutController() =
     inherit Controller()
 
-
-    member this.Checkout() = this.View()
-
-
-    member this.Card(name: string, surname: string, email: string, address: string) =
+    let ValidateForm(form : FormToOrder) =
+        let nameRegex = new Regex("^[A-Z][a-zA-Z]+$")
+        let nameCheck = nameRegex.IsMatch form.Name
+        
+        let surnameRegex = new Regex("^[A-Z][a-zA-Z]+$")
+        let surnameCheck = surnameRegex.IsMatch form.Surname
+        
+        let emailPattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                           @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$"
+        let emailCheck = Regex.IsMatch(form.Email, emailPattern, RegexOptions.IgnoreCase)
+        
+        nameCheck && surnameCheck && emailCheck
+    let isAuth (context : HttpContext) =
+        if context.Session.Keys.Contains("isAuth")
+            then
+                true
+            else
+                false
+          
+    let matchIds (context : ApplicationContext, id : int, httpContext : HttpContext) =
+        let userId = httpContext.Session.GetInt32("id") |> int
+        if context.Order.Where(fun c -> c.UserId = userId).Where(fun i -> i.Id = id).Any() then
+            true 
+        else
+            false
+    member this.Checkout() =
         use context = new ApplicationContext()
+        let mutable id = 0
+        if (isAuth this.HttpContext) then
+            id <- (this.HttpContext.Session.GetInt32("id") |> int)
+        let user = context.User.Where(fun i -> i.Id = id).FirstOrDefault()
+        if (isAuth this.HttpContext && context.Cart.Where(fun c -> c.AuthorizedUserId = id).Any()) then
+            this.View(user) :> ActionResult
+        elif isAuth this.HttpContext then
+            this.Redirect("../../Catalog") :> ActionResult
+        else
+            this.Redirect("../../Authentication/Signin") :> ActionResult
 
-        let userId =
-            this.HttpContext.Session.GetInt32("id") |> int
+    [<HttpPost>]
+    member this.TrySendForm(form : FormToOrder) =
+        
+        let valid = ValidateForm form
+        if not valid then this.Response.Headers.Add("order_result", StringValues("error"))
+        else
+            use context = new ApplicationContext()
 
-        let cartId =
-            context
-                .Cart
-                .First(fun c -> c.AuthorizedUserId = userId)
-                .Id
+            let userId =
+                this.HttpContext.Session.GetInt32("id") |> int
 
-        let productLines =
-            context
-                .ProductLine
-                .Where(fun p -> p.CartId = cartId)
-                .Include(fun p -> p.Product)
-                .ToList()
-        //updating db
-        let order = Order()
-        order.Status <- Status.Paid
-        order.OrderTime <- DateTime.Now
-        order.ProductLines <- productLines
-        order.UserId <- userId
-        order.RecipientName <- name
-        order.RecipientSurname <- surname
-        order.DeliveryType <- DeliveryType.Delivery
-        order.RecipientEmail <- email
-        order.DeliveryAddress <- address
+            let cartId =
+                context
+                    .Cart
+                    .First(fun c -> c.AuthorizedUserId = userId)
+                    .Id
 
-        let amount =
-            productLines
-                .Select(fun p -> p.Product.Cost * p.ProductCount)
-                .Sum()
+            let productLines =
+                context
+                    .ProductLine
+                    .Where(fun p -> p.CartId = cartId)
+                    .Include(fun p -> p.Product)
+                    .ToList()
+            //updating db
+            let order = Order()
+            order.Status <- Status.Paid
+            order.OrderTime <- DateTime.Now
+            order.ProductLines <- productLines
+            order.UserId <- userId
+            order.RecipientName <- form.Name
+            order.RecipientSurname <- form.Surname
+            order.DeliveryType <- DeliveryType.Delivery
+            order.RecipientEmail <- form.Email
+            order.DeliveryAddress <- form.Address
 
-        order.Amount <- amount
+            let amount =
+                productLines
+                    .Select(fun p -> p.Product.Cost * p.ProductCount)
+                    .Sum()
 
-        context.Order.Add(order) |> ignore
-        //removes product lines from db
-        for productLine in productLines do
-            productLine.CartId <- 0
-            context.ProductLine.Update(productLine) |> ignore
+            order.Amount <- amount
             
-        context.SaveChanges() |> ignore
-        //fixed double SaveChanges
-        this.View(order)
+            //removing cart   
+            let oldCart = context.Cart.FirstOrDefault(fun c -> c.AuthorizedUserId = userId)
+            context.Cart.Remove(oldCart) |> ignore
+            this.HttpContext.Session.Remove("cartId")
+            
+            context.Order.Add(order) |> ignore
+            //removes product lines from db
+            for productLine in productLines do
+                productLine.CartId <- 0
+                context.ProductLine.Update(productLine) |> ignore
+                
+            context.SaveChanges() |> ignore
+            
+            //update purchases statistics
+            Purchase.UpdatePurchases(order, context)
+            
+            this.Response.Headers.Add("order_result", StringValues("ok"))
+        
+    
+    member this.Card() = //name: string, surname: string, email: string, address: string
+        this.View()
 
     member this.Orders(id: int) =
         let context = new ApplicationContext()
-
-        //order to Order list
-        let order =
-            context
-                .Order
-                .Single(fun i -> i.Id = id)
-        context.Entry(order).Collection("ProductLines").Load()
-        for product in order.ProductLines do
-            context.Entry(product).Reference("Product").Load()
+        if isAuth this.HttpContext && matchIds(context, id, this.HttpContext) then
+            //order to Order list
+            let order =
+                context
+                    .Order
+                    .Single(fun i -> i.Id = id)
+            context.Entry(order).Collection("ProductLines").Load()
+            for product in order.ProductLines do
+                context.Entry(product).Reference("Product").Load()
+                
+            for image in order.ProductLines.Select(fun i -> i.Product).ToList() do
+                context.Entry(image).Collection("Images").Load()
             
-        for image in order.ProductLines.Select(fun i -> i.Product).ToList() do
-            context.Entry(image).Collection("Images").Load()
-        
-        this.View(order)
+            this.View(order) :> ActionResult
+        elif isAuth this.HttpContext then
+            this.Redirect("../../Profile/Order") :> ActionResult
+        else
+            this.Redirect("../../Authentication/Signin") :> ActionResult
+            
+            
+            
 
 
     member this.UpdateStatus(orderId: int, newStatus: Status) =
