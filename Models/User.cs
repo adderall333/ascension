@@ -19,6 +19,9 @@ namespace Models
         public bool IsAdmin { get; set; }
         
         public IEnumerable<Review> Reviews { get; set; }
+        
+        [NotAdministered]
+        public IEnumerable<Order> Orders { get; set; }
 
         public override string ToString()
         {

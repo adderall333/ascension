@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Models.Attributes;
 
 namespace Models
 {
@@ -28,6 +27,7 @@ namespace Models
         public DateTime OrderTime { get; set; }
 
         
+        public User User { get; set; }
         public int UserId { get; set; }
         
         public string RecipientName { get; set; }
@@ -43,7 +43,7 @@ namespace Models
         public DeliveryType DeliveryType { get; set; }
 
         public string DeliveryAddress { get; set; }
-        
+      
         public List<ProductLine> ProductLines { get; set; }
         
         [NotMapped]
