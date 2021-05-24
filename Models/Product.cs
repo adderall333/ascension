@@ -92,11 +92,11 @@ namespace Models
                 specificationOption.Products.Remove(this);
             }
             SpecificationOptions.RemoveAll(sOp => true);
+            context.SaveChanges();
 
-            SpecificationOptions = context
+            SpecificationOptions.AddRange(context
                 .SpecificationOption
-                .Where(sOp => specificationOptions.Contains(sOp.Id))
-                .ToList();
+                .Where(sOp => specificationOptions.Contains(sOp.Id)));
 
             return this;
         }

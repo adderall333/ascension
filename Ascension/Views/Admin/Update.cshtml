@@ -17,7 +17,7 @@
     @message
 </div>
 
-<form id="update" method="post" action="@action">
+<form id="update" method="post" action="@action" enctype="multipart/form-data">
     <input type="hidden" name="id" value="@updateModel.Id">
     @Html.GetHtml(UpdateHelper.getUpdateHtml(updateModel))
     <div>
