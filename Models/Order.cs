@@ -38,11 +38,12 @@ namespace Models
 
         public int Amount { get; set; }
 
-        public Status Status { get; set; } // NotPaid ,Paid ,Packing, Delivering, Delivered.
+        public Status Status { get; set; }
 
-        public DeliveryType DeliveryType { get; set; } // Delivery, SelfTake
+        public DeliveryType DeliveryType { get; set; }
 
-        public string DeliveryAddress { get; set; } // If DeliveryType == "Delivery"
+        public string DeliveryAddress { get; set; }
+      
         public List<ProductLine> ProductLines { get; set; }
         
         [NotMapped]

@@ -6,14 +6,19 @@
     Layout = "_Layout";
 }
 
+<div>
+    <a asp-controller="Admin" asp-action="Index">Back</a>
+</div>
+
 @foreach (var order in Model)
 {
-    <div class="row">
+    <div class="row" style="margin-bottom: 10px">
         <div class="col-2">
             @order.ToString()
         </div>
         <div class="col-3">
             <form method="post">
+                    <input type="hidden" name="id" value="@order.Id">
                 <select class="status-select" name="status">
                     @if (order.Status == Status.NotPaid)
                     {
@@ -23,7 +28,7 @@
                     {
                         <option value="@Status.NotPaid">@Status.NotPaid.ToString()</option>
                     }
-                    
+
                     @if (order.Status == Status.Paid)
                     {
                         <option value="@Status.Paid" selected>@Status.Paid.ToString()</option>
@@ -32,7 +37,7 @@
                     {
                         <option value="@Status.Paid">@Status.Paid.ToString()</option>
                     }
-                    
+
                     @if (order.Status == Status.Packing)
                     {
                         <option value="@Status.Packing" selected>@Status.Packing.ToString()</option>
@@ -41,7 +46,7 @@
                     {
                         <option value="@Status.Packing">@Status.Packing.ToString()</option>
                     }
-                    
+
                     @if (order.Status == Status.Delivering)
                     {
                         <option value="@Status.Delivering" selected>@Status.Delivering.ToString()</option>
@@ -50,7 +55,7 @@
                     {
                         <option value="@Status.Delivering">@Status.Delivering.ToString()</option>
                     }
-                    
+
                     @if (order.Status == Status.Delivered)
                     {
                         <option value="@Status.Delivered" selected>@Status.Delivered.ToString()</option>
@@ -59,7 +64,7 @@
                     {
                         <option value="@Status.Delivered">@Status.Delivered.ToString()</option>
                     }
-                    
+
                     @if (order.Status == Status.Cancelled)
                     {
                         <option value="@Status.Cancelled" selected>@Status.Cancelled.ToString()</option>

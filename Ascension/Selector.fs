@@ -15,7 +15,6 @@ module Selector =
         | "specificationoption" -> context.SpecificationOption |> toList
         | "product" -> context.Product |> toList
         | "image" -> context.Image |> toList
-        | "user" -> context.User |> toList
         | _ -> failwith "There is no such model type"
         
     let getModelWithRelations (name : string) id =
@@ -26,7 +25,6 @@ module Selector =
         | "specificationoption" -> SpecificationOption.GetModel(id)
         | "product" -> Product.GetModel(id)
         | "image" -> Image.GetModel(id)
-        | "user" -> User.GetModel(id)
         | _ -> failwith "There is no such model type"
         
     let getModelType (name : string) =
@@ -37,7 +35,6 @@ module Selector =
         | "specificationoption" -> typeof<SpecificationOption>
         | "product" -> typeof<Product>
         | "image" -> typeof<Image>
-        | "user" -> typeof<User>
         | _ -> failwith "There is no such model type"
         
     

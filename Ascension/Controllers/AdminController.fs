@@ -1,15 +1,29 @@
 namespace Ascension.Controller
 
+open System
 open System.IO
 open Ascension
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc
 open Models
 open System.Linq
+open Models
 open Models.Attributes
 open System.Collections.Generic
 open Selector
 open Checks
+
+type CreateModel(modelType : Type, message : string) =
+        member this.ModelType = modelType
+        member this.Message = message
+        
+type UpdateModel(model : IModel, message : string) =
+    member this.Model = model
+    member this.Message = message
+    
+type AdminsModel(users : List<User>, message : string) =
+    member this.Users = users
+    member this.Message = message
 
 type AdminController() =
     inherit Controller()
@@ -65,16 +79,9 @@ type AdminController() =
     member this.Orders() =
         if isAdmin this.HttpContext
         then
-            let order1 = Order()
-            order1.UserId <- 1
-            order1.Status <- Status.Paid
-            let order2 = Order()
-            order2.UserId <- 2
-            order2.Status <- Status.Delivered
-            let list = List<Order>()
-            list.Add order1
-            list.Add order2
-            this.View(list) :> ActionResult
+            use context = new ApplicationContext()
+            let orders = context.Order.OrderByDescending(fun o -> o.Id).ToList()
+            this.View(orders) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
             
@@ -90,17 +97,61 @@ type AdminController() =
             else
                 order.Status <- status
                 context.SaveChanges() |> ignore
-                this.Ok() :> ActionResult
+                this.Redirect("Orders") :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
-    
+            
+    [<HttpGet>]
+    member this.Admins() =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            let users = context.User.ToList()
+            this.View("Admins", AdminsModel(users, String.Empty)) :> ActionResult
+        else
+            this.Forbid() :> ActionResult
+          
+    [<HttpPost>]
+    member this.GrantRights(userId : int) =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            let user = context.User.FirstOrDefault(fun u -> u.Id = userId)
+            let users = context.User.ToList()
+            if user = null
+            then
+                this.View("Admins", AdminsModel(users, "There is no such user")) :> ActionResult
+            else
+                user.IsAdmin <- true
+                context.SaveChanges() |> ignore
+                this.View("Admins", AdminsModel(users, String.Empty)) :> ActionResult
+        else
+            this.Forbid() :> ActionResult
+            
+    [<HttpPost>]
+    member this.RemoveRights(userId : int) =
+        if isAdmin this.HttpContext
+        then
+            use context = new ApplicationContext()
+            let user = context.User.FirstOrDefault(fun u -> u.Id = userId)
+            let users = context.User.ToList()
+            if user = null
+            then
+                this.View("Admins", AdminsModel(users, "There is no such user")) :> ActionResult
+            else
+                user.IsAdmin <- false
+                context.SaveChanges() |> ignore
+                this.View("Admins", AdminsModel(users, String.Empty)) :> ActionResult
+        else
+            this.Forbid() :> ActionResult
+            
     
     //Create
     [<HttpGet>]     
     member this.Create(name : string) =
         if isAdmin this.HttpContext
         then
-             this.View(getModelType name) :> ActionResult
+             this.View(CreateModel(getModelType name, String.Empty)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
         
@@ -120,7 +171,7 @@ type AdminController() =
 
             match checkResult with
             | Ok(checkedModel) -> createSuperCategory checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) -> this.View("Create", CreateModel(typeof<SuperCategory>, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
         
@@ -140,7 +191,7 @@ type AdminController() =
                 
             match checkResult with
             | Ok(checkedModel) -> createCategory checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) -> this.View("Create", CreateModel(typeof<Category>, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
             
@@ -158,7 +209,7 @@ type AdminController() =
             
             match checkResult with
             | Ok(checkedModel) -> createSpecification checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) -> this.View("Create", CreateModel(typeof<Specification>, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
     
@@ -176,7 +227,7 @@ type AdminController() =
                 
             match checkResult with
             | Ok(checkedModel) -> createSpecificationOption checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) -> this.View("Create", CreateModel(typeof<SpecificationOption>, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
     
@@ -194,7 +245,7 @@ type AdminController() =
                 
             match checkResult with
             | Ok(checkedModel) -> createProduct checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) -> this.View("Create", CreateModel(typeof<Product>, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
     
@@ -214,15 +265,7 @@ type AdminController() =
                 
             match checkResult with
             | Ok(checkedModel) -> createImage checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
-        else
-            this.StatusCode(403) :> ActionResult
-    
-    [<HttpPost>]
-    member this.CreateUser(formModel : UserModel) =
-        if isAdmin this.HttpContext
-        then
-            this.BadRequest("Now we do not support user creation") :> ActionResult
+            | Bad(message) -> this.View("Create", CreateModel(typeof<Image>, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
         
@@ -244,7 +287,7 @@ type AdminController() =
         if isAdmin this.HttpContext
         then
             let model = getModelWithRelations name id
-            this.View(model) :> ActionResult
+            this.View(UpdateModel(model, String.Empty)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
         
@@ -267,7 +310,9 @@ type AdminController() =
                 
             match checkResult with
             | Ok(checkedModel) -> updateSuperCategory checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) ->
+                let model = getModelWithRelations "SuperCategory" formModel.Id
+                this.View("Update", UpdateModel(model, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
             
@@ -290,7 +335,9 @@ type AdminController() =
             
             match checkResult with
             | Ok(checkedModel) -> updateCategory checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) ->
+                let model = getModelWithRelations "Category" formModel.Id
+                this.View("Update", UpdateModel(model, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
     
@@ -311,7 +358,9 @@ type AdminController() =
             
             match checkResult with
             | Ok(checkedModel) -> updateSpecification checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) ->
+                let model = getModelWithRelations "Specification" formModel.Id
+                this.View("Update", UpdateModel(model, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
     
@@ -332,7 +381,9 @@ type AdminController() =
             
             match checkResult with
             | Ok(checkedModel) -> updateSpecificationOption checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) ->
+                let model = getModelWithRelations "SpecificationOption" formModel.Id
+                this.View("Update", UpdateModel(model, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
     
@@ -353,7 +404,9 @@ type AdminController() =
                 
             match checkResult with
             | Ok(checkedModel) -> updateProduct checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) ->
+                let model = getModelWithRelations "Product" formModel.Id
+                this.View("Update", UpdateModel(model, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
         
@@ -374,28 +427,9 @@ type AdminController() =
             
             match checkResult with
             | Ok(checkedModel) -> updateImage checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
-        else
-            this.StatusCode(403) :> ActionResult
-            
-    [<HttpPost>]
-    member this.UpdateUser(formModel : UserModel) =
-        if isAdmin this.HttpContext
-        then
-            let checkResult = checkUser formModel
-            let updateUser (model : UserModel) =
-                use context = new ApplicationContext()
-                context
-                    .User
-                    .First(fun p -> p.Id = model.Id)
-                    .Update(model.Name, model.Surname, model.Email, model.IsAdmin) |> ignore
-                context.SaveChanges() |> ignore
-                this.Response.StatusCode = 200 |> ignore
-                this.Redirect($"/admin/read?name=User&id={model.Id}") :> ActionResult
-                
-            match checkResult with
-            | Ok(checkedModel) -> updateUser checkedModel
-            | Bad(message) -> this.BadRequest(message) :> ActionResult
+            | Bad(message) ->
+                let model = getModelWithRelations "Image" formModel.Id
+                this.View("Update", UpdateModel(model, message)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
         
@@ -477,18 +511,5 @@ type AdminController() =
             context.SaveChanges() |> ignore
             this.Response.StatusCode = 200 |> ignore
             this.Redirect("/admin/models?name=Image") :> ActionResult
-        else
-            this.StatusCode(403) :> ActionResult
-    
-    [<HttpPost>]
-    member this.DeleteUser(id : int) =
-        if isAdmin this.HttpContext
-        then
-            use context = new ApplicationContext()
-            let modelToDelete = User.GetModel(id) :?> User
-            context.User.Remove(modelToDelete) |> ignore
-            context.SaveChanges() |> ignore
-            this.Response.StatusCode = 200 |> ignore
-            this.Redirect("/admin/models?name=User") :> ActionResult
         else
             this.StatusCode(403) :> ActionResult

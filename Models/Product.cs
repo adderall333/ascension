@@ -77,21 +77,26 @@ namespace Models
             if (category > 0)
                 Category = context.Category.First(c => c.Id == category);
 
-            if (specificationOptions.Any())
+            
+            SpecificationOptions = context
+                .SpecificationOption
+                .Include(sOp => sOp.Products)
+                .Where(sOp => sOp
+                    .Products
+                    .Select(p => p.Id)
+                    .Contains(Id))
+                .ToList();
+
+            foreach (var specificationOption in SpecificationOptions)
             {
-                SpecificationOptions = context
-                    .SpecificationOption
-                    .Where(sOp => sOp
-                        .Products
-                        .Select(p => p.Id)
-                        .Contains(Id))
-                    .ToList();
-                
-                SpecificationOptions.RemoveAll(sOp => true);
-                SpecificationOptions.AddRange(context
-                    .SpecificationOption
-                    .Where(sOp => specificationOptions.Contains(sOp.Id)));
+                specificationOption.Products.Remove(this);
             }
+            SpecificationOptions.RemoveAll(sOp => true);
+            context.SaveChanges();
+
+            SpecificationOptions.AddRange(context
+                .SpecificationOption
+                .Where(sOp => specificationOptions.Contains(sOp.Id)));
 
             return this;
         }

@@ -1,18 +1,24 @@
 @using Models
-@model Type
+@model Ascension.Controller.CreateModel
 
 @{
     ViewBag.Title = "Admin page";
     Layout = "_Layout";
-    var action = "/Admin/Create" + Model.Name;
+    var modelType = Model.ModelType;
+    var message = Model.Message;
+    var action = "/Admin/Create" + modelType.Name;
 }
 
 <div>
-    <a asp-controller="Admin" asp-action="Models" asp-route-name="@Model.Name">Back</a>
+    <a asp-controller="Admin" asp-action="Models" asp-route-name="@modelType.Name">Back</a>
+</div>
+
+<div id="error-message" style="color: red">
+    @message
 </div>
 
 <form id="create" method="post" action="@action"  enctype="multipart/form-data">
-    @Html.GetHtml(CreateHelper.getCreateHtml(Model))
+    @Html.GetHtml(CreateHelper.getCreateHtml(modelType))
     <div>
         <button id="btn">Create</button>
     </div>

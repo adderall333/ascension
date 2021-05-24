@@ -1,19 +1,25 @@
 @using Models
-@model IModel
+@model Ascension.Controller.UpdateModel
 
 @{
     ViewBag.Title = "Admin page";
     Layout = "_Layout";
-    var action = "/Admin/Update" + Model.GetType().Name;
+    var updateModel = Model.Model;
+    var message = Model.Message;
+    var action = "/Admin/Update" + updateModel.GetType().Name;
 }
 
 <div>
-    <a asp-controller="Admin" asp-action="Models" asp-route-name="@Model.GetType().Name">Back</a>
+    <a asp-controller="Admin" asp-action="Models" asp-route-name="@updateModel.GetType().Name">Back</a>
 </div>
 
-<form id="update" method="post" action="@action">
-    <input type="hidden" name="id" value="@Model.Id">
-    @Html.GetHtml(UpdateHelper.getUpdateHtml(Model))
+<div id="error-message" style="color: red">
+    @message
+</div>
+
+<form id="update" method="post" action="@action" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="@updateModel.Id">
+    @Html.GetHtml(UpdateHelper.getUpdateHtml(updateModel))
     <div>
         <button id="btn">Update</button>    
     </div>

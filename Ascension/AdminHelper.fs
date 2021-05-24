@@ -73,13 +73,11 @@ module CreateHelper =
             elif property.GetCustomAttributes(typedefof<ImagePropertyAttribute>, false).Any()
             then
                 sb.Append(processImageProperty) |> ignore
-            elif (*property.GetCustomAttributes(typedefof<OneToManyAttribute>, false).Any() ||*)
-                 property.GetCustomAttributes(typedefof<ManyToManyAttribute>, false).Any()
+            elif property.GetCustomAttributes(typedefof<ManyToManyAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations (property.PropertyType.GetGenericArguments().First()).Name
                 sb.Append(processComplexProperty options property.Name true) |> ignore
-            elif (*property.GetCustomAttributes(typedefof<OneToOneAttribute>, false).Any() ||*)
-                 property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any()
+            elif property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations property.Name
                 sb.Append(processComplexProperty options property.Name false) |> ignore
@@ -123,14 +121,12 @@ module UpdateHelper =
             elif property.GetCustomAttributes(typedefof<ImagePropertyAttribute>, false).Any()
             then
                 sb.Append(processImageProperty) |> ignore
-            elif (*property.GetCustomAttributes(typedefof<OneToManyAttribute>, false).Any() ||*)
-                 property.GetCustomAttributes(typedefof<ManyToManyAttribute>, false).Any()
+            elif property.GetCustomAttributes(typedefof<ManyToManyAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations (property.PropertyType.GetGenericArguments().First()).Name
                 let checkedIds = (property.GetValue(model) :?> IEnumerable<IModel>).Select(fun e -> e.Id)
                 sb.Append(processComplexProperty options property.Name checkedIds true) |> ignore
-            elif (*property.GetCustomAttributes(typedefof<OneToOneAttribute>, false).Any() ||*)
-                 property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any()
+            elif property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations property.Name
                 let checkedIds = [(property.GetValue(model) :?> IModel).Id]
@@ -176,14 +172,12 @@ module Checks =
                     |> check notImageCheck "File type is not supported"
                     
     let checkSpecification (model : SpecificationModel) =
-        use context = new ApplicationContext()
         let emptyNameCheck (specification : SpecificationModel) = not (String.IsNullOrEmpty(specification.Name))
         let noCategoryCheck (specification : SpecificationModel) = specification.Category > 0
         (Ok(model)) |> check emptyNameCheck "Specification name was empty"
                     |> check noCategoryCheck "Category was not specified"
     
     let checkSpecificationOption (model : SpecificationOptionModel) =
-        use context = new ApplicationContext()
         let emptyNameCheck (specificationOption : SpecificationOptionModel) = not (String.IsNullOrEmpty(specificationOption.Name))
         let noSpecificationCheck (specificationOption : SpecificationOptionModel) = specificationOption.Specification > 0
         (Ok(model)) |> check emptyNameCheck "Specification option name was empty"
@@ -206,7 +200,6 @@ module Checks =
                     |> check noCategoryCheck "Category was not specified"
                     
     let checkImage (model : ImageModel) =
-        use context = new ApplicationContext()
         let emptyPathCheck (image : ImageModel) = not (String.IsNullOrEmpty(image.Path))
         let notImageCheck (image : ImageModel) = ["jpg"; "png"].Contains(image.Path.Split(".").Last())
         let noProductCheck (image : ImageModel) = image.Product > 0
@@ -215,7 +208,6 @@ module Checks =
                     |> check noProductCheck "Product was not specified"
     
     let checkUser (model : UserModel) =
-        use context = new ApplicationContext()
         let emptyNameCheck (user : UserModel) = not (String.IsNullOrEmpty(user.Name))
         let emptySurnameCheck (user : UserModel) = not (String.IsNullOrEmpty(user.Surname))
         let emptyEmailCheck (user : UserModel) = not (String.IsNullOrEmpty(user.Email))
