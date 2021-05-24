@@ -287,7 +287,7 @@ type AdminController() =
         if isAdmin this.HttpContext
         then
             let model = getModelWithRelations name id
-            this.View(model) :> ActionResult
+            this.View(UpdateModel(model, String.Empty)) :> ActionResult
         else
             this.StatusCode(403) :> ActionResult
         
