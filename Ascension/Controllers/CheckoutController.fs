@@ -128,7 +128,7 @@ type CheckoutController() =
             
             
             //email params
-            let from = MailAddress("ascensiongroupshop@gmail.com", "Danila")
+            (*let from = MailAddress("ascensiongroupshop@gmail.com", "Danila")
             
             let fromTo = MailAddress(order.RecipientEmail)
             
@@ -151,8 +151,7 @@ type CheckoutController() =
                 <p>Recipient Name: " + order.RecipientName.ToString() + "</p>
                 <p>Recipient Surname: " + order.RecipientSurname.ToString() + "</p>
                 <p>Recipient Email: " + order.RecipientEmail.ToString() + "</p>
-            </div>
-               "
+            </div>"
             
             message.IsBodyHtml <- true
             
@@ -160,7 +159,7 @@ type CheckoutController() =
           
             smtp.Credentials <- NetworkCredential("ascensiongroupshop@gmail.com", "Vjacheslavovich098123MMM")
             smtp.EnableSsl <- true
-            smtp.Send(message)
+            smtp.Send(message)*)
         
     
     member this.Card() = //name: string, surname: string, email: string, address: string
