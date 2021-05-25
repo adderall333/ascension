@@ -39,7 +39,7 @@ type CartController() =
         let cartId = getCartId this.HttpContext
 
         context.ProductLine.Add(ProductLine(cartId, productId)) |> ignore
-
+        
         context.SaveChanges() |> ignore
 
     [<HttpPost>]

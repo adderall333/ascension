@@ -81,6 +81,7 @@ function removeItem(removeButton) {
         productRow.remove();
         recalculateCart();
         updateSumItems();
+        location.reload()
     });
 }
 
