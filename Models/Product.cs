@@ -24,6 +24,8 @@ namespace Models
         [SimpleProperty]
         public string Description { get; set; }
         
+        public bool IsAvailable { get; set; }
+        
         [NotAdministered]
         public int CategoryId { get; set; }
         

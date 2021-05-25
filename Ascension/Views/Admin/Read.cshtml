@@ -6,8 +6,13 @@
     Layout = "_Layout";
 }
 
-<div>
-    <a asp-controller="Admin" asp-action="Models" asp-route-name="@Model.GetType().Name">Back</a>
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/admin.css">
+}
+
+<div class="standard-text">
+    <a asp-controller="Admin" asp-action="Models" asp-route-name="@Model.GetType().Name">← Back</a>
 </div>
 
 @Html.GetHtml(ReadHelper.getReadHtml(Model))

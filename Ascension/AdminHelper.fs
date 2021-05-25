@@ -15,19 +15,25 @@ module Tools =
         | t when t = typeof<string> -> "text"
         | t when t = typeof<bool> -> "checkbox"
         | _ -> failwith "There is no such input type"
+        
+    let getHref (value : IModel) =
+        $"href=\"/Admin/Read/{value.Id}?name={value.GetType().Name}\""
 
 module ReadHelper =
-    let processImageProperty value = $"<img src=\"{value}\" style=\"width: 300px; height: 300px;\">"
+    let processImageProperty value = $"<img class=\"image\" src=\"{value}\" style=\"width: 300px; height: 300px;\">"
     
-    let processSingleProperty propertyName value =
-        "<p>" + propertyName + "  :  " + value + "</p>"
+    let processSimpleProperty propertyName value =
+        $"<div class=\"standard-text\">{propertyName}  :  {value.ToString()}</div>"
         
-    let processEnumerableProperty propertyName values =
+    let processSingleProperty propertyName (value : IModel) =
+        $"<div class=\"standard-text\">{propertyName}  :  <a {Tools.getHref value}>{value.ToString()}</a></div>"
+        
+    let processEnumerableProperty propertyName (values : IEnumerable<IModel>) =
         let sb = StringBuilder()
-        sb.Append("<p>" + propertyName) |> ignore
+        sb.Append("<div class=\"standard-text\">" + propertyName) |> ignore
         for value in values do
-            sb.Append("<br>" + value.ToString()) |> ignore
-        sb.Append("</p>") |> ignore
+            sb.Append($"<div class=\"little-text\"><a {Tools.getHref value}>{value.ToString()}</a></div>") |> ignore
+        sb.Append("</div>") |> ignore
         sb.ToString()
         
     let getReadHtml model =
@@ -38,10 +44,12 @@ module ReadHelper =
             then
                 sb.Append(processEnumerableProperty property.Name (property.GetValue(model) :?> IEnumerable<_>)) |> ignore
             elif property.GetCustomAttributes(typedefof<OneToOneAttribute>, false).Any() ||
-                 property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any() ||
-                 property.GetCustomAttributes(typedefof<SimplePropertyAttribute>, false).Any()
+                 property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any()
             then
-                sb.Append(processSingleProperty property.Name (property.GetValue(model).ToString())) |> ignore
+                sb.Append(processSingleProperty property.Name (property.GetValue(model) :?> IModel)) |> ignore
+            elif property.GetCustomAttributes(typedefof<SimplePropertyAttribute>, false).Any()
+            then
+                sb.Append(processSimpleProperty property.Name (property.GetValue(model))) |> ignore
             elif property.GetCustomAttributes(typedefof<ImagePropertyAttribute>, false).Any()
             then
                 sb.Append(processImageProperty (property.GetValue(model))) |> ignore
@@ -50,11 +58,11 @@ module ReadHelper =
 module CreateHelper =
     let processSimpleProperty propertyType propertyName =
         let sb = StringBuilder()
-        sb.Append("<p><label>" + propertyName + "<label>") |> ignore
-        sb.Append("<input type=\"" + Tools.getInputType propertyType + "\" name=\"" + propertyName + "\"></p>") |> ignore
+        sb.Append($"<div class=\"standard-text\"><label for=\"{propertyName}\" class=\"form-label\">{propertyName}</label>") |> ignore
+        sb.Append($"<input id=\"{propertyName}\" class=\"form-control\" type=\"{Tools.getInputType propertyType}\" name=\"{propertyName}\"></div>") |> ignore
         sb.ToString()
         
-    let processImageProperty = "<p><label>Image<lebel><input type=\"file\" name=\"file\" accept=\"image/jpeg,image/png\"></p>"
+    let processImageProperty = "<div class=\"standard-text\"><label>Image<lebel><input type=\"file\" name=\"file\" accept=\"image/jpeg,image/png\"></div>"
         
     let processComplexProperty (options : IEnumerable<IModel>) propertyName isEnumerable =
         let sb = StringBuilder()

@@ -5,15 +5,20 @@
     Layout = "_Layout";
 }
 
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/admin.css">
+}
+
 @foreach (var name in Model)
 {
-    <p>
+    <div class="standard-text">
         <a asp-controller="Admin" asp-action="Models" asp-route-name="@name">@name</a>
-    </p>
+    </div>
 }
-<p>
+<div class="standard-text">
     <a asp-controller="Admin" asp-action="Admins">Admins</a>
-</p>
-<p>
+</div>
+<div class="standard-text">
     <a asp-controller="Admin" asp-action="Orders">Orders</a>
-</p>
+</div>

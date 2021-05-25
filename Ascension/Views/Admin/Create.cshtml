@@ -9,8 +9,13 @@
     var action = "/Admin/Create" + modelType.Name;
 }
 
-<div>
-    <a asp-controller="Admin" asp-action="Models" asp-route-name="@modelType.Name">Back</a>
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/admin.css">
+}
+
+<div class="standard-text">
+    <a asp-controller="Admin" asp-action="Models" asp-route-name="@modelType.Name">← Back</a>
 </div>
 
 <div id="error-message" style="color: red">

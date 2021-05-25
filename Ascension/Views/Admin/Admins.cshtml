@@ -5,10 +5,16 @@
     Layout = "_Layout";
     var users = Model.Users;
     var message = Model.Message;
+    var i = 0;
 }
 
-<div>
-    <a asp-controller="Admin" asp-action="Index">Back</a>
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/admin.css">
+}
+
+<div class="standard-text">
+    <a asp-controller="Admin" asp-action="Index">← Back</a>
 </div>
 
 <div id="error-message" style="color: red">
@@ -18,28 +24,57 @@
 <div>
     @foreach (var user in users)
     {
-        <div class="row" style="margin-bottom: 10px">
-            <div class="col">@user.ToString()</div>
-            @if (user.IsAdmin)
-            {
-                <div class="col">Is admin</div>
-                <div class="col">
-                    <form asp-controller="Admin" asp-action="RemoveRights">
-                        <input type="hidden" name="userId" value="@user.Id">
-                        <button type="submit">Remove admin rights</button>
-                    </form>
-                </div>
-            }
-            else
-            {
-                <div class="col">Regular user</div>
-                <div class="col">
-                    <form asp-controller="Admin" asp-action="GrantRights">
-                        <input type="hidden" name="userId" value="@user.Id">
-                        <button type="submit">Grant admin rights</button>
-                    </form>
-                </div>
-            }
-        </div>
+        @if (i++ % 2 == 0)
+        {
+            <div class="row table-row dark-row">
+                <div class="col table-data">@user.ToString()</div>
+                @if (user.IsAdmin)
+                {
+                    <div class="col table-data">Is admin</div>
+                    <div class="col table-data">
+                        <form asp-controller="Admin" asp-action="RemoveRights">
+                            <input type="hidden" name="userId" value="@user.Id">
+                            <button class="btn btn-outline-light product-btn">Remove admin rights</button>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <div class="col table-data">Regular user</div>
+                    <div class="col table-data">
+                        <form asp-controller="Admin" asp-action="GrantRights">
+                            <input type="hidden" name="userId" value="@user.Id">
+                            <button class="btn btn-outline-light product-btn">Grant admin rights</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="row table-row">
+                <div class="col table-data">@user.ToString()</div>
+                @if (user.IsAdmin)
+                {
+                    <div class="col table-data">Is admin</div>
+                    <div class="col table-data">
+                        <form asp-controller="Admin" asp-action="RemoveRights">
+                            <input type="hidden" name="userId" value="@user.Id">
+                            <button class="btn btn-outline-light product-btn">Remove admin rights</button>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <div class="col table-data">Regular user</div>
+                    <div class="col table-data">
+                        <form asp-controller="Admin" asp-action="GrantRights">
+                            <input type="hidden" name="userId" value="@user.Id">
+                            <button class="btn btn-outline-light product-btn">Grant admin rights</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        }
     }
 </div>

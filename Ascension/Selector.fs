@@ -7,7 +7,7 @@ open Microsoft.EntityFrameworkCore
 module Selector =
     let getModelsWithoutRelations (name : string) =
         use context = new ApplicationContext()
-        let toList (set : DbSet<_>) = set.Select(fun e -> e :> IModel).ToList()
+        let toList (set : DbSet<_>) = set.Select(fun e -> e :> IModel).OrderBy(fun e -> e.Id).ToList()
         match name.ToLower() with
         | "supercategory" -> context.SuperCategory |> toList
         | "category" -> context.Category |> toList
