@@ -58,18 +58,26 @@ module ReadHelper =
 module CreateHelper =
     let processSimpleProperty propertyType propertyName =
         let sb = StringBuilder()
-        sb.Append($"<div class=\"standard-text\"><label for=\"{propertyName}\" class=\"form-label\">{propertyName}</label>") |> ignore
-        sb.Append($"<input id=\"{propertyName}\" class=\"form-control\" type=\"{Tools.getInputType propertyType}\" name=\"{propertyName}\"></div>") |> ignore
+        if propertyType = typeof<bool>
+        then
+            sb.Append($"<div class=\"form-check standard-text\"><input id=\"{propertyName}\" class=\"form-check-input\" type=\"checkbox\" name=\"{propertyName}\">") |> ignore
+            sb.Append($"<label for=\"{propertyName}\" class=\"form-check-label\">{propertyName}</label></div>") |> ignore
+        else
+            sb.Append($"<div class=\"standard-text\"><label for=\"{propertyName}\" class=\"form-label\">{propertyName}</label>") |> ignore
+            sb.Append($"<input id=\"{propertyName}\" class=\"form-control\" type=\"{Tools.getInputType propertyType}\" name=\"{propertyName}\"></div>") |> ignore
         sb.ToString()
         
-    let processImageProperty = "<div class=\"standard-text\"><label>Image<lebel><input type=\"file\" name=\"file\" accept=\"image/jpeg,image/png\"></div>"
+    let processImageProperty =
+        "<div for=\"image-input\" class=\"standard-text\"><label class=\"form-label\">Image</label>" +
+        "<input class=\"form-control\" id=\"image-input\" type=\"file\" name=\"file\" accept=\"image/jpeg,image/png\"></div>"
         
-    let processComplexProperty (options : IEnumerable<IModel>) propertyName isEnumerable =
+    let processComplexProperty (options : IEnumerable<IModel>) propertyName =
         let sb = StringBuilder()
-        sb.Append("<p>" + propertyName) |> ignore
+        sb.Append($"<div class=\"standard-text\">{propertyName}</div>") |> ignore
         for option in options do
-            sb.Append("<br><input type=\"" + (if isEnumerable then "checkbox" else "radio") + "\"name=\"" +
-                      propertyName + "\"value=\"" + option.Id.ToString() + "\">" + option.ToString()) |> ignore
+            sb.Append($"<div class\"form-check\"><input class=\"form-check-input\" type=\"radio\" id=\"{option.ToString()}\" ") |> ignore
+            sb.Append($"name=\"{propertyName}\"value=\"{option.Id.ToString()}\"><label class=\"form-check-label\" ") |> ignore
+            sb.Append($"for=\"{option.ToString()}\">{option.ToString()}</label></div>") |> ignore
         sb.ToString()
         
     let getCreateHtml (modelType : Type) =
@@ -81,20 +89,18 @@ module CreateHelper =
             elif property.GetCustomAttributes(typedefof<ImagePropertyAttribute>, false).Any()
             then
                 sb.Append(processImageProperty) |> ignore
-            elif property.GetCustomAttributes(typedefof<ManyToManyAttribute>, false).Any()
-            then
-                let options = getModelsWithoutRelations (property.PropertyType.GetGenericArguments().First()).Name
-                sb.Append(processComplexProperty options property.Name true) |> ignore
             elif property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations property.Name
-                sb.Append(processComplexProperty options property.Name false) |> ignore
+                sb.Append(processComplexProperty options property.Name) |> ignore
         sb.ToString()
         
 module UpdateHelper =
-    let processImageProperty = "<p><label>Image<lebel><input type=\"file\" name=\"file\" accept=\"image/jpeg,image/png\"></p>"
+    let processImageProperty =
+        "<div for=\"image-input\" class=\"standard-text\"><label class=\"form-label\">Image</label>" +
+        "<input class=\"form-control\" id=\"image-input\" type=\"file\" name=\"file\" accept=\"image/jpeg,image/png\"></div>"
     
-    let getHtmlAttribute propertyType (propertyValue : Object) propertyName =
+    let getValueAttribute propertyType (propertyValue : Object) propertyName =
         if propertyType <> typedefof<bool>
         then
             "value=\"" + propertyValue.ToString() + "\""
@@ -106,18 +112,25 @@ module UpdateHelper =
     
     let processSimpleProperty propertyType propertyValue propertyName =
         let sb = StringBuilder()
-        sb.Append("<p><label>" + propertyName + "<label>") |> ignore
-        sb.Append("<input type=\"" + Tools.getInputType propertyType + "\" name=\"" + propertyName + "\"") |> ignore
-        sb.Append(getHtmlAttribute propertyType propertyValue propertyName + "></p>") |> ignore
+        if propertyType = typeof<bool>
+        then
+            sb.Append($"<div class=\"form-check standard-text\"><input id=\"{propertyName}\" class=\"form-check-input\" type=\"checkbox\" name=\"{propertyName}\" ") |> ignore
+            sb.Append($"{getValueAttribute propertyType propertyValue propertyName}>") |> ignore
+            sb.Append($"<label for=\"{propertyName}\" class=\"form-check-label\">{propertyName}</label></div>") |> ignore
+        else
+            sb.Append($"<div class=\"standard-text\"><label for=\"{propertyName}\" class=\"form-label\">{propertyName}</label>") |> ignore
+            sb.Append($"<input id=\"{propertyName}\" class=\"form-control\" type=\"{Tools.getInputType propertyType}\" name=\"{propertyName}\" ") |> ignore
+            sb.Append($"{getValueAttribute propertyType propertyValue propertyName}></div>") |> ignore
         sb.ToString()
         
     let processComplexProperty (options : IEnumerable<IModel>) propertyName (checkedIds : IEnumerable<int>) isEnumerable  =
         let sb = StringBuilder()
-        sb.Append("<p>" + propertyName) |> ignore
+        sb.Append($"<div class=\"standard-text\">{propertyName}</div>") |> ignore
         for option in options do
-            sb.Append("<br><input type=\"" + (if isEnumerable then "checkbox" else "radio") + "\"name=\"" +
-                      propertyName + "\"value=\"" + option.Id.ToString() + "\" " +
-                      (if checkedIds.Contains(option.Id) then "checked" else "") + ">" + option.ToString()) |> ignore
+            let isChecked = if checkedIds.Contains(option.Id) then "checked" else ""
+            sb.Append($"<div class\"form-check\"><input class=\"form-check-input\" type=\"radio\" id=\"{option.ToString()}\" ") |> ignore
+            sb.Append($"name=\"{propertyName}\" value=\"{option.Id.ToString()}\" {isChecked}>") |> ignore
+            sb.Append($"<label class=\"form-check-label\" for=\"{option.ToString()}\">{option.ToString()}</label></div>") |> ignore
         sb.ToString()
         
     let getUpdateHtml model =
@@ -129,11 +142,6 @@ module UpdateHelper =
             elif property.GetCustomAttributes(typedefof<ImagePropertyAttribute>, false).Any()
             then
                 sb.Append(processImageProperty) |> ignore
-            elif property.GetCustomAttributes(typedefof<ManyToManyAttribute>, false).Any()
-            then
-                let options = getModelsWithoutRelations (property.PropertyType.GetGenericArguments().First()).Name
-                let checkedIds = (property.GetValue(model) :?> IEnumerable<IModel>).Select(fun e -> e.Id)
-                sb.Append(processComplexProperty options property.Name checkedIds true) |> ignore
             elif property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations property.Name
