@@ -18,16 +18,6 @@ open CartService
 type CatalogController() =
     inherit Controller()
     
-    let search (context : ApplicationContext) (searchString : string) =
-        if searchString <> null && searchString <> ""
-        then
-            context
-                .Product
-                .Where(fun p -> p.SearchVector.Matches(searchString))
-                .ToList()
-        else
-            null
-        
     let errorHandling (this : Controller) =
         this.Response.StatusCode <- 404
         let reqId = 
@@ -87,6 +77,7 @@ type CatalogController() =
                            |> search context  
                            |> selectByCategory context category
                            |> filter context ids
+                           |> filterUnavailable
                            |> sortProducts sortOption
                            |> loadImages context
                            |> loadRating context
@@ -97,7 +88,7 @@ type CatalogController() =
         use context = new ApplicationContext()
         let product = context.Product.FirstOrDefault(fun p -> p.Id = id)
         
-        if product = null
+        if product = null || not product.IsAvailable
         then
             errorHandling this
         else

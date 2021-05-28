@@ -17,6 +17,14 @@ module Selector =
         | "image" -> context.Image |> toList
         | _ -> failwith "There is no such model type"
         
+    let getModelsWithRelations (name : string) =
+        use context = new ApplicationContext()
+        let toList (set : DbSet<_>) = set.Select(fun e -> e :> IModel).OrderBy(fun e -> e.Id).ToList()
+        match name.ToLower() with
+        | "specificationoptions" -> (context.SpecificationOption |> toList).Select(fun e -> SpecificationOption.GetModel(e.Id))
+        | "products" -> (context.Product |> toList).Select(fun e -> Product.GetModel(e.Id))
+        | _ -> failwith "There is no such model type"
+        
     let getModelWithRelations (name : string) id =
         match name.ToLower() with
         | "supercategory" -> SuperCategory.GetModel(id)
@@ -37,4 +45,13 @@ module Selector =
         | "image" -> typeof<Image>
         | _ -> failwith "There is no such model type"
         
+    let getEmptyModel (name : string) =
+        match name.ToLower() with
+        | "supercategory" -> SuperCategory() :> IModel
+        | "category" -> Category() :> IModel
+        | "specification" -> Specification() :> IModel
+        | "specificationoption" -> SpecificationOption() :> IModel
+        | "product" -> Product() :> IModel
+        | "image" -> Image() :> IModel
+        | _ -> failwith "There is no such model type"
     

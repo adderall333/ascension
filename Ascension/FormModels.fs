@@ -1,15 +1,16 @@
 namespace Ascension
 
 open System.Collections.Generic
+open Models
 
-type SuperCategoryModel() =
+type SuperCategoryModel() = 
     let mutable id = 0 : int
     let mutable name = null : string
     let mutable imagePath = null : string
     let mutable categories = List<int>() : List<int>
     member this.Id
-        with get() = id
-        and set value = id <- value
+            with get() = id
+            and set value = id <- value
     member this.Name
         with get() = name
         and set value = name <- value
@@ -19,6 +20,10 @@ type SuperCategoryModel() =
     member this.Categories
         with get() = categories
         and set value = categories <- value
+    interface IModel with
+        member this.Id
+            with get() = id
+            and set value = id <- value
         
 type CategoryModel() =
     let mutable id = 0 : int
@@ -45,6 +50,10 @@ type CategoryModel() =
     member this.Specifications
         with get() = specifications
         and set value = specifications <- value
+    interface IModel with
+        member this.Id
+            with get() = id
+            and set value = id <- value
         
 type SpecificationModel() =
     let mutable id = 0 : int
@@ -63,6 +72,10 @@ type SpecificationModel() =
     member this.SpecificationOptions
         with get() = specificationOptions
         and set value = specificationOptions <- value
+    interface IModel with
+        member this.Id
+            with get() = id
+            and set value = id <- value
         
 type SpecificationOptionModel() =
     let mutable id = 0 : int
@@ -81,12 +94,17 @@ type SpecificationOptionModel() =
     member this.Products
         with get() = products
         and set value = products <- value
+    interface IModel with
+        member this.Id
+            with get() = id
+            and set value = id <- value
         
 type ProductModel() =
     let mutable id = 0 : int
     let mutable name = null : string
     let mutable cost = 0 : int
     let mutable description = null : string
+    let mutable isAvailable = null : string
     let mutable category = 0 : int
     let mutable specificationOptions = List<int>() : List<int>
     let mutable images = List<int>() : List<int>
@@ -102,6 +120,9 @@ type ProductModel() =
     member this.Description
         with get() = description
         and set value = description <- value
+    member this.IsAvailable
+        with get() = isAvailable
+        and set value = isAvailable <- value
     member this.Category
         with get() = category
         and set value = category <- value
@@ -111,6 +132,10 @@ type ProductModel() =
     member this.Images
         with get() = images
         and set value = images <- value
+    interface IModel with
+        member this.Id
+            with get() = id
+            and set value = id <- value
         
 type ImageModel() =
     let mutable id = 0 : int
@@ -125,6 +150,10 @@ type ImageModel() =
     member this.Product
         with get() = product
         and set value = product <- value
+    interface IModel with
+        member this.Id
+            with get() = id
+            and set value = id <- value
         
 type UserModel() =
     let mutable id = 0 : int
@@ -147,3 +176,7 @@ type UserModel() =
     member this.IsAdmin
         with get() = isAdmin
         and set value = isAdmin <- value
+    interface IModel with
+        member this.Id
+            with get() = id
+            and set value = id <- value

@@ -96,12 +96,11 @@ module CreateHelper =
         sb.ToString()
         
 module UpdateHelper =
-    let processImageProperty =
-        "<div for=\"image-input\" class=\"standard-text\"><label class=\"form-label\">Image</label>" +
-        "<input class=\"form-control\" id=\"image-input\" type=\"file\" name=\"file\" accept=\"image/jpeg,image/png\"></div>"
-    
     let getValueAttribute propertyType (propertyValue : Object) propertyName =
-        if propertyType <> typedefof<bool>
+        if propertyValue = null
+        then
+            ""
+        elif propertyType <> typedefof<bool>
         then
             "value=\"" + propertyValue.ToString() + "\""
         elif (propertyValue :?> bool)
@@ -123,14 +122,33 @@ module UpdateHelper =
             sb.Append($"{getValueAttribute propertyType propertyValue propertyName}></div>") |> ignore
         sb.ToString()
         
-    let processComplexProperty (options : IEnumerable<IModel>) propertyName (checkedIds : IEnumerable<int>) isEnumerable  =
+    let processImageProperty =
+        "<div for=\"image-input\" class=\"standard-text\"><label class=\"form-label\">Image</label>" +
+        "<input class=\"form-control\" id=\"image-input\" type=\"file\" name=\"file\" accept=\"image/jpeg,image/png\"></div>"
+        
+    let processManyToOneProperty (options : IEnumerable<IModel>) propertyName (checkedId : int)  =
         let sb = StringBuilder()
         sb.Append($"<div class=\"standard-text\">{propertyName}</div>") |> ignore
         for option in options do
-            let isChecked = if checkedIds.Contains(option.Id) then "checked" else ""
+            let isChecked = if checkedId = option.Id then "checked" else ""
             sb.Append($"<div class\"form-check\"><input class=\"form-check-input\" type=\"radio\" id=\"{option.ToString()}\" ") |> ignore
             sb.Append($"name=\"{propertyName}\" value=\"{option.Id.ToString()}\" {isChecked}>") |> ignore
             sb.Append($"<label class=\"form-check-label\" for=\"{option.ToString()}\">{option.ToString()}</label></div>") |> ignore
+        sb.ToString()
+        
+    let processManyToManyProperty (options : IEnumerable<IModel>) propertyName (checkedIds : IEnumerable<int>)  =
+        use context = new ApplicationContext()
+        let sb = StringBuilder()
+        let groups = options.GroupBy(fun o -> (o :?> ICategorized).CategoryName)
+        
+        sb.Append($"<div class=\"standard-text\">{propertyName}</div>") |> ignore
+        for group in groups do
+            sb.Append($"<div class=\"little-text\">{group.Key}</div>") |> ignore
+            for option in group do
+                let isChecked = if checkedIds.Contains(option.Id) then "checked" else ""
+                sb.Append($"<div class\"form-check\"><input class=\"form-check-input\" type=\"checkbox\" id=\"{option.ToString()}\" ") |> ignore
+                sb.Append($"name=\"{propertyName}\" value=\"{option.Id.ToString()}\" category-name=\"{group.Key}\" {isChecked}>") |> ignore
+                sb.Append($"<label class=\"form-check-label\" for=\"{option.ToString()}\">{option.ToString()}</label></div>") |> ignore
         sb.ToString()
         
     let getUpdateHtml model =
@@ -145,8 +163,18 @@ module UpdateHelper =
             elif property.GetCustomAttributes(typedefof<ManyToOneAttribute>, false).Any()
             then
                 let options = getModelsWithoutRelations property.Name
-                let checkedIds = [(property.GetValue(model) :?> IModel).Id]
-                sb.Append(processComplexProperty options property.Name checkedIds false) |> ignore
+                let value = property.GetValue(model)
+                let checkedId = if value = null then -1 else (value :?> IModel).Id
+                sb.Append(processManyToOneProperty options property.Name checkedId) |> ignore
+            elif property.GetCustomAttributes(typedefof<ManyToManyAttribute>, false).Any()
+            then
+                let options = getModelsWithRelations property.Name
+                let value = property.GetValue(model)
+                let checkedIds =
+                    if value = null
+                    then seq {-1}
+                    else (value :?> IEnumerable<IModel>).Select(fun e -> e.Id)
+                sb.Append(processManyToManyProperty options property.Name checkedIds) |> ignore
         sb.ToString()
         
 module Checks =

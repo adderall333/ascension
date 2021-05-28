@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Models.Attributes;
 
 namespace Models
 {
-    public class SpecificationOption : IModel
+    public class SpecificationOption : IModel, ICategorized
     {
         [PrimaryKey]
         public int Id { get; set; }
@@ -22,6 +24,10 @@ namespace Models
         [ManyToMany]
         public List<Product> Products { get; set; }
         
+        [NotMapped]
+        [NotAdministered]
+        public string CategoryName { get; set; }
+        
         public override string ToString()
         {
             return $"{Id}.{Name} (Specification Id: {SpecificationId})";
@@ -30,11 +36,14 @@ namespace Models
         public static IModel GetModel(int id)
         {
             var context = new ApplicationContext();
-            return context
+            var model = context
                 .SpecificationOption
                 .Include(specificationOption => specificationOption.Specification)
+                .ThenInclude(specification => specification.Category)
                 .Include(specificationOption => specificationOption.Products)
                 .First(specificationOption => specificationOption.Id == id);
+            model.CategoryName = model.Specification.Category.Name;
+            return model;
         }
         
         public SpecificationOption Update(string name, int specification, List<int> products, ApplicationContext context)
