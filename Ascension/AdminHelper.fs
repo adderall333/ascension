@@ -209,10 +209,12 @@ module Checks =
                                                                     .Where(fun c -> c.Name = category.Name && c.Id <> category.Id)
                                                                     .Any())
         let noSuperCategoryCheck (category : CategoryModel) = category.SuperCategory > 0
+        let noImageCheck (category : CategoryModel) = not (String.IsNullOrEmpty(category.ImagePath))
         let notImageCheck (category : CategoryModel) = ["jpg"; "png"].Contains(category.ImagePath.Split(".").Last())
         (Ok(model)) |> check emptyNameCheck "Category name was empty"
                     |> check nonUniqueNameCheck "Category with same name already exists"
                     |> check noSuperCategoryCheck "Super category was not specified"
+                    |> check noImageCheck "Image was not specified"
                     |> check notImageCheck "File type is not supported"
                     
     let checkSpecification (model : SpecificationModel) =
