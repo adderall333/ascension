@@ -23,6 +23,7 @@ open System.Linq
 open Microsoft.AspNetCore.Mvc
 open Microsoft.EntityFrameworkCore
 open Models
+open System.Net.Mail;
 
 type CheckoutController() =
     inherit Controller()
@@ -99,7 +100,10 @@ type CheckoutController() =
             order.DeliveryType <- DeliveryType.Delivery
             order.RecipientEmail <- form.Email
             order.DeliveryAddress <- form.Address
-
+            
+          
+                
+                  
             let amount =
                 productLines
                     .Select(fun p -> p.Product.Cost * p.ProductCount)
@@ -124,8 +128,20 @@ type CheckoutController() =
             Purchase.UpdatePurchases(order, context)
             
             this.Response.Headers.Add("order_result", StringValues("ok"))
+            
+            this.EmailSender(order)
+           
+            let event = new Event<_>()
+           
+           
+            if order.Status then 
+              // Trigger the event when count goes over 100. To keep the sample
+              // simple, we pass 'count' to the listeners of the event.
+            event.Trigger(count)
+          // Expose the event so that the users of our type can register event handlers
         
     
+            
     member this.Card() = //name: string, surname: string, email: string, address: string
         this.View()
 
@@ -140,7 +156,8 @@ type CheckoutController() =
             context.Entry(order).Collection("ProductLines").Load()
             for product in order.ProductLines do
                 context.Entry(product).Reference("Product").Load()
-                
+            
+          
             for image in order.ProductLines.Select(fun i -> i.Product).ToList() do
                 context.Entry(image).Collection("Images").Load()
             
@@ -152,6 +169,40 @@ type CheckoutController() =
             
             
             
+    member this.EmailSender(order: Order) =
+           
+            let from = MailAddress("ascensiongroupshop@gmail.com", "AscensionLowTechGroup")
+
+            let fromTo = MailAddress(order.RecipientEmail)
+
+            let message = new MailMessage(from, fromTo)
+
+            message.Subject <- "Order Status"
+
+
+            //email message (body)
+            message.Body <- " <div class=\"col-md-9 order-content\">
+            <div class=\"form_main col-md-4 col-sm-5 col-xs-7\">
+                <h4 class=\"heading\"><strong>Order №" + order.Id.ToString() + "</strong></h4>
+            </div>
+            <div>
+                <p>Time:" + order.OrderTime.ToString() + "</p>
+                <p>Status:" + order.Status.ToString() + "</p>
+                <p>Amount: " + order.Amount.ToString() + " $</p>
+                <p>Delivery Address: " + order.DeliveryAddress.ToString() + "</p>
+                <p>Recipient Name: " + order.RecipientName.ToString() + "</p>
+                <p>Recipient Surname: " + order.RecipientSurname.ToString() + "</p>
+                <p>Recipient Email: " + order.RecipientEmail.ToString() + "</p>
+            </div>
+               "
+            
+            message.IsBodyHtml <- true
+               
+            let smtp = new SmtpClient("smtp.gmail.com", 587)
+
+            smtp.Credentials <- NetworkCredential("ascensiongroupshop@gmail.com", "Vjacheslavovich098123MMM")
+            smtp.EnableSsl <- true
+            smtp.Send(message)
 
 
     member this.UpdateStatus(orderId: int, newStatus: Status) =
