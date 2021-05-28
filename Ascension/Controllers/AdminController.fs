@@ -102,7 +102,7 @@ type AdminController() =
         if isAdmin this.HttpContext
         then
             use context = new ApplicationContext()
-            let users = context.User.ToList()
+            let users = context.User.OrderBy(fun u -> u.Id).ToList()
             this.View("Admins", AdminsModel(users, String.Empty)) :> ActionResult
         else
             this.Forbid() :> ActionResult

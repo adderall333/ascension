@@ -224,10 +224,18 @@ module Checks =
                     |> check noCategoryCheck "Category was not specified"
     
     let checkSpecificationOption (model : SpecificationOptionModel) =
+        use context = new ApplicationContext()
         let emptyNameCheck (specificationOption : SpecificationOptionModel) = not (String.IsNullOrEmpty(specificationOption.Name))
         let noSpecificationCheck (specificationOption : SpecificationOptionModel) = specificationOption.Specification > 0
+        
+        let categoryId = context.Specification.First(fun s -> s.Id = model.Specification).CategoryId
+        let badProductsCheck (specificationOption : SpecificationOptionModel) = context
+                                                                                    .Product
+                                                                                    .Where(fun p -> specificationOption.Products.Contains(p.Id))
+                                                                                    .All(fun p -> p.Category.Id = categoryId)
         (Ok(model)) |> check emptyNameCheck "Specification option name was empty"
                     |> check noSpecificationCheck "Specification was not specified"
+                    |> check badProductsCheck "Products must be from the same category as the specification option"
         
     let checkProduct (model : ProductModel) =
         use context = new ApplicationContext()
@@ -239,11 +247,16 @@ module Checks =
         let emptyDescriptionCheck (product : ProductModel) = not (String.IsNullOrEmpty(product.Description))
         let substantialCostCheck (product : ProductModel) = product.Cost > 0 && product.Cost < 1000000
         let noCategoryCheck (product : ProductModel) = product.Category > 0
+        let badSpecificationOptionsCheck (product : ProductModel) = context
+                                                                        .SpecificationOption
+                                                                        .Where(fun sOp -> product.SpecificationOptions.Contains(sOp.Id))
+                                                                        .All(fun sOp -> sOp.Specification.CategoryId = product.Category)
         (Ok(model)) |> check emptyNameCheck "Product name was empty"
                     |> check nonUniqueNameCheck "Product with same name already exists"
                     |> check emptyDescriptionCheck "Product description was empty"
                     |> check substantialCostCheck "Product cost was less than 0 or bigger than 1000000"
                     |> check noCategoryCheck "Category was not specified"
+                    |> check badSpecificationOptionsCheck "Specification options must be from the same category as the product"
                     
     let checkImage (model : ImageModel) =
         let emptyPathCheck (image : ImageModel) = not (String.IsNullOrEmpty(image.Path))
