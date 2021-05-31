@@ -146,7 +146,7 @@ edit_button.addEventListener("click", () => {
                 form.email.classList.add('error');
             }
             else if (result === "failedPass"){
-                createMessage('zdmi-close', "Your old password fields does not matches");
+                createMessage('zdmi-close', "Old password is incorrect");
                 form.old_pass.classList.add('error');
             }
             else // "error"
