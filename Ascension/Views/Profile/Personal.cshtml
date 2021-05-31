@@ -5,7 +5,9 @@
     Layout = "_Layout";
     ViewBag.Title = "Profile";
 }
+
 <body>
+<link rel="stylesheet" href="~/css/authentication.css">
 <div class="container">
     <div class="row profile">
         <div class="col-md-3">
@@ -65,16 +67,40 @@
                 <div id="error-block"></div>
                 <form method="POST" id="edit-form" name="EditForm" onsubmit="return false">
                     <div class="form-group">
-                        <input class="auth-input" type="text" maxlength="20" name="name" id="name" placeholder="Your Name" value="@Model.Name"/>
+                        <label class="auth-label" for="name">
+                            <i class="zmdi zmdi-account material-icons-name"></i>
+                        </label>
+                        <input class="auth-input" type="text" maxlength="20" name="name" id="name" placeholder="Your name" value="@Model.Name"/>
                     </div>
                     <div class="form-group">
-                        <input class="auth-input" type="text" maxlength="20" name="surname" id="surname" placeholder="Your Surname" value="@Model.Surname"/>
+                        <label class="auth-label" for="surname">
+                            <i class="zmdi zmdi-account-o material-icons-name"></i>
+                        </label>
+                        <input class="auth-input" type="text" maxlength="20" name="surname" id="surname" placeholder="Your surname" value="@Model.Surname"/>
                     </div>
                     <div class="form-group">
-                        <input class="auth-input" type="text" name="email" id="email" placeholder="Your Email" value="@Model.Email"/>
+                        <label class="auth-label" for="email">
+                            <i class="zmdi zmdi-email"></i>
+                        </label>
+                        <input class="auth-input" type="text" name="email" id="email" placeholder="Your email" value="@Model.Email"/>
                     </div>
                     <div class="form-group">
-                        <input class="auth-input" type="password" name="pass" id="pass" placeholder="Password"/>
+                        <label class="auth-label" for="old_pass">
+                            <i class="zmdi zmdi-lock"></i>
+                        </label>
+                        <input class="auth-input" type="password" name="old_pass" id="old_pass" placeholder="Old password"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="auth-label" for="pass">
+                            <i class="zmdi zmdi-lock"></i>
+                        </label>
+                        <input class="auth-input" type="password" name="pass" id="pass" placeholder="New password"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="auth-label" for="repass">
+                            <i class="zmdi zmdi-lock"></i>
+                        </label>
+                        <input class="auth-input" type="password" name="repass" id="repass" placeholder="Repeat your new password"/>
                     </div>
                     <div class="form-group form-button">
                         <input type="submit" name="edit-personal" id="edit-personal" class="auth-input form-submit" value="Save"/>

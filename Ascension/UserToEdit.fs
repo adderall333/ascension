@@ -5,6 +5,7 @@ type UserToEdit() =
     let mutable surname = null : string
     let mutable email = null : string
     let mutable pass = null : string
+    let mutable old_pass = null : string
     member this.Name
         with get() = name
         and set(value) = name <- value
@@ -17,3 +18,6 @@ type UserToEdit() =
     member this.Pass
         with get() = pass
         and set(value) = pass <- value
+    member this.Old_Pass
+        with get() = old_pass
+        and set(value) = old_pass <- value
