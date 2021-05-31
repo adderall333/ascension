@@ -6,7 +6,8 @@ open Microsoft.AspNetCore.Mvc
 open Models
 open Ascension
 open Microsoft.Extensions.Primitives
-open System.Text.RegularExpressions;
+open System.Text.RegularExpressions
+open BCrypt.Net
 
 type ProfileController() =
     inherit Controller()
@@ -17,7 +18,7 @@ type ProfileController() =
             context.User.Where(fun e -> e.Email = email).ToList().Any()
         else
             false
-    let ValidateUser(user : UserToRegister) =
+    let ValidateUser(user : UserToEdit) =
         let nameRegex = new Regex("^[A-Z][a-zA-Z]+$")
         let nameCheck = nameRegex.IsMatch user.Name
         
@@ -59,7 +60,7 @@ type ProfileController() =
             this.Redirect("../Authentication/Signin") :> ActionResult
             
     [<HttpPost>]  
-    member this.TryEdit(user : UserToRegister) =
+    member this.TryEdit(user : UserToEdit) =
         let id = this.HttpContext.Session.GetInt32("id") |> int
         use dbContext = new ApplicationContext()
         let dbUser = dbContext
@@ -69,7 +70,8 @@ type ProfileController() =
                       .First()
         let valid = ValidateUser user
         if not valid then this.Response.Headers.Add("edit_result", StringValues("error"))
-        elif FindUser (user.Email, dbUser.Email) then this.Response.Headers.Add("edit_result", StringValues("failed"))
+        elif FindUser (user.Email, dbUser.Email) then this.Response.Headers.Add("edit_result", StringValues("failedEmail"))
+        elif not <| Crypto.VerifyHashedPassword user.Old_Pass dbUser.HashedPassword && user.Old_Pass <> null then this.Response.Headers.Add("edit_result", StringValues("failedPass"))
         else
             let hashedPassword = Crypto.GetHashPassword user.Pass
             dbUser.Name <- user.Name

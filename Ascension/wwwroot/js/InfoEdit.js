@@ -6,17 +6,17 @@ edit_button.addEventListener("click", () => {
     let surname = form.surname.value;
     let email = form.email.value;
     let pass = form.pass.value;
+    let old_pass = form.old_pass.value;
+    let  repass = form.repass.value;
 
     for(let i=0; i<form.elements.length; i++) {
         let input = form.elements[i];
         input.classList.remove('error');
     }
-
     let checkName = /^[A-Z][a-zA-Z]+$/.test(name);
     let checkSurname = /^[A-Z][a-zA-Z]+$/.test(surname);
     let checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)
     let checkPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(pass);
-
     function createMessage(zmdi, message) {
         let div = document.createElement('div');
         div.className = 'error-div';
@@ -50,6 +50,24 @@ edit_button.addEventListener("click", () => {
             createMessage('zmdi-close','Fill in all the fields');
             return false;
         }
+        if (pass === "" && (repass !== "" || old_pass !== ""))
+        {
+            check = false;
+            createMessage('zdmi-close', 'Type your new password');
+            form.pass.classList.add('error');
+        }
+        if (repass === "" && (pass !== "" || old_pass !== ""))
+        {
+            check = false;
+            createMessage('zdmi-close', 'Type your new password again');
+            form.repass.classList.add('error');
+        }
+        if (old_pass === "" && (pass !== "" || repass !== ""))
+        {
+            check = false;
+            createMessage('zdmi-close', 'Type your old password');
+            form.old_pass.classList.add('error');
+        }
 
         if (!checkName) {
             check = false;
@@ -74,6 +92,14 @@ edit_button.addEventListener("click", () => {
                 form.pass.classList.add('error');
             }
         }
+        if(repass !== pass){
+            if(pass !== "" && repass !== ""){
+                check = false;
+                createMessage('zdmi-close', 'The passwords doesn\'t match');
+                form.pass.classList.add('error');
+                form.repass.classList.add('error');
+            }
+        }
 
         return check;
     }
@@ -92,6 +118,7 @@ edit_button.addEventListener("click", () => {
     fD.append('surname', surname);
     fD.append('email', email);
     fD.append('pass', pass);
+    fD.append('old_pass', old_pass);
 
     $('#loading').addClass('processing');
     $.ajax({
@@ -106,9 +133,13 @@ edit_button.addEventListener("click", () => {
             if (result === "ok") {
                 createMessage('zmdi-check','You have successfully edit information');
             }
-            else if (result === "failed") {
+            else if (result === "failedEmail") {
                 createMessage('zmdi-close','This email address already exists</br>Please choose a unique one');
                 form.email.classList.add('error');
+            }
+            else if (result === "failedPass"){
+                createMessage('zdmi-close', "Your old password fields does not matches");
+                form.old_pass.classList.add('error');
             }
             else // "error"
                 createMessage('zmdi-close','An error occurred while editing</br>Please try again')
