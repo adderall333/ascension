@@ -7,7 +7,7 @@ open Microsoft.EntityFrameworkCore
 module Selector =
     let getModelsWithoutRelations (name : string) =
         use context = new ApplicationContext()
-        let toList (set : DbSet<_>) = set.Select(fun e -> e :> IModel).ToList()
+        let toList (set : DbSet<_>) = set.Select(fun e -> e :> IModel).OrderBy(fun e -> e.Id).ToList()
         match name.ToLower() with
         | "supercategory" -> context.SuperCategory |> toList
         | "category" -> context.Category |> toList
@@ -15,6 +15,14 @@ module Selector =
         | "specificationoption" -> context.SpecificationOption |> toList
         | "product" -> context.Product |> toList
         | "image" -> context.Image |> toList
+        | _ -> failwith "There is no such model type"
+        
+    let getModelsWithRelations (name : string) =
+        use context = new ApplicationContext()
+        let toList (set : DbSet<_>) = set.Select(fun e -> e :> IModel).OrderBy(fun e -> e.Id).ToList()
+        match name.ToLower() with
+        | "specificationoptions" -> (context.SpecificationOption |> toList).Select(fun e -> SpecificationOption.GetModel(e.Id))
+        | "products" -> (context.Product |> toList).Select(fun e -> Product.GetModel(e.Id))
         | _ -> failwith "There is no such model type"
         
     let getModelWithRelations (name : string) id =
@@ -37,4 +45,13 @@ module Selector =
         | "image" -> typeof<Image>
         | _ -> failwith "There is no such model type"
         
+    let getEmptyModel (name : string) =
+        match name.ToLower() with
+        | "supercategory" -> SuperCategory() :> IModel
+        | "category" -> Category() :> IModel
+        | "specification" -> Specification() :> IModel
+        | "specificationoption" -> SpecificationOption() :> IModel
+        | "product" -> Product() :> IModel
+        | "image" -> Image() :> IModel
+        | _ -> failwith "There is no such model type"
     

@@ -42,6 +42,19 @@ module ProductFilter =
                 .Select(fun s -> s.Id)
                 .Concat(checkedOptionsIds)
                 .ToList()
+        
+    let search (context : ApplicationContext) (searchString : string) =
+        if searchString <> null && searchString <> ""
+        then
+            context
+                .Product
+                .Where(fun p -> p.SearchVector.Matches(searchString))
+                .ToList()
+        else
+            null
+             
+    let filterUnavailable (products : List<Product>) =
+        products.Where(fun p -> p.IsAvailable).ToList()
                 
     let filterProducts (context : ApplicationContext) (products : List<Product>) (requiredOptionsIds : List<int>) =
         for product in products do

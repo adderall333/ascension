@@ -1,4 +1,4 @@
-﻿namespace Ascension
+﻿namespace Ascension.Controllers
 
 open Microsoft.AspNetCore.Http
 open System.Linq

@@ -1,4 +1,4 @@
-﻿namespace Ascension.Controller
+﻿namespace Ascension.Controllers
 
 open Ascension
 open System.Linq

@@ -3,32 +3,58 @@
 @{
     ViewBag.Title = "Admin page";
     Layout = "_Layout";
+    var i = 0;
 }
 
-<div>
-    <a asp-controller="Admin" asp-action="Index">Back</a>
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/admin.css">
+}
+
+<div class="standard-text">
+    <a asp-controller="Admin" asp-action="Index">← Back</a>
 </div>
 
-<div class="col">
+<div class="big-text">
     <a asp-controller="Admin" asp-action="Create" asp-route-name="@Model.First().GetType().Name">Create</a>
 </div>
 
 @foreach (var entity in Model)
 {
-    <div class="row">
-        <div class="col">
-            @entity.ToString()
+    if (i++ % 2 == 0)
+    {
+        <div class="row table-row dark-row">
+            <div class="col-6 table-data">
+                @entity.ToString()
+            </div>
+            <div class="col-2 table-data">
+                <a asp-controller="Admin" asp-action="Read" asp-route-name="@Model.First().GetType().Name" asp-route-id="@entity.Id">Read</a>
+            </div>
+            <div class="col-2 table-data">
+                <a asp-controller="Admin" asp-action="Update" asp-route-name="@Model.First().GetType().Name" asp-route-id="@entity.Id">Update</a>
+            </div>
+            <div class="col-2 table-data">
+                <a href="#" class="deleteLink" model-name="@entity.GetType().Name" model-id="@entity.Id">Delete</a>
+            </div>
         </div>
-        <div class="col">
-            <a asp-controller="Admin" asp-action="Read" asp-route-name="@Model.First().GetType().Name" asp-route-id="@entity.Id">Read</a>
+    }
+    else
+    {
+        <div class="row table-row">
+            <div class="col-6 table-data">
+                @entity.ToString()
+            </div>
+            <div class="col-2 table-data">
+                <a asp-controller="Admin" asp-action="Read" asp-route-name="@Model.First().GetType().Name" asp-route-id="@entity.Id">Read</a>
+            </div>
+            <div class="col-2 table-data">
+                <a asp-controller="Admin" asp-action="Update" asp-route-name="@Model.First().GetType().Name" asp-route-id="@entity.Id">Update</a>
+            </div>
+            <div class="col-2 table-data">
+                <a href="#" class="deleteLink" model-name="@entity.GetType().Name" model-id="@entity.Id">Delete</a>
+            </div>
         </div>
-        <div class="col">
-            <a asp-controller="Admin" asp-action="Update" asp-route-name="@Model.First().GetType().Name" asp-route-id="@entity.Id">Update</a>
-        </div>
-        <div class="col">
-            <a href="#" class="deleteLink" model-name="@entity.GetType().Name" model-id="@entity.Id">Delete</a>
-        </div>
-    </div>
+    }
 }
 
 <script>

@@ -10,7 +10,7 @@ using NpgsqlTypes;
 
 namespace Models
 {
-    public class Product : IModel
+    public class Product : IModel, ICategorized
     {
         [PrimaryKey]
         public int Id { get; set; }
@@ -22,7 +22,10 @@ namespace Models
         public int Cost { get; set; }
         
         [SimpleProperty]
-        public string Description { get; set; }
+        public string? Description { get; set; }
+        
+        [SimpleProperty]
+        public bool IsAvailable { get; set; }
         
         [NotAdministered]
         public int CategoryId { get; set; }
@@ -46,11 +49,15 @@ namespace Models
         public IEnumerable<Review> Reviews { get; set; }
         
         [NotAdministered]
-        public ProductRating Rating { get; set; }
+        public ProductRating? Rating { get; set; }
         
         [NotMapped]
         [NotAdministered]
         public bool IsInCart { get; set; }
+        
+        [NotMapped]
+        [NotAdministered]
+        public string CategoryName { get; set; }
         
         public override string ToString()
         {
@@ -60,19 +67,22 @@ namespace Models
         public static IModel GetModel(int id)
         {
             var context = new ApplicationContext();
-            return context
+            var model = context
                 .Product
                 .Include(product => product.Category)
                 .Include(product => product.SpecificationOptions)
                 .Include(product => product.Images)
                 .First(product => product.Id == id);
+            model.CategoryName = model.Category.Name;
+            return model;
         }
 
-        public Product Update(string name, int cost, string description, int category, List<int> specificationOptions, ApplicationContext context)
+        public Product Update(string name, int cost, string description, string isAvailable, int category, List<int> specificationOptions, ApplicationContext context)
         {
             Name = name;
             Cost = cost;
             Description = description;
+            IsAvailable = isAvailable == "IsAvailable";
             
             if (category > 0)
                 Category = context.Category.First(c => c.Id == category);

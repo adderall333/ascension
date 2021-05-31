@@ -1,5 +1,5 @@
 @using Models
-@model Ascension.Controller.UpdateModel
+@model Ascension.Controllers.UpdateModel
 
 @{
     ViewBag.Title = "Admin page";
@@ -9,8 +9,13 @@
     var action = "/Admin/Update" + updateModel.GetType().Name;
 }
 
-<div>
-    <a asp-controller="Admin" asp-action="Models" asp-route-name="@updateModel.GetType().Name">Back</a>
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/admin.css">
+}
+
+<div class="standard-text">
+    <a asp-controller="Admin" asp-action="Models" asp-route-name="@updateModel.GetType().Name">← Back</a>
 </div>
 
 <div id="error-message" style="color: red">
@@ -21,6 +26,6 @@
     <input type="hidden" name="id" value="@updateModel.Id">
     @Html.GetHtml(UpdateHelper.getUpdateHtml(updateModel))
     <div>
-        <button id="btn">Update</button>    
+        <button id="btn" class="btn btn-outline-light product-btn" style="margin-top: 15px">Update</button>    
     </div>
 </form>

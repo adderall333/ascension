@@ -1,16 +1,21 @@
 @using Models
-@model Ascension.Controller.CreateModel
+@model Ascension.Controllers.UpdateModel
 
 @{
     ViewBag.Title = "Admin page";
     Layout = "_Layout";
-    var modelType = Model.ModelType;
+    var updateModel = Model.Model;
     var message = Model.Message;
-    var action = "/Admin/Create" + modelType.Name;
+    var action = "/Admin/Create" + updateModel.GetType().Name;
 }
 
-<div>
-    <a asp-controller="Admin" asp-action="Models" asp-route-name="@modelType.Name">Back</a>
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/admin.css">
+}
+
+<div class="standard-text">
+    <a asp-controller="Admin" asp-action="Models" asp-route-name="@updateModel.GetType().Name">← Back</a>
 </div>
 
 <div id="error-message" style="color: red">
@@ -18,8 +23,8 @@
 </div>
 
 <form id="create" method="post" action="@action"  enctype="multipart/form-data">
-    @Html.GetHtml(CreateHelper.getCreateHtml(modelType))
+    @Html.GetHtml(UpdateHelper.getUpdateHtml(updateModel))
     <div>
-        <button id="btn">Create</button>
+        <button id="btn" class="btn btn-outline-light product-btn" style="margin-top: 15px">Create</button>
     </div>
 </form>
