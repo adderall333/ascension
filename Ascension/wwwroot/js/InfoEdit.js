@@ -92,6 +92,14 @@ edit_button.addEventListener("click", () => {
                 form.pass.classList.add('error');
             }
         }
+        if(old_pass === pass){
+            if(pass !== "" && old_pass !== ""){
+                check = false;
+                createMessage('zdmi-close', 'Old and new passwords must not match');
+                form.pass.classList.add('error');
+                form.old_pass.classList.add('error');
+            }
+        }
         if(repass !== pass){
             if(pass !== "" && repass !== ""){
                 check = false;
