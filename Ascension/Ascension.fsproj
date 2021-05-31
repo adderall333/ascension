@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="EmailService.fs" />
         <Compile Include="CartService.fs" />
         <Compile Include="FormModels.fs" />
         <Compile Include="ProductFilter.fs" />
@@ -30,9 +31,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="BCrypt.Net" Version="0.1.0" />
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
         <PackageReference Include="Dadata" Version="21.3.0" />
+        <PackageReference Include="MailKit" Version="2.12.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.0" />
+        <PackageReference Include="MimeKit" Version="2.12.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 

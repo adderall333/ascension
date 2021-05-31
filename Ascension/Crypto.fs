@@ -1,6 +1,5 @@
 ﻿namespace Ascension
 
-open System
 open BCrypt.Net
 
 module Crypto =

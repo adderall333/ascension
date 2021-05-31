@@ -111,40 +111,9 @@ type CheckoutController() =
             
             this.Response.Headers.Add("order_result", StringValues("ok"))
             
-            
-            //email params
-            (*let from = MailAddress("ascensiongroupshop@gmail.com", "Danila")
-            
-            let fromTo = MailAddress(order.RecipientEmail)
-            
-            let message = new MailMessage(from, fromTo)
-            
-            message.Subject <- "Order Status"
-            
-            
-            //email message (body)
-            message.Body <- " <div class=\"col-md-9 order-content\">
-            <div class=\"form_main col-md-4 col-sm-5 col-xs-7\">
-                <h4 class=\"heading\"><strong>Order №" + order.Id.ToString() + "</strong></h4>
-            </div>
-            <div>
-                <p>Time:" + order.OrderTime.ToString() + "</p>
-                <p>Status:" + order.Status.ToString() + "</p>
-                <p>Amount: " + order.Amount.ToString() + " $</p>
-                <!-- If Delivery type is not delivery, fix it !!!!!!-->
-                <p>Delivery Address: " + order.DeliveryAddress.ToString() + "</p>
-                <p>Recipient Name: " + order.RecipientName.ToString() + "</p>
-                <p>Recipient Surname: " + order.RecipientSurname.ToString() + "</p>
-                <p>Recipient Email: " + order.RecipientEmail.ToString() + "</p>
-            </div>"
-            
-            message.IsBodyHtml <- true
-            
-            let smtp = new SmtpClient("smtp.gmail.com", 587)
-          
-            smtp.Credentials <- NetworkCredential("ascensiongroupshop@gmail.com", "Vjacheslavovich098123MMM")
-            smtp.EnableSsl <- true
-            smtp.Send(message)*)
+            //email
+            let message = EmailService.GetMessageForOrder(order)
+            EmailService.SendEmail(order.RecipientEmail, "The new order has been successfully created", message)
         
     
     member this.Card() = //name: string, surname: string, email: string, address: string
