@@ -93,6 +93,8 @@ type AdminController() =
             else
                 order.Status <- status
                 context.SaveChanges() |> ignore
+                let message = EmailService.GetMessageForOrder(order)
+                EmailService.SendEmail(order.RecipientEmail, "The order status has been changed", message)
                 this.Redirect("Orders") :> ActionResult
         else
             this.StatusCode(403) :> ActionResult

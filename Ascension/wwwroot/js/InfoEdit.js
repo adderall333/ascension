@@ -103,7 +103,7 @@ edit_button.addEventListener("click", () => {
         if(repass !== pass){
             if(pass !== "" && repass !== ""){
                 check = false;
-                createMessage('zdmi-close', 'The passwords doesn\'t match');
+                createMessage('zdmi-close', 'The passwords don\'t match');
                 form.pass.classList.add('error');
                 form.repass.classList.add('error');
             }
