@@ -38,6 +38,6 @@ module EmailService =
         
         use client = new SmtpClient()
         client.Connect("smtp.gmail.com", 465, true)
-        client.Authenticate("ascensiongroupshop@gmail.com", "Vjacheslavovich098123MMM")
+        client.Authenticate("ascensiongroupshop@gmail.com", "AscensionSHOP777")
         client.Send(emailMessage)
         client.Disconnect(true)
