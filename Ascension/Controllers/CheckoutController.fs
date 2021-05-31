@@ -1,29 +1,14 @@
-﻿namespace Ascension
+﻿namespace Ascension.Controllers
 
 open System
-open System.Collections.Generic
-open System.Net.Mail
 open System.Text.RegularExpressions
+open Ascension
 open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Primitives
-open ProductFilter
-open System.Diagnostics
 open System.Linq
-open Microsoft.AspNetCore.Mvc
-open Microsoft.EntityFrameworkCore
 open Microsoft.EntityFrameworkCore
 open Models
-open System
-open System.Collections.Generic
-open System.Net
 open Microsoft.AspNetCore.Http
-open Microsoft.AspNetCore.Identity
-open ProductFilter
-open System.Diagnostics
-open System.Linq
-open Microsoft.AspNetCore.Mvc
-open Microsoft.EntityFrameworkCore
-open Models
 
 type CheckoutController() =
     inherit Controller()
