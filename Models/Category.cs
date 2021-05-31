@@ -16,8 +16,11 @@ namespace Models
         [ImageProperty]
         public string ImagePath { get; set; }
         
+        [NotAdministered]
+        public int SuperCategoryId { get; set; }
+        
         [ManyToOne]
-        public SuperCategory SuperCategory { get; set; }
+        public SuperCategory? SuperCategory { get; set; }
         
         [OneToMany]
         public List<Product> Products { get; set; }
@@ -47,11 +50,11 @@ namespace Models
             ImagePath = string.IsNullOrEmpty(imagePath) ? ImagePath : imagePath;
             
             if (superCategory > 0)
-                SuperCategory = context.SuperCategory.First(sc => sc.Id == superCategory);
+                SuperCategory = context.SuperCategory?.First(sc => sc.Id == superCategory);
 
             return this;
         }
-
+        
         public Category()
         {
         }

@@ -16,7 +16,7 @@ namespace Models
         public int ProductId { get; set; }
         
         [ManyToOne]
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
 
         public override string ToString()
         {
@@ -37,7 +37,7 @@ namespace Models
             Path = string.IsNullOrEmpty(path) ? Path : path; 
             
             if (product > 0)
-                Product = context.Product.First(p => p.Id == product);
+                Product = context.Product?.First(p => p.Id == product);
 
             return this;
         }

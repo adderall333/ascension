@@ -22,7 +22,7 @@ namespace Models
         public int Cost { get; set; }
         
         [SimpleProperty]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
         [SimpleProperty]
         public bool IsAvailable { get; set; }
@@ -49,7 +49,7 @@ namespace Models
         public IEnumerable<Review> Reviews { get; set; }
         
         [NotAdministered]
-        public ProductRating Rating { get; set; }
+        public ProductRating? Rating { get; set; }
         
         [NotMapped]
         [NotAdministered]

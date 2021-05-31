@@ -20,7 +20,7 @@ namespace Models
         public Category Category { get; set; }
         
         [OneToMany]
-        public List<SpecificationOption> SpecificationOptions { get; set; }
+        public List<SpecificationOption>? SpecificationOptions { get; set; }
         
         public override string ToString()
         {
