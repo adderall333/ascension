@@ -29,8 +29,7 @@ module EmailService =
         emailMessage.From.Add(MailboxAddress("Ascension site administration", "ascensiongroupshop@gmail.com"));
         emailMessage.To.Add(MailboxAddress("", email));
         emailMessage.Headers.Add("Precedence", "bulk");
-        emailMessage.Subject <- subject;
-        emailMessage.Date <- DateTimeOffset.Now
+        emailMessage.Subject <- subject
         
         let htmlMessage = TextPart(MimeKit.Text.TextFormat.Html)
         htmlMessage.Text <- message
@@ -38,6 +37,6 @@ module EmailService =
         
         use client = new SmtpClient()
         client.Connect("smtp.gmail.com", 465, true)
-        client.Authenticate("ascensiongroupshop@gmail.com", "Vjacheslavovich098123MMM")
+        client.Authenticate("ascensiongroupshop@gmail.com", "AscensionSHOP777")
         client.Send(emailMessage)
         client.Disconnect(true)
