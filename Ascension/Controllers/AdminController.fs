@@ -466,7 +466,7 @@ type AdminController() =
             use context = new ApplicationContext()
             let modelToDelete = Category.GetModel(id) :?> Category
             modelToDelete.Products.ForEach(fun p -> p.IsAvailable <- false)
-            context.Category.Remove(modelToDelete) |> ignore
+            modelToDelete.IsAvailable <- false
             context.SaveChanges() |> ignore
             this.Response.StatusCode = 200 |> ignore
             this.Redirect("/admin/models?name=Category") :> ActionResult

@@ -13,6 +13,9 @@ namespace Models
         [SimpleProperty]
         public string Name { get; set; }
         
+        [SimpleProperty]
+        public bool IsAvailable { get; set; }
+        
         [ImageProperty]
         public string ImagePath { get; set; }
         

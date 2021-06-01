@@ -27,7 +27,7 @@ let client = ref (factory.CreateDefaultClient(cookieContainerHandler))
 [<TestCase("/profile/order", TestName = "Profile_Orders")>]
 
 [<TestCase("/checkout/card", TestName = "Checkout_Card")>]
-[<TestCase("/checkout/orders/39", TestName = "Checkout_Order")>]
+[<TestCase("/checkout/orders/152", TestName = "Checkout_Order")>]
 
 [<TestCase("/admin", TestName = "AdminIndex")>]
 
