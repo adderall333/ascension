@@ -33,6 +33,9 @@ type CatalogController() =
                             .SuperCategory
                             .Include(fun sc -> sc.Categories)
                             .ToList()
+                            
+        model.ForEach(fun sOp -> sOp.Categories <- sOp.Categories.Where(fun c -> c.IsAvailable).ToList())
+        
         if (searchString <> null) && (searchString <> "")
         then
             this.ViewData.Add("searchString", searchString)
