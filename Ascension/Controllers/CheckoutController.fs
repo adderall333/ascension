@@ -77,7 +77,12 @@ type CheckoutController() =
             //updating db
             let order = Order()
             order.Status <- Status.Paid
-            order.OrderTime <- DateTime.Now
+            
+            let moscowZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time")
+            let utcTime = DateTime.Now.ToUniversalTime()
+            let moscowTime = TimeZoneInfo.ConvertTime(utcTime, moscowZone)
+            order.OrderTime <- moscowTime
+            
             order.ProductLines <- productLines
             order.UserId <- userId
             order.RecipientName <- form.Name
