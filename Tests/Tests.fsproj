@@ -18,7 +18,7 @@
         <Compile Include="TestBase.fs" />
         <Compile Include="SimpleTests.fs" />
         <Compile Include="SignedInTests.fs" />
-        <Compile Include="Program.fs" />
+        <Compile Include="Entry.fs" />
     </ItemGroup>
 
     <ItemGroup>
