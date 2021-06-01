@@ -29,7 +29,8 @@ module EmailService =
         emailMessage.From.Add(MailboxAddress("Ascension site administration", "ascensiongroupshop@gmail.com"));
         emailMessage.To.Add(MailboxAddress("", email));
         emailMessage.Headers.Add("Precedence", "bulk");
-        emailMessage.Subject <- subject
+        emailMessage.Subject <- subject;
+        emailMessage.Date <- DateTimeOffset.Now
         
         let htmlMessage = TextPart(MimeKit.Text.TextFormat.Html)
         htmlMessage.Text <- message
