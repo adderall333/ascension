@@ -10,6 +10,7 @@ open System.Linq
 open Models
 open Models.Attributes
 open System.Collections.Generic
+open Microsoft.EntityFrameworkCore
 open Selector
 open Checks
 
@@ -464,7 +465,10 @@ type AdminController() =
         if isAdmin this.HttpContext
         then
             use context = new ApplicationContext()
-            let modelToDelete = Category.GetModel(id) :?> Category
+            let modelToDelete = context
+                                    .Category
+                                    .Include(fun c -> c.Products)
+                                    .First(fun c -> c.Id = id)
             modelToDelete.Products.ForEach(fun p -> p.IsAvailable <- false)
             modelToDelete.IsAvailable <- false
             context.SaveChanges() |> ignore
