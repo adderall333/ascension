@@ -6,6 +6,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Ascension", "Ascension\Asce
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tests", "Tests\Tests.fsproj", "{AC79D55D-B1D4-4BBA-83B5-EAD448C5C12E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EqHashTests", "EqHashTests\EqHashTests.csproj", "{4AE75A3C-EC1C-4A4E-87A1-E2866419D18E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{AC79D55D-B1D4-4BBA-83B5-EAD448C5C12E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC79D55D-B1D4-4BBA-83B5-EAD448C5C12E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC79D55D-B1D4-4BBA-83B5-EAD448C5C12E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AE75A3C-EC1C-4A4E-87A1-E2866419D18E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AE75A3C-EC1C-4A4E-87A1-E2866419D18E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AE75A3C-EC1C-4A4E-87A1-E2866419D18E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AE75A3C-EC1C-4A4E-87A1-E2866419D18E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
